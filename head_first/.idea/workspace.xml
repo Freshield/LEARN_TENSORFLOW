@@ -37,14 +37,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="twoLayerNet.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="twoLayerNet.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/twoLayerNet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="30" column="24" lean-forward="false" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="0">
+              <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="30" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tensorBoard.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tensorBoard.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="567">
+              <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -64,6 +72,7 @@
         <option value="$PROJECT_DIR$/hello_world.py" />
         <option value="$PROJECT_DIR$/small_test.py" />
         <option value="$PROJECT_DIR$/twoLayerNet.py" />
+        <option value="$PROJECT_DIR$/tensorBoard.py" />
       </list>
     </option>
   </component>
@@ -110,7 +119,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.twoLayerNet">
+  <component name="RunManager" selected="Python.tensorBoard">
     <configuration default="false" name="hello_world" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -158,6 +167,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="head_first" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/twoLayerNet.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="tensorBoard" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="head_first" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tensorBoard.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -296,16 +322,18 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Python.hello_world" />
       <item index="1" class="java.lang.String" itemvalue="Python.small_test" />
       <item index="2" class="java.lang.String" itemvalue="Python.twoLayerNet" />
+      <item index="3" class="java.lang.String" itemvalue="Python.tensorBoard" />
     </list>
     <recent_temporary>
-      <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Python.twoLayerNet" />
-        <item index="1" class="java.lang.String" itemvalue="Python.small_test" />
-        <item index="2" class="java.lang.String" itemvalue="Python.hello_world" />
+      <list size="4">
+        <item index="0" class="java.lang.String" itemvalue="Python.tensorBoard" />
+        <item index="1" class="java.lang.String" itemvalue="Python.twoLayerNet" />
+        <item index="2" class="java.lang.String" itemvalue="Python.small_test" />
+        <item index="3" class="java.lang.String" itemvalue="Python.hello_world" />
       </list>
     </recent_temporary>
   </component>
@@ -409,11 +437,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/twoLayerNet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="30" column="24" lean-forward="false" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="30" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tensorBoard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
