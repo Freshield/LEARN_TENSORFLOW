@@ -55,12 +55,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="whole_test.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="whole_test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/whole_test.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="264">
               <caret line="21" column="11" lean-forward="false" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="contrib_test.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/contrib_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="443">
+              <caret line="31" column="54" lean-forward="false" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -82,6 +94,7 @@
         <option value="$PROJECT_DIR$/variable_test.py" />
         <option value="$PROJECT_DIR$/train_test.py" />
         <option value="$PROJECT_DIR$/whole_test.py" />
+        <option value="$PROJECT_DIR$/contrib_test.py" />
       </list>
     </option>
   </component>
@@ -127,24 +140,7 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Python.whole_test">
-    <configuration default="false" name="headfirst" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="getting_started" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/headfirst.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.contrib_test">
     <configuration default="false" name="placeholder_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -209,6 +205,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="getting_started" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/whole_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="contrib_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="getting_started" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/contrib_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -348,19 +361,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.headfirst" />
-      <item index="1" class="java.lang.String" itemvalue="Python.placeholder_test" />
-      <item index="2" class="java.lang.String" itemvalue="Python.variable_test" />
-      <item index="3" class="java.lang.String" itemvalue="Python.train_test" />
-      <item index="4" class="java.lang.String" itemvalue="Python.whole_test" />
+      <item index="0" class="java.lang.String" itemvalue="Python.placeholder_test" />
+      <item index="1" class="java.lang.String" itemvalue="Python.variable_test" />
+      <item index="2" class="java.lang.String" itemvalue="Python.train_test" />
+      <item index="3" class="java.lang.String" itemvalue="Python.whole_test" />
+      <item index="4" class="java.lang.String" itemvalue="Python.contrib_test" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.whole_test" />
-        <item index="1" class="java.lang.String" itemvalue="Python.train_test" />
-        <item index="2" class="java.lang.String" itemvalue="Python.variable_test" />
-        <item index="3" class="java.lang.String" itemvalue="Python.placeholder_test" />
-        <item index="4" class="java.lang.String" itemvalue="Python.headfirst" />
+        <item index="0" class="java.lang.String" itemvalue="Python.contrib_test" />
+        <item index="1" class="java.lang.String" itemvalue="Python.whole_test" />
+        <item index="2" class="java.lang.String" itemvalue="Python.train_test" />
+        <item index="3" class="java.lang.String" itemvalue="Python.variable_test" />
+        <item index="4" class="java.lang.String" itemvalue="Python.placeholder_test" />
       </list>
     </recent_temporary>
   </component>
@@ -509,6 +522,16 @@
         <state relative-caret-position="264">
           <caret line="21" column="11" lean-forward="false" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/contrib_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="31" column="54" lean-forward="false" selection-start-line="31" selection-start-column="54" selection-end-line="31" selection-end-column="54" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
