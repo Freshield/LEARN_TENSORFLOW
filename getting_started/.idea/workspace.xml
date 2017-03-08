@@ -39,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/variable_test.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="198">
-              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -69,7 +69,7 @@
         <entry file="file://$PROJECT_DIR$/contrib_test.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="267">
-              <caret line="23" column="21" lean-forward="true" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+              <caret line="23" column="21" lean-forward="false" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -80,8 +80,8 @@
       <file leaf-file-name="mnist_newman_review.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mnist_newman_review.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="-19">
+              <caret line="13" column="41" lean-forward="true" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -111,7 +111,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1145" />
-    <option name="y" value="1044" />
+    <option name="y" value="716" />
     <option name="width" value="1535" />
     <option name="height" value="876" />
   </component>
@@ -151,24 +151,7 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Python.contrib_test">
-    <configuration default="false" name="placeholder_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="getting_started" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/placeholder_test.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.mnist_newman_review">
     <configuration default="false" name="variable_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -233,6 +216,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="getting_started" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/contrib_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="mnist_newman_review" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="getting_started" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mnist_newman_review.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -372,19 +372,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.placeholder_test" />
-      <item index="1" class="java.lang.String" itemvalue="Python.variable_test" />
-      <item index="2" class="java.lang.String" itemvalue="Python.train_test" />
-      <item index="3" class="java.lang.String" itemvalue="Python.whole_test" />
-      <item index="4" class="java.lang.String" itemvalue="Python.contrib_test" />
+      <item index="0" class="java.lang.String" itemvalue="Python.variable_test" />
+      <item index="1" class="java.lang.String" itemvalue="Python.train_test" />
+      <item index="2" class="java.lang.String" itemvalue="Python.whole_test" />
+      <item index="3" class="java.lang.String" itemvalue="Python.contrib_test" />
+      <item index="4" class="java.lang.String" itemvalue="Python.mnist_newman_review" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.contrib_test" />
-        <item index="1" class="java.lang.String" itemvalue="Python.whole_test" />
-        <item index="2" class="java.lang.String" itemvalue="Python.train_test" />
-        <item index="3" class="java.lang.String" itemvalue="Python.variable_test" />
-        <item index="4" class="java.lang.String" itemvalue="Python.placeholder_test" />
+        <item index="0" class="java.lang.String" itemvalue="Python.mnist_newman_review" />
+        <item index="1" class="java.lang.String" itemvalue="Python.contrib_test" />
+        <item index="2" class="java.lang.String" itemvalue="Python.whole_test" />
+        <item index="3" class="java.lang.String" itemvalue="Python.train_test" />
+        <item index="4" class="java.lang.String" itemvalue="Python.variable_test" />
       </list>
     </recent_temporary>
   </component>
@@ -402,7 +402,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1145" y="1044" width="1535" height="876" extended-state="6" />
+    <frame x="1145" y="716" width="1535" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2495114" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -507,7 +507,7 @@
     <entry file="file://$PROJECT_DIR$/variable_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -539,7 +539,7 @@
     <entry file="file://$PROJECT_DIR$/contrib_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="267">
-          <caret line="23" column="21" lean-forward="true" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+          <caret line="23" column="21" lean-forward="false" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -548,8 +548,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/mnist_newman_review.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="-19">
+          <caret line="13" column="41" lean-forward="true" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
           <folding />
         </state>
       </provider>
