@@ -81,6 +81,7 @@ def fill_feed_dict(data_set, images_pl, labels_pl):
       images_pl: images_feed,
       labels_pl: labels_feed,
   }
+
   return feed_dict
 
 
@@ -103,6 +104,7 @@ def do_eval(sess,
   true_count = 0  # Counts the number of correct predictions.
   steps_per_epoch = data_set.num_examples // FLAGS.batch_size
   num_examples = steps_per_epoch * FLAGS.batch_size
+  print ('steps_per_epoch,num_examples', steps_per_epoch, num_examples)
   for step in xrange(steps_per_epoch):
     feed_dict = fill_feed_dict(data_set,
                                images_placeholder,
