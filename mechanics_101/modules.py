@@ -22,7 +22,9 @@ def inference(images, hidden1_num, hidden2_num):
     return logits
 
 def loss(logits, lables):
-    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=lables))
+    print ('logits,lables shape:',logits.shape, lables.shape)
+    lables = tf.to_int64(lables)
+    cross_entropy = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=lables, logits=logits))
     return cross_entropy
 
 def training(loss, learning_rate):
@@ -36,7 +38,7 @@ def evaluation(logits, labels):
 
 def placeholder_inputs(batch_size):
     images_pl = tf.placeholder(tf.float32, shape=(batch_size, IMAGE_PIXES))
-    labels_pl = tf.placeholder(tf.float32, shape=(batch_size))
+    labels_pl = tf.placeholder(tf.int32, shape=(batch_size))
 
     return images_pl, labels_pl
 
@@ -56,7 +58,7 @@ def do_eval(sess, eval_correct, images_pl, labels_pl, data_set, batch_size):
     num_examples = num_per_epoch * batch_size
 
     for step in xrange(num_per_epoch):
-        feed_dict = fill_feed_dict(data_set, images_pl, labels_pl)
+        feed_dict = fill_feed_dict(data_set, images_pl, labels_pl, batch_size)
         step_correct = sess.run(eval_correct, feed_dict=feed_dict)
         correct_count += step_correct
 
