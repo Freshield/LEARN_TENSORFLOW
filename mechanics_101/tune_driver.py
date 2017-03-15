@@ -28,7 +28,7 @@ sess = tf.Session()
 
 
 for lr in [0.01, 0.001, 0.05, 0.02, 0.005, 0.002]:
-    
+
     train_op = m.training(loss_h, lr)
 
     sess.run(tf.global_variables_initializer())
