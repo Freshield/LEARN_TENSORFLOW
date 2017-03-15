@@ -31,6 +31,9 @@ def loss(logits, lables):
     return cross_entropy
 
 def training(loss, learning_rate):
+    #for tensorboard
+    tf.summary.scalar('loss',loss)
+
     train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)
     return train_op
 
