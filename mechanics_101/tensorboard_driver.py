@@ -7,8 +7,8 @@ max_steps = 10000
 hidden1 = 128
 hidden2 = 32
 batch_size = 100
-log_dir = 'logs/fully_connected_net'
-#for tensorboard logs
+log_dir = 'logs/fully_connected_net_scope'
+#######################for tensorboard logs##############################3
 if tf.gfile.Exists(log_dir):
     tf.gfile.DeleteRecursively(log_dir)
 tf.gfile.MakeDirs(log_dir)
@@ -32,34 +32,38 @@ train_op = m.training(loss_h, learning_rate)
 
 sess = tf.Session()
 
-#for tensorboard
+######################for tensorboard#############################33
 summary = tf.summary.merge_all()
 summary_writer = tf.summary.FileWriter(log_dir, sess.graph)
 
-sess.run(tf.global_variables_initializer())
+for lr in [0.01, 0.001, 0.05, 0.02, 0.005, 0.002]:
 
-for step in xrange(max_steps):
+    train_op = m.training(loss_h, lr)
 
-    feed_dict = m.fill_feed_dict(data_sets.train, images_pl, labels_pl, batch_size)
+    sess.run(tf.global_variables_initializer())
 
-    _, loss = sess.run([train_op, loss_h], feed_dict=feed_dict)
+    for step in xrange(max_steps):
 
-    if step % 100 == 0 or step == max_steps - 1:
-        print ('step %d: loss = %.3f' % (step, loss))
+        feed_dict = m.fill_feed_dict(data_sets.train, images_pl, labels_pl, batch_size)
 
-        #for tensorboard
-        summary_str = sess.run(summary, feed_dict=feed_dict)
-        summary_writer.add_summary(summary_str, step)
-        summary_writer.flush()
+        _, loss = sess.run([train_op, loss_h], feed_dict=feed_dict)
 
-    if (step + 1) % 1000 == 0 or (step + 1) == max_steps:
-        print ('Training Eval:')
-        m.do_eval(sess, correct_nums, images_pl, labels_pl, data_sets.train, batch_size)
+        if step % 100 == 0 or step == max_steps - 1:
+            print ('step %d: loss = %.3f' % (step, loss))
 
-        print ('Validation Eval:')
-        m.do_eval(sess, correct_nums, images_pl, labels_pl, data_sets.validation, batch_size)
+            ##########################for tensorboard########################
+            summary_str = sess.run(summary, feed_dict=feed_dict)
+            summary_writer.add_summary(summary_str, step)
+            summary_writer.flush()
 
-        print ('Test Eval:')
-        m.do_eval(sess, correct_nums, images_pl, labels_pl, data_sets.test, batch_size)
+        if (step + 1) == max_steps:
+            print ('Training Eval:')
+            m.do_eval(sess, correct_nums, images_pl, labels_pl, data_sets.train, batch_size)
+
+            print ('Validation Eval:')
+            m.do_eval(sess, correct_nums, images_pl, labels_pl, data_sets.validation, batch_size)
+
+            print ('Test Eval:')
+            m.do_eval(sess, correct_nums, images_pl, labels_pl, data_sets.test, batch_size)
 
 

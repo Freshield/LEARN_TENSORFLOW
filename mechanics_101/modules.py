@@ -7,44 +7,44 @@ IMAGE_PIXES = 28 * 28
 NUM_CLASSES = 10
 
 def inference(images, hidden1_num, hidden2_num):
-    hidden1_weight = tf.Variable(tf.truncated_normal([IMAGE_PIXES, hidden1_num], stddev= 1. / tf.sqrt(float(IMAGE_PIXES))))
-    hidden1_bias = tf.Variable(tf.zeros([hidden1_num]))
-
-    hidden2_weight = tf.Variable(tf.truncated_normal([hidden1_num, hidden2_num], stddev= 1. / tf.sqrt(float(hidden1_num))))
-    hidden2_bias = tf.Variable(tf.zeros([hidden2_num]))
-
-    linear_weight = tf.Variable(tf.truncated_normal([hidden2_num, NUM_CLASSES], stddev= 1. / tf.sqrt(float(hidden2_num))))
-    linear_bias = tf.Variable(tf.zeros([NUM_CLASSES]))
-
-
-
-    hidden1_out = tf.nn.relu(tf.matmul(images, hidden1_weight) + hidden1_bias)
-    hidden2_out = tf.nn.relu(tf.matmul(hidden1_out, hidden2_weight) + hidden2_bias)
-    logits = tf.matmul(hidden2_out, linear_weight) + linear_bias
+    with tf.name_scope('hidden1'):
+        hidden1_weight = tf.Variable(tf.truncated_normal([IMAGE_PIXES, hidden1_num], stddev= 1. / tf.sqrt(float(IMAGE_PIXES))), name='hidden1_weight')
+        hidden1_bias = tf.Variable(tf.zeros([hidden1_num]), name='hidden1_bias')
+        hidden1_out = tf.nn.relu(tf.matmul(images, hidden1_weight) + hidden1_bias)
+    with tf.name_scope('hidden2'):
+        hidden2_weight = tf.Variable(tf.truncated_normal([hidden1_num, hidden2_num], stddev= 1. / tf.sqrt(float(hidden1_num))), name='hidden2_weight')
+        hidden2_bias = tf.Variable(tf.zeros([hidden2_num]), name='hidden2_bias')
+        hidden2_out = tf.nn.relu(tf.matmul(hidden1_out, hidden2_weight) + hidden2_bias)
+    with tf.name_scope('linear'):
+        linear_weight = tf.Variable(tf.truncated_normal([hidden2_num, NUM_CLASSES], stddev= 1. / tf.sqrt(float(hidden2_num))), name='linear_weight')
+        linear_bias = tf.Variable(tf.zeros([NUM_CLASSES]), name='linear_bias')
+        logits = tf.matmul(hidden2_out, linear_weight) + linear_bias
 
     return logits
 
 def loss(logits, lables):
     print ('logits,lables shape:',logits.shape, lables.shape)
     lables = tf.to_int64(lables)
-    cross_entropy = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=lables, logits=logits))
+    cross_entropy = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=lables, logits=logits, name='xentropy'), name='xentropy_mean')
     return cross_entropy
 
 def training(loss, learning_rate):
-    #for tensorboard
+    ################for tensorboard###################
     tf.summary.scalar('loss',loss)
 
-    train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)
+    global_step = tf.Variable(0, name='global_step', trainable=False)
+
+    train_op = tf.train.GradientDescentOptimizer(learning_rate,name='gsd').minimize(loss,name='minimize', global_step=global_step)
     return train_op
 
 def evaluation(logits, labels):
     correct = tf.nn.in_top_k(logits, labels, 1)
-    correct_count = tf.reduce_sum(tf.cast(correct, tf.float32))
+    correct_count = tf.reduce_sum(tf.cast(correct, tf.float32), name='correct_count')
     return correct_count
 
 def placeholder_inputs(batch_size):
-    images_pl = tf.placeholder(tf.float32, shape=(batch_size, IMAGE_PIXES))
-    labels_pl = tf.placeholder(tf.int32, shape=(batch_size))
+    images_pl = tf.placeholder(tf.float32, shape=(batch_size, IMAGE_PIXES), name='image_pl')
+    labels_pl = tf.placeholder(tf.int32, shape=(batch_size), name='label_pl')
 
     return images_pl, labels_pl
 
