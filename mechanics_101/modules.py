@@ -30,7 +30,8 @@ def loss(logits, lables):
 
 def training(loss, learning_rate):
 
-    train_op = tf.train.GradientDescentOptimizer(learning_rate,name='gsd').minimize(loss,name='minimize')
+    #train_op = tf.train.GradientDescentOptimizer(learning_rate,name='gsd').minimize(loss,name='minimize')
+    train_op = tf.train.AdamOptimizer(learning_rate, name='adam').minimize(loss, name='minimize')
     return train_op
 
 def evaluation(logits, labels):
