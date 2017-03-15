@@ -9,14 +9,17 @@ NUM_CLASSES = 10
 def inference(images, hidden1_num, hidden2_num):
     hidden1_weight = tf.Variable(tf.truncated_normal([IMAGE_PIXES, hidden1_num], stddev= 1. / tf.sqrt(float(IMAGE_PIXES))))
     hidden1_bias = tf.Variable(tf.zeros([hidden1_num]))
-    hidden1_out = tf.nn.relu(tf.matmul(images, hidden1_weight) + hidden1_bias)
 
     hidden2_weight = tf.Variable(tf.truncated_normal([hidden1_num, hidden2_num], stddev= 1. / tf.sqrt(float(hidden1_num))))
     hidden2_bias = tf.Variable(tf.zeros([hidden2_num]))
-    hidden2_out = tf.nn.relu(tf.matmul(hidden1_out, hidden2_weight) + hidden2_bias)
 
     linear_weight = tf.Variable(tf.truncated_normal([hidden2_num, NUM_CLASSES], stddev= 1. / tf.sqrt(float(hidden2_num))))
     linear_bias = tf.Variable(tf.zeros([NUM_CLASSES]))
+
+
+
+    hidden1_out = tf.nn.relu(tf.matmul(images, hidden1_weight) + hidden1_bias)
+    hidden2_out = tf.nn.relu(tf.matmul(hidden1_out, hidden2_weight) + hidden2_bias)
     logits = tf.matmul(hidden2_out, linear_weight) + linear_bias
 
     return logits
