@@ -1,4 +1,4 @@
 *.gz
-logs/*
-MNIST/*
-files/*
+logs
+MNIST
+files
