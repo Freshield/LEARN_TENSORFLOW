@@ -27,7 +27,7 @@ def loss(logits, lables, inf_cache, reg):
     hidden1_weight, hidden2_weight = inf_cache
     lables = tf.to_int64(lables)
     cross_entropy = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=lables, logits=logits, name='xentropy'), name='xentropy_mean')
-    final_loss = cross_entropy + 0.5 * reg * tf.reduce_sum(hidden1_weight **2) + 0.5 * reg * tf.reduce_sum(hidden2_weight ** 2)
+    final_loss = cross_entropy + 0.5 * reg * tf.reduce_sum(tf.square(hidden1_weight)) + 0.5 * reg * tf.reduce_sum(tf.square(hidden2_weight))
     return final_loss
 
 def training(loss, learning_rate):
@@ -69,4 +69,5 @@ def do_eval(sess, eval_correct, images_pl, labels_pl, data_set, batch_size):
 
     precision = float(correct_count) / num_examples
     print ('num examples: %d num correct: %d precision : %0.04f' % (num_examples, correct_count, precision))
+    return precision
 
