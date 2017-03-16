@@ -20,13 +20,15 @@ def inference(images, hidden1_num, hidden2_num):
         linear_bias = tf.Variable(tf.zeros([NUM_CLASSES]), name='linear_bias')
         logits = tf.matmul(hidden2_out, linear_weight) + linear_bias
 
-    return logits
+    inf_cache = (hidden1_weight, hidden2_weight)
+    return logits, inf_cache
 
-def loss(logits, lables):
-    print ('logits,lables shape:',logits.shape, lables.shape)
+def loss(logits, lables, inf_cache, reg):
+    hidden1_weight, hidden2_weight = inf_cache
     lables = tf.to_int64(lables)
     cross_entropy = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=lables, logits=logits, name='xentropy'), name='xentropy_mean')
-    return cross_entropy
+    final_loss = cross_entropy + 0.5 * reg * tf.reduce_sum(hidden1_weight **2) + 0.5 * reg * tf.reduce_sum(hidden2_weight ** 2)
+    return final_loss
 
 def training(loss, learning_rate):
 

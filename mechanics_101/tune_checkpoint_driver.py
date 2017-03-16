@@ -8,6 +8,7 @@ max_steps = 15000
 hidden1 = 128
 hidden2 = 32
 batch_size = 100
+reg = 2e-3
 
 #from modules give the handle
 import tensorflow.examples.tutorials.mnist.input_data as input_data
@@ -16,7 +17,7 @@ data_sets = input_data.read_data_sets('MNIST')
 
 images_pl, labels_pl = m.placeholder_inputs(batch_size)
 
-logits = m.inference(images_pl, hidden1, hidden2)
+logits, inf_cache = m.inference(images_pl, hidden1, hidden2)
 
 correct_nums = m.evaluation(logits, labels_pl)
 
@@ -24,7 +25,7 @@ correct_nums = m.evaluation(logits, labels_pl)
 
 sess = tf.Session()
 
-loss_h = m.loss(logits, labels_pl)
+loss_h = m.loss(logits, labels_pl, inf_cache, reg)
 
 checkpoint_file = 'logs/checkpoint_model/model.ckpt'
 
