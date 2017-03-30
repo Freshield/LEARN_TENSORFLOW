@@ -22,6 +22,8 @@ test_set = tf.contrib.learn.datasets.base.load_csv_with_header(
 # Specify that all features have real-value data
 feature_columns = [tf.contrib.layers.real_valued_column("", dimension=4)]
 
+print (feature_columns)
+
 # Build 3 layer DNN with 10, 20, 10 units respectively.
 classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
                                             hidden_units=[10, 20, 10],
@@ -29,13 +31,13 @@ classifier = tf.contrib.learn.DNNClassifier(feature_columns=feature_columns,
                                             model_dir="/tmp/iris_model")
 
 # Fit model.
-classifier.fit(x=training_set.data,
-               y=training_set.target,
+classifier.fit(x=tf.constant(training_set.data),
+               y=tf.constant(training_set.target),
                steps=2000)
 
 # Evaluate accuracy.
-accuracy_score = classifier.evaluate(x=test_set.data,
-                                     y=test_set.target)["accuracy"]
+accuracy_score = classifier.evaluate(x=tf.constant(test_set.data),
+                                     y=tf.constant(test_set.target))["accuracy"]
 print('Accuracy: {0:f}'.format(accuracy_score))
 
 # Classify two new flower samples.
