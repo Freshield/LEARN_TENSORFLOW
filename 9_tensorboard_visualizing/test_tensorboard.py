@@ -39,7 +39,7 @@ def train():
 
     with tf.name_scope('input_reshape'):
         image_shaped_input = tf.reshape(x, [-1, 28, 28, 1])
-        tf.summary.image('input', image_shaped_input, 10)
+        tf.summary.image('input', image_shaped_input, 20)
 
     def weight_variable(shape):
         initial = tf.truncated_normal(shape, stddev=0.1)
@@ -90,7 +90,7 @@ def train():
         diff = tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
         with tf.name_scope('total'):
             cross_entropy = tf.reduce_mean(diff)
-    tf.summary.scalar('cross_entrop', cross_entropy)
+        tf.summary.scalar('cross_entrop', cross_entropy)
 
     with tf.name_scope('train'):
         train_step = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy)
@@ -100,7 +100,7 @@ def train():
             correction_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
         with tf.name_scope('accuracy'):
             accuracy = tf.reduce_mean(tf.cast(correction_prediction, tf.float32))
-    tf.summary.scalar('accuracy', accuracy)
+        tf.summary.scalar('accuracy', accuracy)
 
     merged = tf.summary.merge_all()
     train_writer = tf.summary.FileWriter(logs_dir + '/train', sess.graph)
@@ -124,18 +124,19 @@ def train():
 
         else:
             if i % 100 == 99:
-                run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
-                run_metadata = tf.RunMetadata()
+                #run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+                #run_metadata = tf.RunMetadata()
                 summary, _ = sess.run([merged, train_step],
-                                      feed_dict(True),
-                                      options=run_options,
-                                      run_metadata=run_metadata)
-                train_writer.add_run_metadata(run_metadata, 'step%03d' % i)
+                                      feed_dict(True))#,
+                                      #options=run_options,
+                                      #run_metadata=run_metadata)
+                #train_writer.add_run_metadata(run_metadata, 'step%03d' % i)
                 train_writer.add_summary(summary, i)
                 print ('Adding run metadata for', i)
             else:
                 summary, _ = sess.run([merged, train_step], feed_dict=feed_dict(True))
                 train_writer.add_summary(summary, i)
+                
     train_writer.close()
     test_writer.close()
 
