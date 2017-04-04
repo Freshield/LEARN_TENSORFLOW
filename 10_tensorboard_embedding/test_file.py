@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
 
+sess = tf.InteractiveSession()
+
 x = np.eye(3)
 
 print x
@@ -56,5 +58,15 @@ print x
 
 y = tf.stack(x)
 print y
+w = tf.Variable(y, name='w')
+print w
 z = tf.constant(x)
 print z
+v = tf.Variable(z, name='v')
+print v
+
+a = tf.map_fn(lambda z: z + 100, x)
+b = tf.reduce_mean(a)
+print a.eval()
+print b.eval()
+

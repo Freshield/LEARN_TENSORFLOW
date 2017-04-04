@@ -26,6 +26,7 @@ def generate_embeddings():
     with tf.device("/cpu:0"):
         embedding = tf.Variable(tf.stack(mnist.test.images[:FLAGS.max_steps], axis=0), trainable=False, name='embedding')
 
+    print (mnist.test.images[:FLAGS.max_steps].shape)
     tf.global_variables_initializer().run()
 
     saver = tf.train.Saver()
