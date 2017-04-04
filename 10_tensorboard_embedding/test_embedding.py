@@ -54,7 +54,8 @@ def generate_metadata_file():
     def save_metadata(file):
         with open(file, 'w') as f:
             for i in range(FLAGS.max_steps):
-                c = np.nonzero(mnist.test.labels[::1])[1:][0][i]
+                c = np.nonzero(mnist.test.labels)[1][i]
+                print ('{}\n'.format(c))
                 f.write('{}\n'.format(c))
 
     save_metadata(FLAGS.log_dir + '/projector/metadata.tsv')
@@ -72,7 +73,7 @@ if __name__ == '__main__':
     parser.add_argument('--fake_data', nargs='?', const=True, type=bool,
                         default=False,
                         help='If true, uses fake data for unit testing.')
-    parser.add_argument('--max_steps', type=int, default=1000,
+    parser.add_argument('--max_steps', type=int, default=10,
                         help='Number of steps to run trainer.')
     parser.add_argument('--data_dir', type=str, default='mnist_data',
                         help='Directory for storing input data')
