@@ -80,7 +80,9 @@ print b.eval()
 print diff_time
 
 time_before = time.time()
-test = "1475311661	495	d2de91e4b2ee1eb3	a966bff84c7724b2	e6b85c49	c791fd91	6	d9ac464b	3c52b4d4	de776e0b	559cb6df	cdb6761b	71432d05	1	0"
+#9 is \t, 10 is \n
+test = "1475349108	72	8cf0bcb30983a0f6	fedef371bab5ae04	b1bde6ff	93c9e166	6	d9ac464b	3c52b4d4	e43e8c29	521568b2	c2c389c8	926920bb	1	1" \
+       "\n1475349108	1500	8cf0bcb30983a0f6	19822f60db7c89e3	017af400	2d499bef	6	d9ac464b	3c52b4d4	e43e8c29	aa2e5ade	c2c389c8	926920bb	1	1"
 ascii = tf.stack(map(ord, test))
 time_after = time.time()
 diff_time = time_after -time_before
