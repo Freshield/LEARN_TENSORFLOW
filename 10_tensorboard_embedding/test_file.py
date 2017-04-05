@@ -79,3 +79,11 @@ print a.eval()
 print b.eval()
 print diff_time
 
+time_before = time.time()
+test = "1475311661	495	d2de91e4b2ee1eb3	a966bff84c7724b2	e6b85c49	c791fd91	6	d9ac464b	3c52b4d4	de776e0b	559cb6df	cdb6761b	71432d05	1	0"
+ascii = tf.stack(map(ord, test))
+time_after = time.time()
+diff_time = time_after -time_before
+print ascii.eval()
+print diff_time
+
