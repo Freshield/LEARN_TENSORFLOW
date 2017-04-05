@@ -1,8 +1,0 @@
-now val_pre is:0.9378
-now test_pre is:0.9325
-now rest times is:8
-now hidden1 size is: 40
-now hidden2 size is: 40
-now learning rate is: 0.000543794342927
-now regualrization streagths is: 0.0002
-now batch size is: 20

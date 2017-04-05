@@ -1,7 +1,0 @@
-best accuray is:0.9525
-best rest times is:10
-best hidden1 size is: 40
-best hidden2 size is: 40
-best learning rate is: 0.00543794342927
-best regualrization streagths is: 0.0002
-best batch size is: 20
