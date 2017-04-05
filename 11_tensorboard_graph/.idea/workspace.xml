@@ -22,21 +22,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_graph_visualization.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test_graph_visualization.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_graph_visualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
+            <state relative-caret-position="385">
+              <caret line="37" column="49" lean-forward="true" selection-start-line="37" selection-start-column="49" selection-end-line="37" selection-end-column="49" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mnist_sample.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="mnist_sample.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mnist_sample.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="200" column="31" lean-forward="false" selection-start-line="200" selection-start-column="31" selection-end-line="200" selection-end-column="31" />
+            <state relative-caret-position="1442">
+              <caret line="143" column="25" lean-forward="false" selection-start-line="143" selection-start-column="25" selection-end-line="143" selection-end-column="25" />
               <folding>
                 <element signature="e#1055#1093#0" expanded="true" />
               </folding>
@@ -57,8 +57,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/testing.py" />
-        <option value="$PROJECT_DIR$/test_graph_visualization.py" />
         <option value="$PROJECT_DIR$/mnist_sample.py" />
+        <option value="$PROJECT_DIR$/test_graph_visualization.py" />
       </list>
     </option>
   </component>
@@ -130,7 +130,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.mnist_sample">
+  <component name="RunManager" selected="Python.test_graph_visualization">
     <configuration default="false" name="test_graph_visualization" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -238,8 +238,8 @@
     </list>
     <recent_temporary>
       <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.mnist_sample" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test_graph_visualization" />
+        <item index="0" class="java.lang.String" itemvalue="Python.test_graph_visualization" />
+        <item index="1" class="java.lang.String" itemvalue="Python.mnist_sample" />
       </list>
     </recent_temporary>
   </component>
@@ -312,21 +312,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_graph_visualization.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mnist_sample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="200" column="31" lean-forward="false" selection-start-line="200" selection-start-column="31" selection-end-line="200" selection-end-column="31" />
+        <state relative-caret-position="1442">
+          <caret line="143" column="25" lean-forward="false" selection-start-line="143" selection-start-column="25" selection-end-line="143" selection-end-column="25" />
           <folding>
             <element signature="e#1055#1093#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_graph_visualization.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="37" column="49" lean-forward="true" selection-start-line="37" selection-start-column="49" selection-end-line="37" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>

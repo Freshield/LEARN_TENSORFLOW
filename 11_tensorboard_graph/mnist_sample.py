@@ -82,9 +82,8 @@ def train():
     # Adding a name scope ensures logical grouping of the layers in the graph.
     with tf.name_scope(layer_name):
       # This Variable will hold the state of the weights for the layer
-      with tf.name_scope('weights'):
-        weights = weight_variable([input_dim, output_dim])
-        variable_summaries(weights)
+      weights = weight_variable([input_dim, output_dim])
+      tf.summary.scalar('weight',weights)
       with tf.name_scope('biases'):
         biases = bias_variable([output_dim])
         variable_summaries(biases)
@@ -95,15 +94,7 @@ def train():
       tf.summary.histogram('activations', activations)
       return activations
 
-  hidden1 = nn_layer(x, 784, 500, 'layer1')
-
-  with tf.name_scope('dropout'):
-    keep_prob = tf.placeholder(tf.float32)
-    tf.summary.scalar('dropout_keep_probability', keep_prob)
-    dropped = tf.nn.dropout(hidden1, keep_prob)
-
-  # Do not apply softmax activation yet, see below.
-  y = nn_layer(dropped, 500, 10, 'layer2', act=tf.identity)
+  y = nn_layer(x, 784, 10, 'layer1')
 
   with tf.name_scope('cross_entropy'):
     # The raw formulation of cross-entropy,
@@ -150,7 +141,7 @@ def train():
     else:
       xs, ys = mnist.test.images, mnist.test.labels
       k = 1.0
-    return {x: xs, y_: ys, keep_prob: k}
+    return {x: xs, y_: ys}
 
   for i in range(FLAGS.max_steps):
     if i % 10 == 0:  # Record summaries and test-set accuracy
@@ -159,13 +150,8 @@ def train():
       print('Accuracy at step %s: %s' % (i, acc))
     else:  # Record train set summaries, and train
       if i % 100 == 99:  # Record execution stats
-        run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
-        run_metadata = tf.RunMetadata()
         summary, _ = sess.run([merged, train_step],
-                              feed_dict=feed_dict(True),
-                              options=run_options,
-                              run_metadata=run_metadata)
-        train_writer.add_run_metadata(run_metadata, 'step%03d' % i)
+                              feed_dict=feed_dict(True))
         train_writer.add_summary(summary, i)
         print('Adding run metadata for', i)
       else:  # Record a summary
@@ -187,7 +173,7 @@ if __name__ == '__main__':
   parser.add_argument('--fake_data', nargs='?', const=True, type=bool,
                       default=False,
                       help='If true, uses fake data for unit testing.')
-  parser.add_argument('--max_steps', type=int, default=1000,
+  parser.add_argument('--max_steps', type=int, default=300,
                       help='Number of steps to run trainer.')
   parser.add_argument('--learning_rate', type=float, default=0.001,
                       help='Initial learning rate')
