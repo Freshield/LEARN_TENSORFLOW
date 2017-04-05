@@ -69,7 +69,7 @@ print v
 """
 sess = tf.InteractiveSession()
 time_before = time.time()
-x = tf.eye(10000)
+x = tf.ones([10000,10000])
 a = tf.map_fn(lambda z: z + 100, x)
 b = tf.reduce_mean(a)
 time_after = time.time()

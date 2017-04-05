@@ -36,7 +36,7 @@ def train():
 
     with tf.name_scope('input_reshape'):
         image_shaped_input = tf.reshape(x, [-1, 28, 28, 1])
-        tf.summary.image('input', image_shaped_input, 10)
+        tf.summary.image('input', image_shaped_input, 10)#10 mean total images want to show
 
     # We can't initialize these variables to 0 - the network will get stuck.
     def weight_variable(shape):
@@ -193,6 +193,7 @@ def generate_metadata_file():
 #            f.write('id\tchar\n')
             for i in range(FLAGS.max_steps):
                 c = np.nonzero(mnist.test.labels[::1])[1:][0][i]
+                #equel np.nonzero(mnist.test.labels)[1][i]
                 f.write('{}\n'.format(c))
     # save metadata file
     save_metadata(FLAGS.log_dir + '/projector/metadata.tsv')
