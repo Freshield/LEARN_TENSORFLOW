@@ -6,8 +6,8 @@ a = tf.constant('hello\nworld', shape=[5])
 
 b = tf.string_split(a, '\n')
 
-sess = tf.Session()
-"""
+sess = tf.InteractiveSession()
+
 c = b.eval().values
 
 time_after = time.time()
@@ -19,29 +19,28 @@ print time_after - time_before
 time_before = time.time()
 
 
-with tf.device('/gpu:0'):
-    file = tf.gfile.Open('facebook_file')
+file = tf.gfile.Open('facebook_file')
 
-    text = file.read()
+text = file.read()
 
-    d = tf.constant([text])
+d = tf.constant([text])
 
-    e = tf.string_split(d, '\n')
+e = tf.string_split(d, '\n')
 
-    #f = tf.string_split(e.values, '\t')
+f = tf.string_split(e.values, '\t')
 
-    #g = e.shape
+#g = e.shape
 #print d.eval().shape
 
-sess.run(d)
+sess.run(f)
 time_after = time.time()
 #print e.eval().values
 #print e.eval().values.shape
 #print g
 #print g.shape
 print time_after - time_before
-"""
 
+"""
 import tensorflow as tf
 sess = tf.InteractiveSession()
 
@@ -49,3 +48,4 @@ with tf.device('/gpu:0'):
     text = tf.constant("aa a", name="LEFT")
     result = tf.string_split([text], delimiter=" ")
 print result.eval()
+"""
