@@ -5,7 +5,7 @@ import time
 
 filename = 'ciena.csv'
 
-batch = 100
+batch = 20
 lr_rate = 0.01
 max_step = 3000
 reg = 0.01
@@ -39,12 +39,41 @@ def get_whole_data(data_set):
     labels_one_hot = np.eye(3)[np_labels]
     return {'features': features, 'labels': labels_one_hot}
 
+def sequence_get_data(data_set, last_index, batch_size):
+    next_index = last_index + batch_size
+    if next_index > len(data_set):
+        last_index -= len(data_set)
+        next_index -= len(data_set)
+    indexs = np.arange(last_index, next_index, 1)
+
+    features = data_set.values[indexs, :-1]
+    labels = data_set.values[indexs, -1]
+    np_labels = np.array(labels, dtype=np.int32)
+    labels_one_hot = np.eye(3)[np_labels]
+    return (next_index, {'features': features, 'labels': labels_one_hot})
+
+def do_eval(sess, data_set, batch_size):
+    num_epoch = len(data_set) / batch_size
+    reset_data_size = len(data_set) % batch_size
+
+    index = 0
+    count = 0.0
+    for step in xrange(num_epoch):
+        index, data = sequence_get_data(data_set, index, batch_size)
+        result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels']})
+        count += result * batch_size
+    if reset_data_size != 0:
+        #the reset data
+        index, data = sequence_get_data(data_set, index, reset_data_size)
+        result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels']})
+        count += result * reset_data_size
+    return count / len(data_set)
 #####################################################################
 ############### create the graph ####################################
 #####################################################################
 
 dataset = pd.read_csv(filename, header=None)
-train_dataset, test_dataset = split_dataset(dataset, radio=0.3)
+train_dataset, test_dataset = split_dataset(dataset, radio=0.2)
 
 print train_dataset.shape
 print test_dataset.shape
@@ -82,11 +111,18 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 sess = tf.InteractiveSession()
 tf.global_variables_initializer().run()
 
+#################################################################
+################## train part ###################################
+#################################################################
+
+index = 0
 # Train
 for step in range(max_step):
     before_time = time.time()
-    data = get_batch_data(train_dataset, batch)
+    #data = get_batch_data(train_dataset, batch)
     # data = get_whole_data(train_dataset)
+
+    index, data = sequence_get_data(train_dataset, index, batch)
 
     _, loss_v = sess.run([train_step, loss],
                        feed_dict={x: data['features'], y_: data['labels']})
@@ -98,12 +134,11 @@ for step in range(max_step):
         span_time = last_time - before_time
         print ('rest time is %f minutes' % (span_time * (max_step - step) / 60))
     if step % 1000 == 0:
-        data = get_batch_data(train_dataset, batch)
-        result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels']})
+        result = do_eval(sess, test_dataset, batch)
         print 'accuracy in step %d is %f' % (step, result)
         # Test trained model
 
-data = get_batch_data(train_dataset, 300)
-result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels']})
+
+result = do_eval(sess, test_dataset, batch)
 print 'last accuracy is %f' % (result)
 """"""
