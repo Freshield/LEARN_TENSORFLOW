@@ -3,3 +3,4 @@ logs
 MNIST
 files
 facebook_file
+*.csv
