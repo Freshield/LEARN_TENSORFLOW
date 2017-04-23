@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
+import tensorflow as tf
+import os
 print 100 % 1000
 print 1100 % 1000
-
+"""
 a = np.array([0,1,2,3,4,5,6,7,8,9])
 
 print len(a)
@@ -48,3 +50,37 @@ dataset = pd.read_csv(filename, header=None)
 
 print dataset.shape
 print dataset.values[1,:]
+"""
+for x in [1,2]:
+    print x
+
+print '%s' % True
+
+"""
+filename = 'modules/test'
+f = file(filename, 'w+')
+f.write("1")
+f.close()
+"""
+
+def copyFiles(sourceDir,  targetDir):
+    if sourceDir.find(".csv") > 0:
+        print 'error'
+        return
+    for file in os.listdir(sourceDir):
+        sourceFile = os.path.join(sourceDir,  file)
+        targetFile = os.path.join(targetDir,  file)
+        if os.path.isfile(sourceFile):
+            if not os.path.exists(targetDir):
+                os.makedirs(targetDir)
+            if not os.path.exists(targetFile) or(os.path.exists(targetFile) and (os.path.getsize(targetFile) != os.path.getsize(sourceFile))):
+                    open(targetFile, "wb").write(open(sourceFile, "rb").read())
+        if os.path.isdir(sourceFile):
+            First_Directory = False
+            copyFiles(sourceFile, targetFile)
+
+path = 'tmp'
+if tf.gfile.Exists(path):
+    tf.gfile.DeleteRecursively(path)
+tf.gfile.MakeDirs(path)
+copyFiles('modules', 'tmp')

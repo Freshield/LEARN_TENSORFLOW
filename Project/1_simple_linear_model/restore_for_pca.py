@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 import time
 
-filename = '/home/freshield/ciena_test/FiberID_Data.csv'
+filename = 'ciena_test.csv'
 
 batch = 100
 lr_rate = 0.01
@@ -84,17 +84,17 @@ with tf.name_scope('input'):
     y_ = tf.placeholder(tf.float32, [None, 3], name='input_y')
 
 with tf.name_scope('hidden1'):
-    W1 = tf.Variable(tf.truncated_normal([241, 100], stddev=0.35), name='weights')
-    b1 = tf.Variable(tf.zeros([100]), name='biases')
+    W1 = tf.Variable(tf.truncated_normal([241, 200], stddev=0.35), name='weights')
+    b1 = tf.Variable(tf.zeros([200]), name='biases')
     hidden1 = tf.nn.relu(tf.matmul(x, W1) + b1)
 
 with tf.name_scope('hidden2'):
-    W2 = tf.Variable(tf.truncated_normal([100, 50], stddev=0.35), name='weights')
-    b2 = tf.Variable(tf.zeros([50]), name='biases')
+    W2 = tf.Variable(tf.truncated_normal([200, 150], stddev=0.35), name='weights')
+    b2 = tf.Variable(tf.zeros([150]), name='biases')
     hidden2 = tf.nn.relu(tf.matmul(hidden1, W2) + b2)
 
 with tf.name_scope('hidden3'):
-    W3 = tf.Variable(tf.truncated_normal([50, 30], stddev=0.35), name='weights')
+    W3 = tf.Variable(tf.truncated_normal([150, 30], stddev=0.35), name='weights')
     b3 = tf.Variable(tf.zeros([30]), name='biases')
     hidden3 = tf.nn.relu(tf.matmul(hidden2, W3) + b3)
 
