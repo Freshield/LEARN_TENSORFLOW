@@ -37,13 +37,13 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
-    real_C = data_set.values[random_index, :3100]
-    imag_C = data_set.values[random_index, 3100 : 6200]
-    others = data_set.values[random_index, 6200 : 6241]
-    labels = data_set.values[random_index, -1]
-    np_labels = np.array(labels, dtype=np.int32)
-    labels_one_hot = np.eye(3)[np_labels]
-    return {'real_C': real_C, 'imag_C':imag_C, 'others':others, 'labels': labels_one_hot}
+    columns = data_set.values[random_index]
+    real_C = columns[random_index, :3100]
+    imag_C = columns[random_index, 3100 : 6200]
+    others = columns[random_index, 6200 : 6241]
+    labels = columns[random_index, -1]
+
+    return {'real_C':real_C, 'imag_C':imag_C, 'others':others, 'labels':labels}
 
 
 def get_whole_data(data_set):
@@ -77,4 +77,9 @@ dataset = pd.read_csv(filename, header=None)
 print dataset.values.shape
 
 train_dataset, validation_dataset, test_dataset = split_dataset(dataset, radio=0.1)
+
+data = get_batch_data(train_dataset, 100)
+
+print data['images'].shape
+test = data['images'][0]
 
