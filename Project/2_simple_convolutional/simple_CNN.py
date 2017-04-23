@@ -38,10 +38,10 @@ def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
     columns = data_set.values[random_index]
-    real_C = columns[random_index, :3100]
-    imag_C = columns[random_index, 3100 : 6200]
-    others = columns[random_index, 6200 : 6241]
-    labels = columns[random_index, -1]
+    real_C = columns[:, :3100]
+    imag_C = columns[:, 3100 : 6200]
+    others = columns[:, 6200 : 6241]
+    labels = columns[:, -1]
 
     return {'real_C':real_C, 'imag_C':imag_C, 'others':others, 'labels':labels}
 

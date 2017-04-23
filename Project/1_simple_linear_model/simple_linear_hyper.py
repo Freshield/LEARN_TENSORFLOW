@@ -37,8 +37,9 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
-    features = data_set.values[random_index, :-20]
-    labels = data_set.values[random_index, -1]
+    columns = data_set.values[random_index]
+    features = columns[:, :-20]
+    labels = columns[:, -1]
     np_labels = np.array(labels, dtype=np.int32)
     labels_one_hot = np.eye(3)[np_labels]
     return {'features': features, 'labels': labels_one_hot}
