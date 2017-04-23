@@ -47,11 +47,13 @@ def get_batch_data(data_set, batch_size):
 
 
 def get_whole_data(data_set):
-    features = data_set.values[:, :-20]
-    labels = data_set.values[:, -1]
-    np_labels = np.array(labels, dtype=np.int32)
-    labels_one_hot = np.eye(3)[np_labels]
-    return {'features': features, 'labels': labels_one_hot}
+    columns = data_set.values
+    real_C = columns[:, :3100]
+    imag_C = columns[:, 3100: 6200]
+    others = columns[:, 6200: 6241]
+    labels = columns[:, -1]
+
+    return {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}
 
 def sequence_get_data(data_set, last_index, batch_size):
     next_index = last_index + batch_size
@@ -60,11 +62,13 @@ def sequence_get_data(data_set, last_index, batch_size):
         next_index -= len(data_set)
     indexs = np.arange(last_index, next_index, 1)
 
-    features = data_set.values[indexs, :-20]
-    labels = data_set.values[indexs, -1]
-    np_labels = np.array(labels, dtype=np.int32)
-    labels_one_hot = np.eye(3)[np_labels]
-    return (next_index, {'features': features, 'labels': labels_one_hot})
+    columns = data_set.values[indexs]
+    real_C = columns[:, :3100]
+    imag_C = columns[:, 3100: 6200]
+    others = columns[:, 6200: 6241]
+    labels = columns[:, -1]
+
+    return {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}
 
 ############################################################
 ############### test #######################################
@@ -80,6 +84,25 @@ train_dataset, validation_dataset, test_dataset = split_dataset(dataset, radio=0
 
 data = get_batch_data(train_dataset, 100)
 
-print data['images'].shape
-test = data['images'][0]
+
+
+with tf.Graph().as_default():
+    with tf.Session() as sess:
+        #inputs
+        real_C_pl = tf.placeholder(tf.float32, [None, 3100])
+        imag_C_pl = tf.placeholder(tf.float32, [None, 3100])
+        labels_pl = tf.placeholder(tf.int32, [None])
+
+        #reshape
+        real_C_reshape = tf.reshape(real_C_pl, [-1, 31, 100])
+        imag_C_reshape = tf.reshape(imag_C_pl, [-1, 31, 100])
+        image_no_padding = tf.concat([real_C_reshape, imag_C_reshape], axis=1)
+
+        #placeholders
+        images_pl = tf.pad(image_no_padding, [[0,0], [3,3], [0,0]], 'CONSTANT')
+        labels_one_hot_pl = tf.one_hot(labels_pl, 3)
+        others_pl = tf.placeholder(tf.float32, [None, 41])
+
+
+
 
