@@ -129,7 +129,7 @@ saver = tf.train.Saver()
 ################## train part ###################################
 #################################################################
 
-path = 'modules/0.99/model.ckpt'
+path = 'modules/1.00/model.ckpt'
 saver.restore(sess, path)
 print "Model restored."
 

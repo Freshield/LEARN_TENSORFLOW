@@ -9,6 +9,8 @@ batch = 100
 lr_rate = 0.01
 max_step = 10000
 reg = 0.01
+lr_decay = 0.97
+lr_decay_epoch = 500
 
 
 def split_dataset(dataset, test_dataset_size=None, radio=None):
@@ -83,17 +85,17 @@ with tf.name_scope('input'):
     y_ = tf.placeholder(tf.float32, [None, 3], name='input_y')
 
 with tf.name_scope('hidden1'):
-    W1 = tf.Variable(tf.truncated_normal([241, 100], stddev=1.0), name='weights')
-    b1 = tf.Variable(tf.zeros([100]), name='biases')
+    W1 = tf.Variable(tf.truncated_normal([241, 200], stddev=1.0), name='weights')
+    b1 = tf.Variable(tf.zeros([200]), name='biases')
     hidden1 = tf.nn.relu(tf.matmul(x, W1) + b1)
 
 with tf.name_scope('hidden2'):
-    W2 = tf.Variable(tf.truncated_normal([100, 50], stddev=1.0), name='weights')
-    b2 = tf.Variable(tf.zeros([50]), name='biases')
+    W2 = tf.Variable(tf.truncated_normal([200, 150], stddev=1.0), name='weights')
+    b2 = tf.Variable(tf.zeros([150]), name='biases')
     hidden2 = tf.nn.relu(tf.matmul(hidden1, W2) + b2)
 
 with tf.name_scope('hidden3'):
-    W3 = tf.Variable(tf.truncated_normal([50, 30], stddev=1.0), name='weights')
+    W3 = tf.Variable(tf.truncated_normal([150, 30], stddev=1.0), name='weights')
     b3 = tf.Variable(tf.zeros([30]), name='biases')
     hidden3 = tf.nn.relu(tf.matmul(hidden2, W3) + b3)
 
@@ -109,10 +111,10 @@ with tf.name_scope('scores'):
 with tf.name_scope('loss'):
     cross_entropy = tf.reduce_mean(
         tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y), name='xentropy')
-    #loss = (cross_entropy + reg * tf.nn.l2_loss(W1) + reg * tf.nn.l2_loss(b1) +
-            #tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) +
-            #tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3) +
-            #tf.nn.l2_loss(W4) + tf.nn.l2_loss(b4))
+    loss = (cross_entropy + reg * tf.nn.l2_loss(W1) + reg * tf.nn.l2_loss(b1) +
+            tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) +
+            tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3) +
+            tf.nn.l2_loss(W4) + tf.nn.l2_loss(b4))
 
 train_step = tf.train.AdamOptimizer(lr_rate).minimize(cross_entropy)
 
@@ -138,7 +140,7 @@ for step in range(max_step):
     #index, data = sequence_get_data(train_dataset, index, batch)
 
     _, loss_v = sess.run([train_step, cross_entropy],
-                       feed_dict={x: data['features'], y_: data['labels'], keep_prob:0.5})
+                       feed_dict={x: data['features'], y_: data['labels'], keep_prob:1.0})
 
     if step % 100 == 0:
         print 'loss in step %d is %f' % (step, loss_v)
@@ -161,6 +163,9 @@ for step in range(max_step):
             save_path = saver.save(sess, path)
             print("Model saved in file: %s" % save_path)
         # Test trained model
+
+    #if step > 0 and step % lr_decay_epoch == 0:
+        #lr_rate *= lr_decay
 
 
 result = do_eval(sess, test_dataset, batch)
