@@ -83,12 +83,12 @@ with tf.name_scope('input'):
     y_ = tf.placeholder(tf.float32, [None, 3], name='input_y')
 
 with tf.name_scope('hidden1'):
-    W1 = tf.Variable(tf.truncated_normal([6260, 5000], stddev=0.35), name='weights')
-    b1 = tf.Variable(tf.zeros([5000]), name='biases')
+    W1 = tf.Variable(tf.truncated_normal([6260, 10000], stddev=1.0), name='weights')
+    b1 = tf.Variable(tf.zeros([10000]), name='biases')
     hidden1 = tf.nn.relu(tf.matmul(x, W1) + b1)
 
 with tf.name_scope('hidden2'):
-    W2 = tf.Variable(tf.truncated_normal([5000, 3000], stddev=0.35), name='weights')
+    W2 = tf.Variable(tf.truncated_normal([10000, 3000], stddev=1.0), name='weights')
     b2 = tf.Variable(tf.zeros([3000]), name='biases')
     hidden2 = tf.nn.relu(tf.matmul(hidden1, W2) + b2)
 
@@ -97,7 +97,7 @@ with tf.name_scope('dropout'):
     hidden2_drop = tf.nn.dropout(hidden2, keep_prob)
 
 with tf.name_scope('scores'):
-    W3 = tf.Variable(tf.truncated_normal([3000, 3], stddev=0.35), name='weights')
+    W3 = tf.Variable(tf.truncated_normal([3000, 3], stddev=1.0), name='weights')
     b3 = tf.Variable(tf.zeros([3]), name='biases')
     y = tf.matmul(hidden2_drop, W3) + b3
 
@@ -107,7 +107,7 @@ with tf.name_scope('loss'):
     loss = (cross_entropy + reg * tf.nn.l2_loss(W1) + reg * tf.nn.l2_loss(b1) +
             tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) + tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3))
 
-train_step = tf.train.AdamOptimizer(lr_rate).minimize(cross_entropy)
+train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
 
 correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -121,40 +121,12 @@ saver = tf.train.Saver()
 ################## train part ###################################
 #################################################################
 
-index = 0
-last_accuracy = 0.6
-# Train
-for step in range(max_step):
-    before_time = time.time()
-    data = get_batch_data(train_dataset, batch)
-    # data = get_whole_data(train_dataset)
-    #index, data = sequence_get_data(train_dataset, index, batch)
-
-    _, loss_v = sess.run([train_step, cross_entropy],
-                       feed_dict={x: data['features'], y_: data['labels'], keep_prob:0.5})
-
-    if step % 100 == 0:
-        print 'loss in step %d is %f' % (step, loss_v)
-
-        last_time = time.time()
-        span_time = last_time - before_time
-        print ('rest time is %f minutes' % (span_time * (max_step - step) / 60))
-    if step % 500 == 0:
-        result = do_eval(sess, test_dataset, batch)
-        print '----------accuracy in step %d is %f-------------' % (step, result)
-        if result > last_accuracy:
-            last_accuracy = result
-            path = "modules/%.2f/model.ckpt" % result
-            if tf.gfile.Exists(path):
-                tf.gfile.DeleteRecursively(path)
-            tf.gfile.MakeDirs(path)
-            save_path = saver.save(sess, path)
-            print("Model saved in file: %s" % save_path)
-        # Test trained model
-
+path = 'modules/0.64/model.ckpt'
+saver.restore(sess, path)
+print "Model restored."
 
 result = do_eval(sess, test_dataset, batch)
-print '-----------last accuracy is %f------------' % (result)
+print 'last accuracy is %f' % (result)
 
 sess.close()
 """"""

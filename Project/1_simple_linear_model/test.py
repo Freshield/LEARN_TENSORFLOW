@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 print 100 % 1000
 print 1100 % 1000
 
@@ -41,3 +42,9 @@ x = np.arange(100)
 print np.mean(x)
 
 print do_eval(x, 20)
+
+filename = '/home/freshield/ciena_test/FiberID_Data.csv'
+dataset = pd.read_csv(filename, header=None)
+
+print dataset.shape
+print dataset.values[1,:]

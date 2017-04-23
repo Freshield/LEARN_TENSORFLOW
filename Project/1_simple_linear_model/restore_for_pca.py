@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 import time
 
-filename = 'ciena1000.csv'
+filename = '/home/freshield/ciena_test/FiberID_Data.csv'
 
 batch = 100
 lr_rate = 0.01
@@ -25,7 +25,7 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
-    features = data_set.values[random_index, :-1]
+    features = data_set.values[random_index, :-20]
     labels = data_set.values[random_index, -1]
     np_labels = np.array(labels, dtype=np.int32)
     labels_one_hot = np.eye(3)[np_labels]
@@ -33,7 +33,7 @@ def get_batch_data(data_set, batch_size):
 
 
 def get_whole_data(data_set):
-    features = data_set.values[:, :-1]
+    features = data_set.values[:, :-20]
     labels = data_set.values[:, -1]
     np_labels = np.array(labels, dtype=np.int32)
     labels_one_hot = np.eye(3)[np_labels]
@@ -46,7 +46,7 @@ def sequence_get_data(data_set, last_index, batch_size):
         next_index -= len(data_set)
     indexs = np.arange(last_index, next_index, 1)
 
-    features = data_set.values[indexs, :-1]
+    features = data_set.values[indexs, :-20]
     labels = data_set.values[indexs, -1]
     np_labels = np.array(labels, dtype=np.int32)
     labels_one_hot = np.eye(3)[np_labels]
@@ -61,6 +61,7 @@ def do_eval(sess, data_set, batch_size):
     for step in xrange(num_epoch):
         index, data = sequence_get_data(data_set, index, batch_size)
         result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels'], keep_prob:1.0})
+        print ('accuracy in step %d is %f' % (step, result))
         count += result * batch_size
     if reset_data_size != 0:
         #the reset data
@@ -79,33 +80,40 @@ print train_dataset.shape
 print test_dataset.shape
 
 with tf.name_scope('input'):
-    x = tf.placeholder(tf.float32, [None, 6260], name='input_x')
+    x = tf.placeholder(tf.float32, [None, 241], name='input_x')
     y_ = tf.placeholder(tf.float32, [None, 3], name='input_y')
 
 with tf.name_scope('hidden1'):
-    W1 = tf.Variable(tf.truncated_normal([6260, 5000], stddev=0.35), name='weights')
-    b1 = tf.Variable(tf.zeros([5000]), name='biases')
+    W1 = tf.Variable(tf.truncated_normal([241, 100], stddev=0.35), name='weights')
+    b1 = tf.Variable(tf.zeros([100]), name='biases')
     hidden1 = tf.nn.relu(tf.matmul(x, W1) + b1)
 
 with tf.name_scope('hidden2'):
-    W2 = tf.Variable(tf.truncated_normal([5000, 3000], stddev=0.35), name='weights')
-    b2 = tf.Variable(tf.zeros([3000]), name='biases')
+    W2 = tf.Variable(tf.truncated_normal([100, 50], stddev=0.35), name='weights')
+    b2 = tf.Variable(tf.zeros([50]), name='biases')
     hidden2 = tf.nn.relu(tf.matmul(hidden1, W2) + b2)
+
+with tf.name_scope('hidden3'):
+    W3 = tf.Variable(tf.truncated_normal([50, 30], stddev=0.35), name='weights')
+    b3 = tf.Variable(tf.zeros([30]), name='biases')
+    hidden3 = tf.nn.relu(tf.matmul(hidden2, W3) + b3)
 
 with tf.name_scope('dropout'):
     keep_prob = tf.placeholder(tf.float32)
-    hidden2_drop = tf.nn.dropout(hidden2, keep_prob)
+    hidden3_drop = tf.nn.dropout(hidden3, keep_prob)
 
 with tf.name_scope('scores'):
-    W3 = tf.Variable(tf.truncated_normal([3000, 3], stddev=0.35), name='weights')
-    b3 = tf.Variable(tf.zeros([3]), name='biases')
-    y = tf.matmul(hidden2_drop, W3) + b3
+    W4 = tf.Variable(tf.truncated_normal([30, 3], stddev=0.35), name='weights')
+    b4 = tf.Variable(tf.zeros([3]), name='biases')
+    y = tf.matmul(hidden3_drop, W4) + b4
 
 with tf.name_scope('loss'):
     cross_entropy = tf.reduce_mean(
         tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y), name='xentropy')
     loss = (cross_entropy + reg * tf.nn.l2_loss(W1) + reg * tf.nn.l2_loss(b1) +
-            tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) + tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3))
+            tf.nn.l2_loss(W2) + tf.nn.l2_loss(b2) +
+            tf.nn.l2_loss(W3) + tf.nn.l2_loss(b3) +
+            tf.nn.l2_loss(W4) + tf.nn.l2_loss(b4))
 
 train_step = tf.train.AdamOptimizer(lr_rate).minimize(cross_entropy)
 
@@ -121,40 +129,12 @@ saver = tf.train.Saver()
 ################## train part ###################################
 #################################################################
 
-index = 0
-last_accuracy = 0.6
-# Train
-for step in range(max_step):
-    before_time = time.time()
-    data = get_batch_data(train_dataset, batch)
-    # data = get_whole_data(train_dataset)
-    #index, data = sequence_get_data(train_dataset, index, batch)
-
-    _, loss_v = sess.run([train_step, cross_entropy],
-                       feed_dict={x: data['features'], y_: data['labels'], keep_prob:0.5})
-
-    if step % 100 == 0:
-        print 'loss in step %d is %f' % (step, loss_v)
-
-        last_time = time.time()
-        span_time = last_time - before_time
-        print ('rest time is %f minutes' % (span_time * (max_step - step) / 60))
-    if step % 500 == 0:
-        result = do_eval(sess, test_dataset, batch)
-        print '----------accuracy in step %d is %f-------------' % (step, result)
-        if result > last_accuracy:
-            last_accuracy = result
-            path = "modules/%.2f/model.ckpt" % result
-            if tf.gfile.Exists(path):
-                tf.gfile.DeleteRecursively(path)
-            tf.gfile.MakeDirs(path)
-            save_path = saver.save(sess, path)
-            print("Model saved in file: %s" % save_path)
-        # Test trained model
-
+path = 'modules/0.99/model.ckpt'
+saver.restore(sess, path)
+print "Model restored."
 
 result = do_eval(sess, test_dataset, batch)
-print '-----------last accuracy is %f------------' % (result)
+print 'last accuracy is %f' % (result)
 
 sess.close()
 """"""
