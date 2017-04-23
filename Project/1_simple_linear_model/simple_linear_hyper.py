@@ -3,7 +3,9 @@ import tensorflow as tf
 import numpy as np
 import time
 import os
-
+############################################################
+############# helpers ######################################
+############################################################
 def copyFiles(sourceDir,  targetDir):
     if sourceDir.find(".csv") > 0:
         print 'error'
@@ -62,31 +64,6 @@ def sequence_get_data(data_set, last_index, batch_size):
     labels_one_hot = np.eye(3)[np_labels]
     return (next_index, {'features': features, 'labels': labels_one_hot})
 
-def do_eval(sess, data_set, batch_size, accuracy, placeholders, merged, test_writer, global_step, if_summary):
-    x, y_, keep_prob = placeholders
-    num_epoch = len(data_set) / batch_size
-    reset_data_size = len(data_set) % batch_size
-
-    index = 0
-    count = 0.0
-    for step in xrange(num_epoch):
-        index, data = sequence_get_data(data_set, index, batch_size)
-        if step == num_epoch - 1:
-            if if_summary:
-                summary, result = sess.run([merged, accuracy], feed_dict={x: data['features'], y_: data['labels'],
-                                                                     keep_prob: 1.0})
-                test_writer.add_summary(summary, global_step)
-            else:
-                result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels'], keep_prob: 1.0})
-        else:
-            result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels'], keep_prob:1.0})
-        count += result * batch_size
-    if reset_data_size != 0:
-        #the reset data
-        index, data = sequence_get_data(data_set, index, reset_data_size)
-        result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels'], keep_prob:1.0})
-        count += result * reset_data_size
-    return count / len(data_set)
 #####################################################################
 ############### create the graph ####################################
 #####################################################################
@@ -183,6 +160,31 @@ def inference(hidden1_size, hidden2_size, hidden3_size, lr_rate, reg, stddev, us
 #################################################################
 ################## train part ###################################
 #################################################################
+def do_eval(sess, data_set, batch_size, accuracy, placeholders, merged, test_writer, global_step, if_summary):
+    x, y_, keep_prob = placeholders
+    num_epoch = len(data_set) / batch_size
+    reset_data_size = len(data_set) % batch_size
+
+    index = 0
+    count = 0.0
+    for step in xrange(num_epoch):
+        index, data = sequence_get_data(data_set, index, batch_size)
+        if step == num_epoch - 1:
+            if if_summary:
+                summary, result = sess.run([merged, accuracy], feed_dict={x: data['features'], y_: data['labels'],
+                                                                     keep_prob: 1.0})
+                test_writer.add_summary(summary, global_step)
+            else:
+                result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels'], keep_prob: 1.0})
+        else:
+            result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels'], keep_prob:1.0})
+        count += result * batch_size
+    if reset_data_size != 0:
+        #the reset data
+        index, data = sequence_get_data(data_set, index, reset_data_size)
+        result = sess.run(accuracy, feed_dict={x: data['features'], y_: data['labels'], keep_prob:1.0})
+        count += result * reset_data_size
+    return count / len(data_set)
 
 def train(max_step, train_dataset, validation_dataset, test_dataset, batch_size, sess, keep_prob_v, loss, accuracy,
           train_step, placeholders, lr_rate, lr_decay, lr_decay_epoch, dir_path, merged):
@@ -267,7 +269,7 @@ def train(max_step, train_dataset, validation_dataset, test_dataset, batch_size,
     if result > 0.98:
         filename = 'modules/%f-%s' % (result, dir_path)
         f = file(filename, 'w+')
-        f.write("1")
+        f.write(dir_path)
         f.close()
         print 'best file writed'
 
@@ -282,6 +284,21 @@ def train(max_step, train_dataset, validation_dataset, test_dataset, batch_size,
 
         copyFiles(train_path, train_log_path)
         copyFiles(test_path, test_log_path)
+
+    if result < 0.4:
+        train_log_path = 'modules/low/%s/logs/train' % dir_path
+        test_log_path = 'modules/low/%s/logs/test' % dir_path
+        if tf.gfile.Exists(train_log_path):
+            tf.gfile.DeleteRecursively(train_log_path)
+        tf.gfile.MakeDirs(train_log_path)
+        if tf.gfile.Exists(test_log_path):
+            tf.gfile.DeleteRecursively(test_log_path)
+        tf.gfile.MakeDirs(test_log_path)
+
+        copyFiles(train_path, train_log_path)
+        copyFiles(test_path, test_log_path)
+
+        print 'saved the low accuracy log'
 
     train_writer.close()
     test_writer.close()
@@ -334,7 +351,7 @@ for reg in [0.01, 0.02]:
                                 print 'hidden3 size is', hidden3_size
                                 print 'use L2 is', use_L2
                                 print 'rest loop is', loop
-                                print 'last use time', time_span
+                                print 'last use time %.2f' % time_span
                                 print 'rest time is %.2f minute' % (time_span * loop / 60)
                                 print '------------------------------------------------'
 
