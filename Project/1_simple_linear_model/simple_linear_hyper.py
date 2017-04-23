@@ -40,17 +40,13 @@ def get_batch_data(data_set, batch_size):
     columns = data_set.values[random_index]
     features = columns[:, :-20]
     labels = columns[:, -1]
-    np_labels = np.array(labels, dtype=np.int32)
-    labels_one_hot = np.eye(3)[np_labels]
-    return {'features': features, 'labels': labels_one_hot}
+    return {'features': features, 'labels': labels}
 
 
 def get_whole_data(data_set):
     features = data_set.values[:, :-20]
     labels = data_set.values[:, -1]
-    np_labels = np.array(labels, dtype=np.int32)
-    labels_one_hot = np.eye(3)[np_labels]
-    return {'features': features, 'labels': labels_one_hot}
+    return {'features': features, 'labels': labels}
 
 def sequence_get_data(data_set, last_index, batch_size):
     next_index = last_index + batch_size
@@ -59,11 +55,10 @@ def sequence_get_data(data_set, last_index, batch_size):
         next_index -= len(data_set)
     indexs = np.arange(last_index, next_index, 1)
 
-    features = data_set.values[indexs, :-20]
-    labels = data_set.values[indexs, -1]
-    np_labels = np.array(labels, dtype=np.int32)
-    labels_one_hot = np.eye(3)[np_labels]
-    return (next_index, {'features': features, 'labels': labels_one_hot})
+    columns = data_set.values[indexs]
+    features = columns[:, :-20]
+    labels = columns[:, -1]
+    return (next_index, {'features': features, 'labels': labels})
 
 #####################################################################
 ############### create the graph ####################################
@@ -84,7 +79,8 @@ def inference(hidden1_size, hidden2_size, hidden3_size, lr_rate, reg, stddev, us
 
     with tf.name_scope('input'):
         x = tf.placeholder(tf.float32, [None, 241], name='input_x')
-        y_ = tf.placeholder(tf.float32, [None, 3], name='input_y')
+        y_ = tf.placeholder(tf.int32, [None], name='input_y')
+        y_one_hot = tf.one_hot(y_, 3)
 
     with tf.name_scope('hidden1'):
         with tf.name_scope('weights'):
@@ -136,7 +132,7 @@ def inference(hidden1_size, hidden2_size, hidden3_size, lr_rate, reg, stddev, us
 
     with tf.name_scope('loss'):
         cross_entropy = tf.reduce_mean(
-            tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y), name='xentropy')
+            tf.nn.softmax_cross_entropy_with_logits(labels=y_one_hot, logits=y), name='xentropy')
         loss = (cross_entropy + reg * tf.nn.l2_loss(W1) + reg * tf.nn.l2_loss(b1) +
                 reg * tf.nn.l2_loss(W2) + reg * tf.nn.l2_loss(b2) +
                 reg * tf.nn.l2_loss(W3) + reg * tf.nn.l2_loss(b3) +
@@ -149,7 +145,7 @@ def inference(hidden1_size, hidden2_size, hidden3_size, lr_rate, reg, stddev, us
         train_step = tf.train.AdamOptimizer(lr_rate).minimize(cross_entropy)
 
     with tf.name_scope('accuracy'):
-        correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+        correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_one_hot, 1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     tf.summary.scalar('accuracy', accuracy)
 
@@ -188,7 +184,7 @@ def do_eval(sess, data_set, batch_size, accuracy, placeholders, merged, test_wri
     return count / len(data_set)
 
 def train(max_step, train_dataset, validation_dataset, test_dataset, batch_size, sess, keep_prob_v, loss, accuracy,
-          train_step, placeholders, lr_rate, lr_decay, lr_decay_epoch, dir_path, merged):
+          train_step, placeholders, lr_rate, lr_decay, lr_decay_epoch, dir_path, merged, situation_now):
 
     x, y_, keep_prob = placeholders
 
@@ -271,6 +267,7 @@ def train(max_step, train_dataset, validation_dataset, test_dataset, batch_size,
         filename = 'modules/%f-%s' % (result, dir_path)
         f = file(filename, 'w+')
         f.write(dir_path)
+        f.write(situation_now)
         f.close()
         print 'best file writed'
 
@@ -356,6 +353,14 @@ for reg in [0.01, 0.02]:
                                 print 'rest time is %.2f minute' % (time_span * loop / 60)
                                 print '------------------------------------------------'
 
+                                situation_now = '\n-------------------now changed-----------------\n' \
+                                                'reg is %f\nlr_rate is %f\nstddev is %f\n' \
+                                                'lr_decay is %f\nhidden1 size is %d\nhidden2 size is %d\n' \
+                                                'hidden3 size is %d\nuse L2 is %s\n' \
+                                                '------------------------------------------------' % (
+                                    reg, lr_rate, stddev, lr_decay, hidden1_size,
+                                    hidden2_size, hidden3_size,use_L2)
+
                                 with tf.Graph().as_default():
                                     with tf.Session() as sess:
                                         train_step, accuracy, loss, placeholders, merged = inference(hidden1_size,hidden2_size,hidden3_size,lr_rate, reg,stddev,use_L2=use_L2)
@@ -367,12 +372,12 @@ for reg in [0.01, 0.02]:
                                         best_accuracy = train(max_step, train_dataset, validation_dataset, test_dataset,
                                                               batch, sess, keep_prob_v, loss, accuracy, train_step,
                                                               placeholders, lr_rate, lr_decay, lr_decay_epoch,
-                                                              dir_path, merged)
+                                                              dir_path, merged, situation_now)
 
                                         if best_accuracy < 0.8:
                                             train(max_step, train_dataset, validation_dataset, test_dataset,
                                                   batch, sess, keep_prob_v, loss, accuracy, train_step, placeholders,
-                                                  lr_rate, lr_decay, lr_decay_epoch, dir_path, merged)
+                                                  lr_rate, lr_decay, lr_decay_epoch, dir_path, merged, situation_now)
 
                                 after_time = time.time()
                                 time_span = after_time - before_time
