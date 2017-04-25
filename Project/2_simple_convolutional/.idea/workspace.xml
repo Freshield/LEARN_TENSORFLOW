@@ -15,11 +15,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="simple_CNN.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="simple_CNN.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simple_CNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4611">
-              <caret line="163" column="15" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
+            <state relative-caret-position="435">
+              <caret line="166" column="0" lean-forward="false" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -27,11 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="simple_CNN_hyper.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="simple_CNN_hyper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simple_CNN_hyper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="164" column="14" lean-forward="true" selection-start-line="164" selection-start-column="14" selection-end-line="164" selection-end-column="14" />
+            <state relative-caret-position="219">
+              <caret line="162" column="17" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -101,16 +101,16 @@
         <option value="$PROJECT_DIR$/mnist_deep.py" />
         <option value="$PROJECT_DIR$/test2.py" />
         <option value="$PROJECT_DIR$/iris_cnn.py" />
-        <option value="$PROJECT_DIR$/simple_CNN.py" />
         <option value="$PROJECT_DIR$/simple_CNN_hyper.py" />
+        <option value="$PROJECT_DIR$/simple_CNN.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1168" />
-    <option name="y" value="597" />
-    <option name="width" value="1833" />
-    <option name="height" value="1083" />
+    <option name="x" value="1169" />
+    <option name="y" value="593" />
+    <option name="width" value="1831" />
+    <option name="height" value="1086" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -127,8 +127,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -143,10 +141,12 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../1_simple_linear_model" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -160,7 +160,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.simple_CNN_hyper">
+  <component name="RunManager" selected="Python.simple_CNN">
     <configuration default="false" name="simple_CNN" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -325,8 +325,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.simple_CNN_hyper" />
-        <item index="1" class="java.lang.String" itemvalue="Python.simple_CNN" />
+        <item index="0" class="java.lang.String" itemvalue="Python.simple_CNN" />
+        <item index="1" class="java.lang.String" itemvalue="Python.simple_CNN_hyper" />
         <item index="2" class="java.lang.String" itemvalue="Python.iris_cnn" />
         <item index="3" class="java.lang.String" itemvalue="Python.test2" />
         <item index="4" class="java.lang.String" itemvalue="Python.mnist_deep" />
@@ -347,12 +347,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1168" y="597" width="1833" height="1083" extended-state="6" />
+    <frame x="1169" y="593" width="1831" height="1086" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26143423" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2653868" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2800441" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14884233" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -397,6 +398,64 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/simple_CNN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4611">
+          <caret line="163" column="15" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mnist_deep.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1827">
+          <caret line="72" column="47" lean-forward="false" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="47" />
+          <folding>
+            <element signature="e#275#313#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iris_cnn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3886">
+          <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="870">
+          <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="9" column="31" lean-forward="false" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_CNN_hyper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4640">
+          <caret line="164" column="14" lean-forward="true" selection-start-line="164" selection-start-column="14" selection-end-line="164" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/simple_CNN.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4611">
@@ -563,20 +622,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_CNN.py">
+    <entry file="file://$PROJECT_DIR$/simple_CNN_hyper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4611">
-          <caret line="163" column="15" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
+        <state relative-caret-position="219">
+          <caret line="162" column="17" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_CNN_hyper.py">
+    <entry file="file://$PROJECT_DIR$/simple_CNN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="164" column="14" lean-forward="true" selection-start-line="164" selection-start-column="14" selection-end-line="164" selection-end-column="14" />
+        <state relative-caret-position="435">
+          <caret line="166" column="0" lean-forward="false" selection-start-line="166" selection-start-column="0" selection-end-line="166" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

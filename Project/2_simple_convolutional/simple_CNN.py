@@ -96,7 +96,7 @@ def max_pool_2x2(x):
 
 def weight_variable(shape):
   """weight_variable generates a weight variable of a given shape."""
-  initial = tf.truncated_normal(shape, stddev=0.1)
+  initial = tf.truncated_normal(shape, stddev=0.35)
   return tf.Variable(initial)
 
 
@@ -146,7 +146,7 @@ def do_eval(sess, data_set, batch_size, correct_num, placeholders, merged, test_
 ############### test #######################################
 ############################################################
 
-filename = 'ciena10000.csv'
+filename = '/home/freshield/ciena_test/ciena10000.csv'
 
 dataset = pd.read_csv(filename, header=None)
 
@@ -155,29 +155,28 @@ train_dataset, validation_dataset, test_dataset = split_dataset(dataset, radio=0
 data = get_batch_data(train_dataset, 100)
 
 batch_size = 100
-lr_rate = 1e-3
-max_step = 2000
-keep_prob_v = 0.5
+lr_rate = 0.002
+max_step = 25000
+keep_prob_v = 1.0
 conv1_depth = 64
 conv2_depth = 128
 conv3_depth = 256
 fc1_size = 2048
 fc2_size = 512
-reg = 0.02
+reg = 0.01
+
 
 loop_num = 1
 
 print '-------------------now changed-----------------'
-print 'conv1 is', conv1_depth
-print 'conv2 is', conv2_depth
-print 'conv3 is', conv3_depth
+print 'lr_rate is', lr_rate
+print 'reg is', reg
 print 'keep_prob', keep_prob_v
 print '------------------------------------------------'
 
 situation_now = '\n-------------------now changed-----------------\n' \
-                'conv1 is %d\nconv2 is %d\nconv3 is %d\nkeep_prob is %.2f\n' \
-                '------------------------------------------------' % (
-                    conv1_depth, conv2_depth, conv3_depth, keep_prob_v)
+                'lr_rate is %.3f\nreg is %.3f\nkeep_prob is %.2f\n' \
+                '------------------------------------------------\n' % (lr_rate, reg, keep_prob_v)
 
 with tf.Graph().as_default():
     with tf.Session() as sess:
@@ -194,14 +193,14 @@ with tf.Graph().as_default():
         image_no_padding = tf.concat([real_C_reshape, imag_C_reshape], axis=1)
         others_r = tf.reshape(others_pl, shape=[-1, 1, 41, 1])
         others_r = tf.concat([others_r, others_r], axis=2)
-        others_r_p = tf.pad(others_r, [[0,0],[0,0],[0,18],[0,0]], 'CONSTANT')
+        others_r_p = tf.pad(others_r, [[0, 0], [0, 0], [0, 18], [0, 0]], 'CONSTANT')
         others_reshape = tf.concat([others_r_p, others_r_p, others_r_p], axis=1)
-
-        tf.summary.image('input', image_no_padding, 20)
 
         # tensors
         images = tf.concat([others_reshape, image_no_padding, others_reshape], axis=1)
         labels_one_hot = tf.one_hot(labels_pl, 3)
+
+        tf.summary.image('input', images, 20)
 
         # build graph
 
@@ -246,15 +245,11 @@ with tf.Graph().as_default():
             name='xentropy')
 
         reg_loss = 0.5 * reg * (
-            tf.nn.l2_loss(W_conv1) + tf.nn.l2_loss(b_conv1) +
-            tf.nn.l2_loss(W_conv2) + tf.nn.l2_loss(b_conv2) +
-            tf.nn.l2_loss(W_conv3) + tf.nn.l2_loss(b_conv3) +
-            tf.nn.l2_loss(W_fc1) + tf.nn.l2_loss(b_fc1) +
-            tf.nn.l2_loss(W_fc2) + tf.nn.l2_loss(b_fc2) +
-            tf.nn.l2_loss(W_fc3) + tf.nn.l2_loss(b_fc3)
-        )
+            tf.nn.l2_loss(W_conv1) + tf.nn.l2_loss(b_conv1) + tf.nn.l2_loss(W_conv2) + tf.nn.l2_loss(
+                b_conv2) + tf.nn.l2_loss(W_conv3) + tf.nn.l2_loss(b_conv3) + tf.nn.l2_loss(W_fc1) + tf.nn.l2_loss(
+                b_fc1) + tf.nn.l2_loss(W_fc2) + tf.nn.l2_loss(b_fc2) + tf.nn.l2_loss(W_fc3) + tf.nn.l2_loss(b_fc3))
 
-        #loss = cross_entropy
+        # loss = cross_entropy
         loss = cross_entropy + reg_loss
 
         train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
@@ -276,11 +271,15 @@ with tf.Graph().as_default():
 
         # train
         # Train
-        best_accuracy = 0.0
+        last_accuracy = 0.0
+        best_accuracy = 0.8
+        best_path = ''
 
         indexs = get_random_seq_indexs(train_dataset)
         out_of_dataset = False
         last_index = 0
+        saver = tf.train.Saver()
+
 
         for step in range(max_step):
             before_time = time.time()
@@ -292,10 +291,9 @@ with tf.Graph().as_default():
 
             last_index, data, out_of_dataset = sequence_get_data(train_dataset, indexs, last_index, batch_size)
 
-            _, loss_v = sess.run([train_step, loss],
-                                 feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'],
-                                            others_pl: data['others'], labels_pl: data['labels'],
-                                            keep_prob: keep_prob_v})
+            _, loss_v = sess.run([train_step, loss], feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'],
+                                                                others_pl: data['others'], labels_pl: data['labels'],
+                                                                keep_prob: keep_prob_v})
 
             if step % 100 == 0:
                 print 'loss in step %d is %f' % (step, loss_v)
@@ -311,8 +309,21 @@ with tf.Graph().as_default():
                 result = do_eval(sess, validation_dataset, batch_size, correct_num, placeholders, merged, test_writer,
                                  True, step)
                 print '----------accuracy in step %d is %f-------------' % (step, result)
-                if result > best_accuracy:
-                    best_accuracy = result
+                if result > last_accuracy or result == 1.0:
+                    last_accuracy = result
+                    if last_accuracy > best_accuracy or result == 1.0:
+                        best_accuracy = result
+                        path = "modules/%d/%.2f/model.ckpt" % (step, result)
+                        best_path = path
+                        if tf.gfile.Exists(path):
+                            tf.gfile.DeleteRecursively(path)
+                        tf.gfile.MakeDirs(path)
+                        save_path = saver.save(sess, path)
+                        print("Model saved in file: %s" % save_path)
+
+        if best_path != '':
+            saver.restore(sess, best_path)
+            print "Model restored."
 
         result = do_eval(sess, test_dataset, batch_size, correct_num, placeholders, merged, test_writer, False, step)
         print '-----------last accuracy is %f------------' % (result)
@@ -321,6 +332,7 @@ with tf.Graph().as_default():
         f = file(filename, 'w+')
         f.write(str(best_accuracy))
         f.write(situation_now)
+        f.write('-----------last accuracy is %f------------' % (result))
         f.close()
 
         test_writer.close()
