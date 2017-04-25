@@ -156,7 +156,7 @@ data = get_batch_data(train_dataset, 100)
 
 batch_size = 100
 lr_rate = 1e-3
-max_step = 2000
+max_step = 25000
 keep_prob_v = 0.5
 conv1_depth = 64
 conv2_depth = 128
@@ -165,23 +165,22 @@ fc1_size = 2048
 fc2_size = 512
 reg = 0.02
 
-loop_num = 2 * 3
+loop_num = 2 * 3 * 2
 
 for lr_rate in [1e-3, 2e-3]:
     for reg in [0.02, 0.05, 0.01]:
         for keep_prob_v in [0.5, 1.0]:
 
             print '-------------------now changed-----------------'
-            print 'conv1 is', conv1_depth
-            print 'conv2 is', conv2_depth
-            print 'conv3 is', conv3_depth
+            print 'lr_rate is', lr_rate
+            print 'reg is', reg
             print 'keep_prob', keep_prob_v
             print '------------------------------------------------'
 
             situation_now = '\n-------------------now changed-----------------\n' \
-                            'conv1 is %d\nconv2 is %d\nconv3 is %d\nkeep_prob is %.2f\n' \
+                            'lr_rate is %d\nreg is %d\nkeep_prob is %.2f\n' \
                             '------------------------------------------------\n' % (
-                                conv1_depth, conv2_depth, conv3_depth, keep_prob_v)
+                                lr_rate, reg, keep_prob_v)
 
             with tf.Graph().as_default():
                 with tf.Session() as sess:
