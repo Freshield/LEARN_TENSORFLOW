@@ -146,7 +146,7 @@ def do_eval(sess, data_set, batch_size, correct_num, placeholders, merged, test_
 ############### test #######################################
 ############################################################
 
-filename = 'ciena_test.csv'
+filename = 'ciena10000.csv'
 
 dataset = pd.read_csv(filename, header=None)
 
