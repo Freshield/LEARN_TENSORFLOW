@@ -281,64 +281,20 @@ with tf.Graph().as_default():
         last_index = 0
         saver = tf.train.Saver()
 
+        step = 20000
+        result = 1.00
 
-        for step in range(max_step):
-            before_time = time.time()
-
-            if out_of_dataset == True:
-                indexs = get_random_seq_indexs(train_dataset)
-                last_index = 0
-                out_of_dataset = False
-
-            last_index, data, out_of_dataset = sequence_get_data(train_dataset, indexs, last_index, batch_size)
-
-            _, loss_v = sess.run([train_step, loss], feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'],
-                                                                others_pl: data['others'], labels_pl: data['labels'],
-                                                                keep_prob: keep_prob_v})
-
-            if step % 100 == 0:
-                print 'loss in step %d is %f' % (step, loss_v)
-                last_time = time.time()
-                span_time = last_time - before_time
-                print ('last 100 loop use %f sec' % (span_time * 100))
-                print ('rest time is %f minutes' % (span_time * (max_step - step) * loop_num / 60))
-
-            if step % 500 == 0 or step == max_step - 1:
-                result = do_eval(sess, train_dataset, batch_size, correct_num, placeholders, merged, test_writer, False,
-                                 step)
-                print '----------train acc in step %d is %f-------------' % (step, result)
-                result = do_eval(sess, validation_dataset, batch_size, correct_num, placeholders, merged, test_writer,
-                                 True, step)
-                print '----------accuracy in step %d is %f-------------' % (step, result)
-                if result > last_accuracy or result == 1.0:
-                    last_accuracy = result
-                    if last_accuracy > best_accuracy or result == 1.0:
-                        best_accuracy = result
-                        path = "modules/%d/%.2f/model.ckpt" % (step, result)
-                        best_path = path
-                        if tf.gfile.Exists(path):
-                            tf.gfile.DeleteRecursively(path)
-                        tf.gfile.MakeDirs(path)
-                        save_path = saver.save(sess, path)
-                        print("Model saved in file: %s" % save_path)
-
-            if step > 0 and step % lr_loop == 0:
-                lr_rate *= lr_decay
+        best_path = "modules/%d/%.2f/model.ckpt" % (step, result)
 
         if best_path != '':
             saver.restore(sess, best_path)
             print "Model restored."
+        result = do_eval(sess, train_dataset, batch_size, correct_num, placeholders, merged, test_writer, False,
+                         step)
+        print '----------train accuracy is %f-------------' % (result)
+        result = do_eval(sess, validation_dataset, batch_size, correct_num, placeholders, merged, test_writer,
+                         True, step)
+        print '----------validation accuracy is %f-------------' % (result)
 
         result = do_eval(sess, test_dataset, batch_size, correct_num, placeholders, merged, test_writer, False, step)
-        print '-----------last accuracy is %f------------' % (result)
-
-        filename = '%.2f-%s' % (best_accuracy, situation_now)
-        f = file(filename, 'w+')
-        f.write(str(best_accuracy))
-        f.write(situation_now)
-        f.write('-----------last accuracy is %f------------' % (result))
-        f.close()
-
-        test_writer.close()
-
-        loop_num -= 1
+        print '-----------test accuracy is %f------------' % (result)
