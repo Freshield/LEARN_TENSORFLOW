@@ -312,7 +312,7 @@ filename = 'ciena_test.csv'
 
 batch = 100
 lr_rate = 0.01
-max_step = 10000
+max_step = 9000
 reg = 0.02
 lr_decay = 1.0
 lr_decay_epoch = 800
@@ -328,7 +328,7 @@ hidden3_size = 30
 dataset = pd.read_csv(filename, header=None)
 train_dataset, validation_dataset, test_dataset = split_dataset(dataset, radio=0.1)
 
-loop = 3 * 2 * 3 * 2 * 1 * 3 * 3 * 3
+loop = 3 * 2 * 3 * 1 * 2 * 3 * 2 * 3
 time_span = 0.0
 for reg in [0.01, 0.02, 0.00]:
     for lr_rate in [0.01, 0.02]:
@@ -336,7 +336,7 @@ for reg in [0.01, 0.02, 0.00]:
             for lr_decay in [0.97]:
                 for hidden1_size in [512, 256]:
                     for hidden2_size in [256, 128, 64]:
-                        for hidden3_size in [128, 64, 32]:
+                        for hidden3_size in [128, 64]:
                             for use_L2 in [True]:
                                 for keep_prob_v in [1.0, 0.5, 0.7]:
                                     before_time = time.time()
