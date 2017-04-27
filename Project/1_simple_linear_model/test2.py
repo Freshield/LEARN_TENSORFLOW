@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import pandas as pd
 
 sess = tf.InteractiveSession()
 
@@ -18,3 +19,7 @@ tb = tf.random_shuffle(ta)
 print ta.eval()
 
 print tb.eval()
+
+dataset = pd.read_csv('ciena_test.csv', header=None)
+
+print dataset.shape

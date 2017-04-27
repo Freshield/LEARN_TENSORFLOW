@@ -18,8 +18,8 @@
       <file leaf-file-name="simple_CNN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simple_CNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8932">
-              <caret line="312" column="16" lean-forward="false" selection-start-line="306" selection-start-column="16" selection-end-line="312" selection-end-column="16" />
+            <state relative-caret-position="4388">
+              <caret line="307" column="34" lean-forward="false" selection-start-line="307" selection-start-column="34" selection-end-line="307" selection-end-column="34" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -39,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="multiple_span_CNN.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="multiple_span_CNN.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/multiple_span_CNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7482">
-              <caret line="262" column="15" lean-forward="false" selection-start-line="262" selection-start-column="15" selection-end-line="262" selection-end-column="15" />
+            <state relative-caret-position="270">
+              <caret line="329" column="38" lean-forward="false" selection-start-line="326" selection-start-column="12" selection-end-line="329" selection-end-column="38" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -51,73 +51,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="multiple_span_CNN_2.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="multiple_span_CNN_2.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/multiple_span_CNN_2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="305" column="15" lean-forward="true" selection-start-line="305" selection-start-column="15" selection-end-line="305" selection-end-column="15" />
+            <state relative-caret-position="-5588">
+              <caret line="80" column="35" lean-forward="false" selection-start-line="80" selection-start-column="35" selection-end-line="80" selection-end-column="35" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="simple_CNN_hyper.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple_CNN_hyper.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4582">
-              <caret line="162" column="17" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="mnist_deep.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mnist_deep.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1827">
-              <caret line="72" column="47" lean-forward="false" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="47" />
-              <folding>
-                <element signature="e#275#313#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="iris_cnn.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/iris_cnn.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3886">
-              <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="870">
-              <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test2.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="17" column="10" lean-forward="false" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -135,6 +75,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>last_accuracy</find>
+      <find>total_accuracy</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -206,7 +147,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.multiple_span_CNN_2">
+  <component name="RunManager" selected="Python.simple_CNN">
     <configuration default="false" name="simple_CNN" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -371,11 +312,11 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.multiple_span_CNN_2" />
-        <item index="1" class="java.lang.String" itemvalue="Python.multiple_span_CNN" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test2" />
-        <item index="3" class="java.lang.String" itemvalue="Python.test_restore" />
-        <item index="4" class="java.lang.String" itemvalue="Python.simple_CNN" />
+        <item index="0" class="java.lang.String" itemvalue="Python.simple_CNN" />
+        <item index="1" class="java.lang.String" itemvalue="Python.multiple_span_CNN_2" />
+        <item index="2" class="java.lang.String" itemvalue="Python.multiple_span_CNN" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test2" />
+        <item index="4" class="java.lang.String" itemvalue="Python.test_restore" />
       </list>
     </recent_temporary>
   </component>
@@ -399,7 +340,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24110672" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.7331863" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23814774" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -479,7 +420,7 @@
         <state relative-caret-position="4582">
           <caret line="162" column="17" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -489,7 +430,7 @@
         <state relative-caret-position="1827">
           <caret line="72" column="47" lean-forward="false" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="47" />
           <folding>
-            <element signature="e#275#313#0" expanded="true" />
+            <element signature="e#275#313#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -499,7 +440,7 @@
         <state relative-caret-position="3886">
           <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -509,7 +450,7 @@
         <state relative-caret-position="870">
           <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -519,7 +460,7 @@
         <state relative-caret-position="464">
           <caret line="17" column="10" lean-forward="false" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -549,7 +490,7 @@
         <state relative-caret-position="1827">
           <caret line="72" column="47" lean-forward="false" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="47" />
           <folding>
-            <element signature="e#275#313#0" expanded="true" />
+            <element signature="e#275#313#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -559,7 +500,7 @@
         <state relative-caret-position="3886">
           <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -569,7 +510,7 @@
         <state relative-caret-position="870">
           <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -579,7 +520,7 @@
         <state relative-caret-position="261">
           <caret line="9" column="31" lean-forward="false" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -589,7 +530,7 @@
         <state relative-caret-position="4640">
           <caret line="164" column="14" lean-forward="true" selection-start-line="164" selection-start-column="14" selection-end-line="164" selection-end-column="14" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -609,7 +550,7 @@
         <state relative-caret-position="1827">
           <caret line="72" column="47" lean-forward="true" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="47" />
           <folding>
-            <element signature="e#275#313#0" expanded="true" />
+            <element signature="e#275#313#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -619,7 +560,7 @@
         <state relative-caret-position="3886">
           <caret line="138" column="0" lean-forward="true" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -629,7 +570,7 @@
         <state relative-caret-position="870">
           <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -639,7 +580,7 @@
         <state relative-caret-position="261">
           <caret line="9" column="31" lean-forward="false" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -649,7 +590,7 @@
         <state relative-caret-position="3567">
           <caret line="127" column="42" lean-forward="false" selection-start-line="127" selection-start-column="42" selection-end-line="127" selection-end-column="42" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -669,7 +610,7 @@
         <state relative-caret-position="3364">
           <caret line="125" column="49" lean-forward="false" selection-start-line="125" selection-start-column="49" selection-end-line="125" selection-end-column="49" />
           <folding>
-            <element signature="e#275#313#0" expanded="true" />
+            <element signature="e#275#313#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -679,7 +620,7 @@
         <state relative-caret-position="870">
           <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -699,7 +640,7 @@
         <state relative-caret-position="841">
           <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -719,7 +660,7 @@
         <state relative-caret-position="841">
           <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -729,17 +670,7 @@
         <state relative-caret-position="3886">
           <caret line="138" column="0" lean-forward="false" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simple_CNN.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8932">
-          <caret line="312" column="16" lean-forward="false" selection-start-line="306" selection-start-column="16" selection-end-line="312" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -759,7 +690,7 @@
         <state relative-caret-position="870">
           <caret line="31" column="24" lean-forward="false" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -769,7 +700,7 @@
         <state relative-caret-position="464">
           <caret line="17" column="10" lean-forward="false" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -779,7 +710,7 @@
         <state relative-caret-position="1827">
           <caret line="72" column="47" lean-forward="false" selection-start-line="72" selection-start-column="2" selection-end-line="72" selection-end-column="47" />
           <folding>
-            <element signature="e#275#313#0" expanded="true" />
+            <element signature="e#275#313#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -789,17 +720,7 @@
         <state relative-caret-position="4582">
           <caret line="162" column="17" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="338" selection-end-column="0" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/multiple_span_CNN.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7482">
-          <caret line="262" column="15" lean-forward="false" selection-start-line="262" selection-start-column="15" selection-end-line="262" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -811,10 +732,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/0.80-&#10;-------------------now changed-----------------&#10;lr_rate is 0.002&#10;reg is 0.010&#10;keep_prob is 0.50&#10;------------------------------------------------&#10;">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/multiple_span_CNN_2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="305" column="15" lean-forward="true" selection-start-line="305" selection-start-column="15" selection-end-line="305" selection-end-column="15" />
+        <state relative-caret-position="-5588">
+          <caret line="80" column="35" lean-forward="false" selection-start-line="80" selection-start-column="35" selection-end-line="80" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_CNN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4388">
+          <caret line="307" column="34" lean-forward="false" selection-start-line="307" selection-start-column="34" selection-end-line="307" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/multiple_span_CNN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="329" column="38" lean-forward="false" selection-start-line="326" selection-start-column="12" selection-end-line="329" selection-end-column="38" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

@@ -229,15 +229,15 @@ def predict(y_conv, labels_one_hot):
 
 def predict_span(y_conv_span, labels_span_one_hot):
     totoal_num = 0
-    total_accuracy = 0.0
+
     for i in range(20):
         y_conv = y_conv_span['span'+str(i)]
         labels_one_hot = labels_span_one_hot['span'+str(i)]
         correct_num, accuracy = predict(y_conv, labels_one_hot)
         totoal_num += correct_num
-        total_accuracy += accuracy
 
-    return totoal_num, total_accuracy
+
+    return totoal_num
 
 def train_op(lr_rate, loss):
     train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
@@ -346,7 +346,7 @@ with tf.Graph().as_default():
 
         train_step = train_op(lr_rate, loss)
 
-        total_num, total_accuracy = predict_span(y_conv_span, label_span_one_hots)
+        total_num = predict_span(y_conv_span, label_span_one_hots)
 
         merged = tf.summary.merge_all()
 
@@ -401,7 +401,7 @@ with tf.Graph().as_default():
                 last_accuracy = result
                 if result > best_accuracy or result == 1.0:
                     best_accuracy = result
-                    path = "modules/%d/%.2f/model.ckpt" % (step, total_accuracy)
+                    path = "modules/%d/%.2f/model.ckpt" % (step, result)
                     best_path = path
                     if tf.gfile.Exists(path):
                         tf.gfile.DeleteRecursively(path)
@@ -430,7 +430,7 @@ with tf.Graph().as_default():
         f = file(filename, 'w+')
         f.write(str(best_accuracy))
         f.write(situation_now)
-        f.write('-----------last accuracy is %f------------' % (total_accuracy))
+        f.write('-----------last accuracy is %f------------' % (result))
         f.close()
 
         test_writer.close()

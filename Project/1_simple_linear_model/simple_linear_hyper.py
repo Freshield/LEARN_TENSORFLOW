@@ -104,6 +104,10 @@ def inference(hidden1_size, hidden2_size, hidden3_size, lr_rate, reg, stddev, us
             hidden2 = tf.nn.relu(tf.matmul(hidden1, W2) + b2)
             tf.summary.histogram('activation', hidden2)
 
+    with tf.name_scope('dropout'):
+        keep_prob = tf.placeholder(tf.float32)
+        hidden2_drop = tf.nn.dropout(hidden2, keep_prob=keep_prob)
+
 
     with tf.name_scope('hidden3'):
         with tf.name_scope('weights'):
@@ -113,13 +117,9 @@ def inference(hidden1_size, hidden2_size, hidden3_size, lr_rate, reg, stddev, us
             b3 = tf.Variable(tf.zeros([hidden3_size]), name='biases')
             variable_summaries(b3)
         with tf.name_scope('activation'):
-            hidden3 = tf.nn.relu(tf.matmul(hidden2, W3) + b3)
+            hidden3 = tf.nn.relu(tf.matmul(hidden2_drop, W3) + b3)
             tf.summary.histogram('activation', hidden3)
 
-
-    with tf.name_scope('dropout'):
-        keep_prob = tf.placeholder(tf.float32)
-        hidden3_drop = tf.nn.dropout(hidden3, keep_prob=keep_prob)
 
     with tf.name_scope('scores'):
         with tf.name_scope('weights'):
@@ -128,7 +128,7 @@ def inference(hidden1_size, hidden2_size, hidden3_size, lr_rate, reg, stddev, us
         with tf.name_scope('biases'):
             b4 = tf.Variable(tf.zeros([3]), name='biases')
             variable_summaries(b4)
-        y = tf.matmul(hidden3_drop, W4) + b4
+        y = tf.matmul(hidden3, W4) + b4
 
     with tf.name_scope('loss'):
         cross_entropy = tf.reduce_mean(
@@ -312,7 +312,7 @@ filename = 'ciena_test.csv'
 
 batch = 100
 lr_rate = 0.01
-max_step = 3500
+max_step = 10000
 reg = 0.02
 lr_decay = 1.0
 lr_decay_epoch = 800
@@ -328,60 +328,70 @@ hidden3_size = 30
 dataset = pd.read_csv(filename, header=None)
 train_dataset, validation_dataset, test_dataset = split_dataset(dataset, radio=0.1)
 
-loop = 2 ** 8
+loop = 3 * 2 * 3 * 2 * 1 * 3 * 3 * 3
 time_span = 0.0
-for reg in [0.01, 0.02]:
-    for lr_rate in [0.01, 0.05]:
-        for stddev in [1.0, 0.35]:
-            for lr_decay in [1.0, 0.99]:
-                for hidden1_size in [200, 150]:
-                    for hidden2_size in [120, 100]:
-                        for hidden3_size in [50, 30]:
-                            for use_L2 in [True, False]:
-                                before_time = time.time()
-                                print '-------------------now changed-----------------'
-                                print 'reg is', reg
-                                print 'lr_rate is', lr_rate
-                                print 'stddev is', stddev
-                                print 'lr_decay', lr_decay
-                                print 'hidden1 size is', hidden1_size
-                                print 'hidden2 size is', hidden2_size
-                                print 'hidden3 size is', hidden3_size
-                                print 'use L2 is', use_L2
-                                print 'rest loop is', loop
-                                print 'last use time %.2f' % time_span
-                                print 'rest time is %.2f minute' % (time_span * loop / 60)
-                                print '------------------------------------------------'
+for reg in [0.01, 0.02, 0.00]:
+    for lr_rate in [0.01, 0.02]:
+        for stddev in [1.0, 0.35, 0.1]:
+            for lr_decay in [0.97]:
+                for hidden1_size in [512, 256]:
+                    for hidden2_size in [256, 128, 64]:
+                        for hidden3_size in [128, 64, 32]:
+                            for use_L2 in [True]:
+                                for keep_prob_v in [1.0, 0.5, 0.7]:
+                                    before_time = time.time()
+                                    print '-------------------now changed-----------------'
+                                    print 'reg is', reg
+                                    print 'lr_rate is', lr_rate
+                                    print 'stddev is', stddev
+                                    print 'lr_decay', lr_decay
+                                    print 'hidden1 size is', hidden1_size
+                                    print 'hidden2 size is', hidden2_size
+                                    print 'hidden3 size is', hidden3_size
+                                    print 'use L2 is', use_L2
+                                    print 'rest loop is', loop
+                                    print 'keep prob is', keep_prob_v
+                                    print 'last use time %.2f' % time_span
+                                    print 'rest time is %.2f minute' % (time_span * loop / 60)
+                                    print '------------------------------------------------'
 
-                                situation_now = '\n-------------------now changed-----------------\n' \
-                                                'reg is %f\nlr_rate is %f\nstddev is %f\n' \
-                                                'lr_decay is %f\nhidden1 size is %d\nhidden2 size is %d\n' \
-                                                'hidden3 size is %d\nuse L2 is %s\n' \
-                                                '------------------------------------------------' % (
-                                    reg, lr_rate, stddev, lr_decay, hidden1_size,
-                                    hidden2_size, hidden3_size,use_L2)
+                                    situation_now = '\n-------------------now changed-----------------\n' \
+                                                    'reg is %f\nlr_rate is %f\nstddev is %f\n' \
+                                                    'lr_decay is %f\nhidden1 size is %d\nhidden2 size is %d\n' \
+                                                    'hidden3 size is %d\nuse L2 is %s\nkeep prob is %.2f\n' \
+                                                    '------------------------------------------------' % (
+                                                        reg, lr_rate, stddev, lr_decay, hidden1_size,
+                                                        hidden2_size, hidden3_size, use_L2, keep_prob_v)
 
-                                with tf.Graph().as_default():
-                                    with tf.Session() as sess:
-                                        train_step, accuracy, loss, placeholders, merged = inference(hidden1_size,hidden2_size,hidden3_size,lr_rate, reg,stddev,use_L2=use_L2)
+                                    with tf.Graph().as_default():
+                                        with tf.Session() as sess:
+                                            train_step, accuracy, loss, placeholders, merged = inference(hidden1_size,
+                                                                                                         hidden2_size,
+                                                                                                         hidden3_size,
+                                                                                                         lr_rate, reg,
+                                                                                                         stddev,
+                                                                                                         use_L2=use_L2)
 
-                                        dir_path = "r%.2flr%.2fs%.2fld%.2fh%d%d%du%s" % (
-                                        reg, lr_rate, stddev, lr_decay,
-                                        hidden1_size, hidden2_size, hidden3_size, use_L2)
+                                            dir_path = "r%.2flr%.2fs%.2fld%.2fh%d%d%du%skp%.2f" % (
+                                                reg, lr_rate, stddev, lr_decay,
+                                                hidden1_size, hidden2_size, hidden3_size, use_L2, keep_prob_v)
 
-                                        best_accuracy = train(max_step, train_dataset, validation_dataset, test_dataset,
-                                                              batch, sess, keep_prob_v, loss, accuracy, train_step,
-                                                              placeholders, lr_rate, lr_decay, lr_decay_epoch,
-                                                              dir_path, merged, situation_now)
+                                            best_accuracy = train(max_step, train_dataset, validation_dataset,
+                                                                  test_dataset,
+                                                                  batch, sess, keep_prob_v, loss, accuracy, train_step,
+                                                                  placeholders, lr_rate, lr_decay, lr_decay_epoch,
+                                                                  dir_path, merged, situation_now)
 
-                                        if best_accuracy < 0.8:
-                                            train(max_step, train_dataset, validation_dataset, test_dataset,
-                                                  batch, sess, keep_prob_v, loss, accuracy, train_step, placeholders,
-                                                  lr_rate, lr_decay, lr_decay_epoch, dir_path, merged, situation_now)
+                                            if best_accuracy < 0.8:
+                                                train(max_step, train_dataset, validation_dataset, test_dataset,
+                                                      batch, sess, keep_prob_v, loss, accuracy, train_step,
+                                                      placeholders,
+                                                      lr_rate, lr_decay, lr_decay_epoch, dir_path, merged,
+                                                      situation_now)
 
-                                after_time = time.time()
-                                time_span = after_time - before_time
-                                loop -= 1
+                                    after_time = time.time()
+                                    time_span = after_time - before_time
+                                    loop -= 1
 
 
 """"""
