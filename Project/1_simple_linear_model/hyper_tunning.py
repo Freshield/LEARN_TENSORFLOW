@@ -23,16 +23,16 @@ train_dataset, validation_dataset, test_dataset = sl.split_dataset(dataset, radi
 
 datasets = (train_dataset, validation_dataset, test_dataset)
 
-loop = 5 * 4 * 3 * 3 * 3 *3 * 2 * 2
+loop = 4 * 3 * 3 * 3 * 3 * 2 * 2
 
-for lr_rate in [0.02, 0.001, 0.002, 0.005, 0.01]:
-    for stddev in [1.0, 0.01, 0.1, 0.35]:
+for lr_rate in [0.02, 0.002, 0.005, 0.01]:
+    for stddev in [1.0, 0.1, 0.35]:
         for hidden1_size in [128, 256, 512]:
             for hidden2_size in [64, 128, 256]:
                 for hidden3_size in [32, 64, 128]:
-                    for keep_prob_v in [1.0]:
-                        for use_L2 in [False]:
-                            for reg in [0.01]:
+                    for keep_prob_v in [1.0, 0.5]:
+                        for use_L2 in [True]:
+                            for reg in [0.01, 0.02]:
                                 print '-------------------now changed-----------------'
                                 print 'reg is', reg
                                 print 'lr_rate is', lr_rate
@@ -73,9 +73,15 @@ for lr_rate in [0.02, 0.001, 0.002, 0.005, 0.01]:
 
                                         placeholders = (x, y_, keep_prob)
                                         #train
-                                        _ = sl.train(max_step, datasets, batch_size, sess, keep_prob_v,
+                                        last_result = sl.train(max_step, datasets, batch_size, sess, keep_prob_v,
                                                      loss, accuracy, train_op, placeholders, lr_rate,
                                                      lr_decay, lr_decay_epoch, correct_num, dir_path,
                                                      merged, situation_now, loop)
+
+                                        if last_result < 0.6:
+                                            last_result = sl.train(max_step, datasets, batch_size, sess, keep_prob_v,
+                                                                   loss, accuracy, train_op, placeholders, lr_rate,
+                                                                   lr_decay, lr_decay_epoch, correct_num, dir_path,
+                                                                   merged, situation_now, loop)
 
                                         loop -= 1

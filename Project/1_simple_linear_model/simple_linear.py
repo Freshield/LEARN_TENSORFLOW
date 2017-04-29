@@ -90,32 +90,34 @@ def variable_summaries(var):
       tf.summary.scalar('min', tf.reduce_min(var))
       tf.summary.histogram('histogram', var)
 
-def weight_variable(shape, stddev, summary=True):
-    with tf.name_scope('weights'):
-        weights = tf.Variable(tf.truncated_normal(shape=shape, stddev=stddev), name='weights')
-        if summary == True:
-            variable_summaries(weights)
-    return weights
+def weight_variable(shape, stddev):
+    initial = tf.truncated_normal(shape=shape, stddev=stddev)
 
-def biases_variable(shape, value, summary=True):
-    with tf.name_scope('biases'):
-        biases = tf.Variable(tf.constant(value=value, dtype=tf.float32, shape=shape, name='biases'))
-        if summary == True:
-            variable_summaries(biases)
-    return biases
+    return tf.Variable(initial, name='weights')
+
+def biases_variable(shape, value):
+    initial = tf.constant(value=value, dtype=tf.float32, shape=shape)
+
+    return tf.Variable(initial, name='biases')
 
 def get_hidden(input, input_size, hidden_size, stddev, b_value, name='hidden', act=tf.nn.relu, summary = True):
     with tf.name_scope(name):
-        W = weight_variable([input_size, hidden_size], stddev, summary)
-        b = biases_variable([hidden_size], b_value, summary)
-        with tf.name_scope('activation'):
-            hidden = act(tf.matmul(input, W) + b)
+        with tf.name_scope('weights'):
+            W = weight_variable([input_size, hidden_size], stddev)
             if summary == True:
-                tf.summary.histogram('activation', hidden)
+                variable_summaries(W)
+        with tf.name_scope('biases'):
+            b = biases_variable([hidden_size], b_value)
+            if summary == True:
+                variable_summaries(b)
+        with tf.name_scope('activation'):
+            activation = act(tf.matmul(input, W) + b, name='activation')
+            if summary == True:
+                tf.summary.histogram('activation', activation)
 
-        l2_loss = tf.nn.l2_loss(W) + tf.nn.l2_loss(b)
+        parameters = (W, b)
 
-    return hidden, l2_loss
+    return activation, parameters
 
 def get_droppout(input):
     with tf.name_scope('dropout'):
@@ -131,28 +133,54 @@ def get_inputs():
 
     return x, y_, y_one_hot
 
+def get_scores(input, input_size, hidden_size, stddev, b_value, name='scores', summary = True):
+    with tf.name_scope(name):
+        with tf.name_scope('weights'):
+            W = weight_variable([input_size, hidden_size], stddev)
+            if summary == True:
+                variable_summaries(W)
+        with tf.name_scope('biases'):
+            b = biases_variable([hidden_size], b_value)
+            if summary == True:
+                variable_summaries(b)
+        with tf.name_scope('scores'):
+            y = tf.matmul(input, W) + b
+            if summary == True:
+                tf.summary.histogram('scores', y)
+
+        parameters = (W, b)
+
+    return y, parameters
+
 def get_logits(x, hidden1_size, hidden2_size, hidden3_size, labels_size, stddev, b_value):
 
-    hidden1, h1_l2_loss = get_hidden(x, 241, hidden1_size, stddev, b_value, 'hidden1')
+    hidden1, h1_para = get_hidden(x, 241, hidden1_size, stddev, b_value, 'hidden1')
 
-    hidden2, h2_l2_loss = get_hidden(hidden1, hidden1_size, hidden2_size, stddev, b_value, 'hidden2')
+    hidden2, h2_para = get_hidden(hidden1, hidden1_size, hidden2_size, stddev, b_value, 'hidden2')
 
     hidden2_drop, keep_prob = get_droppout(hidden2)
 
-    hidden3, h3_l2_loss = get_hidden(hidden2_drop, hidden2_size, hidden3_size, stddev, b_value, 'hidden3')
+    hidden3, h3_para = get_hidden(hidden2_drop, hidden2_size, hidden3_size, stddev, b_value, 'hidden3')
 
-    y, h4_l2_loss = get_hidden(hidden3, hidden3_size, labels_size, stddev, b_value, 'scores')
+    y, h4_para = get_scores(hidden3, hidden3_size, labels_size, stddev, stddev)
 
-    l2_loss = h1_l2_loss + h2_l2_loss + h3_l2_loss + h4_l2_loss
+    total_parameters = {'hidden1':h1_para,
+                        'hidden2':h2_para,
+                        'hidden3':h3_para,
+                        'hidden4':h4_para}
 
-    return y, l2_loss, keep_prob
+    return y, total_parameters, keep_prob
 
-def get_loss(y, y_one_hot, l2_loss, reg, summary = True, use_l2_loss = True):
+def get_loss(y, y_one_hot, total_parameters, reg, summary = True, use_l2_loss = True):
     with tf.name_scope('loss'):
         cross_entropy = tf.reduce_mean(
             tf.nn.softmax_cross_entropy_with_logits(labels=y_one_hot, logits=y), name='xentropy')
         if use_l2_loss == True:
-            loss = cross_entropy + 0.5 * reg * l2_loss
+            reg_loss = 0
+            for i in range(4):
+                W, b = total_parameters['hidden'+str(i+1)]
+                reg_loss += 0.5 * reg * (tf.nn.l2_loss(W) + tf.nn.l2_loss(b))
+            loss = cross_entropy + reg_loss
         else:
             loss = cross_entropy
 
@@ -183,6 +211,7 @@ def get_feed_dict(placeholders, data, keep_prob_v):
     x, y_, keep_prob = placeholders
     return {x: data['features'], y_: data['labels'], keep_prob:keep_prob_v}
 
+#to random eval a batch size
 def do_batch_eval(sess, data_set, batch_size, accuracy, placeholders,
                   merged, test_writer, global_step,if_summary=True):
     indexs = get_random_seq_indexs(data_set)
@@ -199,26 +228,33 @@ def do_batch_eval(sess, data_set, batch_size, accuracy, placeholders,
 
     return result
 
+#to eval whole dataset
 def do_eval(sess, data_set, correct_num, placeholders):
+    #fix batch size in 100
     batch_size = 100
+    #total epoch loop num
     num_epoch = len(data_set) / batch_size
-    reset_data_size = len(data_set) % batch_size
+    #after the last loop, how many data rest
+    rest_data_size = len(data_set) % batch_size
 
+    #get the random index of dataset
     indexs = get_random_seq_indexs(data_set)
     last_index = 0
     count = 0
     for step in xrange(num_epoch):
+        #will not out of dataset, not need care about it
         last_index, data, _ = sequence_get_data(data_set, indexs, last_index, batch_size)
         feed_dict = get_feed_dict(placeholders, data, 1.0)
         num = sess.run(correct_num, feed_dict=feed_dict)
         count += num
 
-    if reset_data_size != 0:
-        #the reset data
-        last_index, data, _ = sequence_get_data(data_set, indexs, last_index, reset_data_size)
+    if rest_data_size != 0:
+        #the rest data
+        last_index, data, _ = sequence_get_data(data_set, indexs, last_index, rest_data_size)
         feed_dict = get_feed_dict(placeholders, data, 1.0)
         num = sess.run(correct_num, feed_dict=feed_dict)
         count += num
+
     return count / data_set.shape[0]
 
 def del_and_create_dir(dir_path):
@@ -249,6 +285,7 @@ def write_file(result, dir_path, situation_now):
 def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
           train_op, placeholders, lr_rate, lr_decay, lr_decay_epoch, correct_num,
           dir_path, merged, situation_now, loop):
+
     train_dataset, validation_dataset, test_dataset = datasets
 
     train_path = 'tmp/train'
@@ -269,10 +306,14 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
     best_path = ''
 
     indexs = get_random_seq_indexs(train_dataset)
+
     out_of_dataset = False
     last_index = 0
-    saver = tf.train.Saver()
     train_acc = 0
+    #to figure if need break
+    break_result = 0
+
+    log = ''
     # Train
     for step in xrange(max_step):
         before_time = time.time()
@@ -285,7 +326,7 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
 
         feed_dict = get_feed_dict(placeholders, data, keep_prob_v)
         #write summary
-        if step % 20 or step == max_step - 1:
+        if step % 40 == 0 or step == max_step - 1:
             summary, _, loss_v = sess.run([merged, train_op, loss],feed_dict=feed_dict)
             train_writer.add_summary(summary, step)
         else:
@@ -294,29 +335,36 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
         if step % 100 == 0:
             print '-----------loss in step %d is %f----------' % (step, loss_v)
 
-            last_time = time.time()
-            span_time = last_time - before_time
-            print ('100 steps is %f second' % (span_time * 100))
-            print ('rest time is %f minutes' % (span_time * (max_step - step) * loop / 60))
         #do evaluation
         if step % 500 == 0 or step == max_step - 1:
+
+            last_time = time.time()
+            span_time = last_time - before_time
+            print ('500 steps is %f second' % (span_time * 500))
+            print ('rest time is %f minutes' % (span_time * (max_step - step) * loop / 60))
 
             result = do_batch_eval(
                 sess, train_dataset, 1000, accuracy, placeholders,
                 merged, test_writer, step, True)
             print '----------train acc in step %d is %f-------------' % (step, result)
+            log += '\ntr a s %d %.4f' % (step, result)
             result = do_batch_eval(
                 sess, validation_dataset, 1000, accuracy, placeholders,
                 merged, test_writer, step, True)
+
             print '----------valid acc in step %d is %f-------------' % (step, result)
+            log += '\nva a s %d %.4f' % (step, result)
             if result > last_accuracy:
                 last_accuracy = result
+                break_result = result
                 best_path, best_accuracy = store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, step)
 
-        if step % 10000 == 0:
-            train_acc = do_eval(sess, train_dataset, correct_num, placeholders)
-            result = do_eval(sess, validation_dataset, correct_num, placeholders)
-            print '----------valid whole acc in step %d is %f-------------' % (step, result)
+        if (step % 4000 == 0 and step > 0):
+            if break_result < 0.44:
+                train_writer.close()
+                test_writer.close()
+
+                return break_result
 
         if (step % lr_decay_epoch == 0 and step > 0):
             lr_rate *= lr_decay
@@ -327,10 +375,11 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
 
     result = do_eval(sess, validation_dataset, correct_num, placeholders)
     print '-----------last accuracy is %f------------' % (result)
+    log += '\nte a %.4f\n' % (result)
 
     if result > 0.98:
-        write_file(result, dir_path, situation_now)
-        write_file(train_acc, dir_path, situation_now)
+
+        write_file(result, dir_path, situation_now+log)
 
         train_log_path = 'modules/%s/logs/train' % dir_path
         test_log_path = 'modules/%s/logs/test' % dir_path
@@ -352,4 +401,4 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
     train_writer.close()
     test_writer.close()
 
-    return best_accuracy
+    return result

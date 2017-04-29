@@ -84,7 +84,7 @@ if tf.gfile.Exists(path):
     tf.gfile.DeleteRecursively(path)
 tf.gfile.MakeDirs(path)
 copyFiles('modules', 'tmp')
-"""
+
 def sequence_get_data(data_set, indexs, last_index, batch_size):
     next_index = last_index + batch_size
     out_of_dataset = False
@@ -113,3 +113,25 @@ for i in range(10):
     print last_index
     print columns
     print out_of_dataset
+
+
+def write_file(result, dir_path, situation_now):
+    filename = 'modules/%f-%s' % (result, dir_path)
+    f = file(filename, 'w+')
+    f.write(dir_path)
+    f.write(situation_now)
+    f.close()
+    print 'best file writed'
+
+write_file(15, 'abc', '\nhello\n')
+
+dataset = pd.read_csv('ciena_test.csv', header=None)
+print dataset.shape
+"""
+def test():
+    for i in range(20):
+        print i
+        if i == 10:
+            break
+
+test()
