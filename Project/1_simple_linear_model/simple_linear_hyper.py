@@ -50,10 +50,17 @@ def get_whole_data(data_set):
 
 def sequence_get_data(data_set, last_index, batch_size):
     next_index = last_index + batch_size
-    if next_index > len(data_set):
-        last_index -= len(data_set)
-        next_index -= len(data_set)
-    indexs = np.arange(last_index, next_index, 1)
+
+    if next_index > data_set.shape[0]:
+
+        next_index -= data_set.shape[0]
+        last_part = np.arange(last_index,dataset.shape[0])
+        before_part = np.arange(next_index)
+        indexs = np.concatenate((last_part, before_part))
+
+    else:
+        indexs = np.arange(last_index,next_index)
+
 
     columns = data_set.values[indexs]
     features = columns[:, :-20]
