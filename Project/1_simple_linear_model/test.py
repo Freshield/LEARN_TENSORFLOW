@@ -61,7 +61,7 @@ filename = 'modules/test'
 f = file(filename, 'w+')
 f.write("1")
 f.close()
-"""
+
 
 def copyFiles(sourceDir,  targetDir):
     if sourceDir.find(".csv") > 0:
@@ -84,3 +84,32 @@ if tf.gfile.Exists(path):
     tf.gfile.DeleteRecursively(path)
 tf.gfile.MakeDirs(path)
 copyFiles('modules', 'tmp')
+"""
+def sequence_get_data(data_set, indexs, last_index, batch_size):
+    next_index = last_index + batch_size
+    out_of_dataset = False
+
+    if next_index > data_set.shape[0]:
+
+        next_index -= data_set.shape[0]
+        last_part = np.arange(last_index,indexs.shape[0])
+        before_part = np.arange(next_index)
+        span_index = indexs[np.concatenate((last_part, before_part))]
+        out_of_dataset = True
+    else:
+        span_index = indexs[last_index:next_index]
+
+
+    columns = data_set[span_index]
+
+    return (next_index, columns, out_of_dataset)
+a = np.array([0,1,2,3,4])
+indexs = np.array([0,1,2,3,4])
+
+last_index = 0
+for i in range(10):
+    last_index, columns, out_of_dataset = sequence_get_data(a, indexs, last_index, 2)
+
+    print last_index
+    print columns
+    print out_of_dataset

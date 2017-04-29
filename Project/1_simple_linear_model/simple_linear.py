@@ -61,11 +61,14 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
     out_of_dataset = False
 
     if next_index > data_set.shape[0]:
-        last_index -= data_set.shape[0]
-        next_index -= data_set.shape[0]
-        out_of_dataset = True
 
-    span_index = indexs[last_index:next_index]
+        next_index -= data_set.shape[0]
+        last_part = np.arange(last_index,indexs.shape[0])
+        before_part = np.arange(next_index)
+        span_index = indexs[np.concatenate((last_part, before_part))]
+        out_of_dataset = True
+    else:
+        span_index = indexs[last_index:next_index]
 
     columns = data_set.values[span_index]
     features = columns[:, :-20]
