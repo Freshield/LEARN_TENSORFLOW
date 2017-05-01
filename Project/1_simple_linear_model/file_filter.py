@@ -29,7 +29,18 @@ def json_to_dic(filename):
         dic = json.load(f)
     return dic
 
+def json_to_dic_list(rootdir):
+    dic_list = []
+    for parent, dirnames, filenames in os.walk(rootdir):
+        for filename in filenames:
+            with open(os.path.join(parent, filename)) as jf:
+                dic = json.load(jf)
+                dic_list.append(dic)
 
+    return dic_list
+
+
+"""
 rootdir = '/media/freshield/BUFFER/simple_linear/modules'
 
 for parent, dirnames, filenames in os.walk(rootdir):
@@ -40,3 +51,4 @@ for parent, dirnames, filenames in os.walk(rootdir):
             para_to_json(parent, filename, 'json/')
 
 print 'finish'
+"""
