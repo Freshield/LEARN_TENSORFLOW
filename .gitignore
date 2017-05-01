@@ -6,3 +6,4 @@ facebook_file
 *.csv
 tmp
 modules
+*.json
