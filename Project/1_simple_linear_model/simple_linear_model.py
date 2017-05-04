@@ -21,7 +21,7 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
     return train_set, test_set
 
-
+#get a random batch data(possible have same value)
 def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
@@ -31,7 +31,7 @@ def get_batch_data(data_set, batch_size):
     labels_one_hot = np.eye(3)[np_labels]
     return {'features': features, 'labels': labels_one_hot}
 
-
+#directly get whole data
 def get_whole_data(data_set):
     features = data_set.values[:, :-1]
     labels = data_set.values[:, -1]
@@ -39,6 +39,7 @@ def get_whole_data(data_set):
     labels_one_hot = np.eye(3)[np_labels]
     return {'features': features, 'labels': labels_one_hot}
 
+#
 def sequence_get_data(data_set, last_index, batch_size):
     next_index = last_index + batch_size
     if next_index > len(data_set):

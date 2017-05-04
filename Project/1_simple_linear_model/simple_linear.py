@@ -3,10 +3,18 @@ import tensorflow as tf
 import numpy as np
 import time
 import os
+
+################################################
+#                                              #
+#             lot of help function             #
+#          create different network model      #
+#                                              #
+################################################
+
 ############################################################
 ############# helpers ######################################
 ############################################################
-
+#to copy files from source dir to target dir
 def copyFiles(sourceDir,  targetDir):
     if sourceDir.find(".csv") > 0:
         print 'error'
@@ -23,6 +31,8 @@ def copyFiles(sourceDir,  targetDir):
             First_Directory = False
             copyFiles(sourceFile, targetFile)
 
+#split the dataset into three part:
+#training, validation, test
 def split_dataset(dataset, test_dataset_size=None, radio=None):
     if radio != None:
         test_dataset_size = int(radio * len(dataset))
@@ -34,7 +44,7 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
     return train_set, validation_set, test_set
 
-
+#get a random data(maybe have same value)
 def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
@@ -43,20 +53,23 @@ def get_batch_data(data_set, batch_size):
     labels = columns[:, -1]
     return {'features': features, 'labels': labels}
 
-
+#directly get whole dataset(only for small dataset)
 def get_whole_data(data_set):
     features = data_set.values[:, :-20]
     labels = data_set.values[:, -1]
     return {'features': features, 'labels': labels}
 
+#get a random indexs for dataset,
+#so that we can shuffle the data every epoch
 def get_random_seq_indexs(data_set):
     data_size = data_set.shape[0]
-    # index = tf.random_shuffle(tf.range(0, data_size))
+    # index = tf.random_shuffle(tf.range(0, data_size))#maybe can do it on tensorflow later
     indexs = np.arange(data_size)
     np.random.shuffle(indexs)
     return indexs
 
-
+#use the indexs together,
+#so that we can sequence batch whole dataset
 def sequence_get_data(data_set, indexs, last_index, batch_size):
     next_index = last_index + batch_size
     out_of_dataset = False
@@ -79,6 +92,7 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
 #####################################################################
 ############### create the graph ####################################
 #####################################################################
+#for summary the tensors
 def variable_summaries(var):
     """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
     with tf.name_scope('summaries'):
@@ -91,16 +105,24 @@ def variable_summaries(var):
       tf.summary.scalar('min', tf.reduce_min(var))
       tf.summary.histogram('histogram', var)
 
+#create weights
+#important
+#the weight initial value stddev is kinds of hyper para
+#if a wrong stddev will stuck the network
 def weight_variable(shape, stddev):
     initial = tf.truncated_normal(shape=shape, stddev=stddev)
 
     return tf.Variable(initial, name='weights')
 
+#create biases
 def biases_variable(shape, value):
     initial = tf.constant(value=value, dtype=tf.float32, shape=shape)
 
     return tf.Variable(initial, name='biases')
 
+#create hidden layer,
+# relu(x * W + b)
+#return parameter for L2 regularzation
 def get_hidden(input, input_size, hidden_size, stddev, b_value, name='hidden', act=tf.nn.relu, summary = True):
     with tf.name_scope(name):
         with tf.name_scope('weights'):
@@ -120,12 +142,15 @@ def get_hidden(input, input_size, hidden_size, stddev, b_value, name='hidden', a
 
     return activation, parameters
 
+#drop the input
 def get_droppout(input):
     with tf.name_scope('dropout'):
         keep_prob = tf.placeholder(tf.float32)
         dropout = tf.nn.dropout(input, keep_prob=keep_prob)
     return dropout, keep_prob
 
+#get input placeholders,
+#also create one hot label here
 def get_inputs():
     with tf.name_scope('input'):
         x = tf.placeholder(tf.float32, [None, 241], name='input_x')
@@ -134,6 +159,12 @@ def get_inputs():
 
     return x, y_, y_one_hot
 
+#important
+#scores must different with hidden layer
+#because there have relu at the end of hidden
+#and score needn't
+# x * W + b
+#return parameter for L2 regularzation
 def get_scores(input, input_size, hidden_size, stddev, b_value, name='scores', summary = True):
     with tf.name_scope(name):
         with tf.name_scope('weights'):
@@ -153,6 +184,8 @@ def get_scores(input, input_size, hidden_size, stddev, b_value, name='scores', s
 
     return y, parameters
 
+#3 layers neural network model
+#input 241, output 3
 def get_logits(x, hidden1_size, hidden2_size, hidden3_size, labels_size, stddev, b_value):
 
     hidden1, h1_para = get_hidden(x, 241, hidden1_size, stddev, b_value, 'hidden1')
@@ -172,6 +205,8 @@ def get_logits(x, hidden1_size, hidden2_size, hidden3_size, labels_size, stddev,
 
     return y, total_parameters, keep_prob
 
+#get loss by softmax
+#also can choose if use L2 regularzation or not
 def get_loss(y, y_one_hot, total_parameters, reg, summary = True, use_l2_loss = True):
     with tf.name_scope('loss'):
         cross_entropy = tf.reduce_mean(
@@ -191,28 +226,36 @@ def get_loss(y, y_one_hot, total_parameters, reg, summary = True, use_l2_loss = 
 
         return loss
 
+#get train handle for training and backpropagation
+#use adam function
 def get_train_op(loss, lr_rate, optimizer=tf.train.AdamOptimizer):
     with tf.name_scope('train'):
         train_op = optimizer(lr_rate).minimize(loss)
     return train_op
 
+#get the correct numbers
+#so that we can get batch data correct number
+#and add them together at the last to get the total accuracy
 def get_correct_num(y, y_one_hot):
     with tf.name_scope('correct_num'):
         correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_one_hot, 1))
         correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
     return correct_num
 
+#get the feed data accuracy
 def get_accuracy(y, y_one_hot):
     with tf.name_scope('accuracy'):
         correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_one_hot, 1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     return accuracy
 
+#get the feed dictionary
 def get_feed_dict(placeholders, data, keep_prob_v):
     x, y_, keep_prob = placeholders
     return {x: data['features'], y_: data['labels'], keep_prob:keep_prob_v}
 
-#to random eval a batch size
+#to random eval a batch size in sequence
+#for big dataset evaluate a bigger batch size
 def do_batch_eval(sess, data_set, batch_size, accuracy, placeholders,
                   merged, test_writer, global_step,if_summary=True):
     indexs = get_random_seq_indexs(data_set)
@@ -230,6 +273,9 @@ def do_batch_eval(sess, data_set, batch_size, accuracy, placeholders,
     return result
 
 #to eval whole dataset
+#not directly feed whole data
+#feed batch size and get correct numbers
+#at last calculate the whole dataset accuracy
 def do_eval(sess, data_set, correct_num, placeholders):
     #fix batch size in 100
     batch_size = 100
@@ -258,11 +304,13 @@ def do_eval(sess, data_set, correct_num, placeholders):
 
     return count / data_set.shape[0]
 
+#ensure the path exist
 def del_and_create_dir(dir_path):
     if tf.gfile.Exists(dir_path):
         tf.gfile.DeleteRecursively(dir_path)
     tf.gfile.MakeDirs(dir_path)
 
+#store our model
 def store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, step):
     if last_accuracy > best_accuracy or last_accuracy == 1.0:
         best_accuracy = last_accuracy
@@ -273,6 +321,7 @@ def store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, 
         print("Model saved in file: %s" % save_path)
     return best_path, best_accuracy
 
+#write log file
 def write_file(result, dir_path, situation_now):
     filename = 'modules/%f-%s' % (result, dir_path)
     f = file(filename, 'w+')
@@ -282,32 +331,37 @@ def write_file(result, dir_path, situation_now):
     print 'best file writed'
 
 
-
-def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
-          train_op, placeholders, lr_rate, lr_decay, lr_decay_epoch, correct_num,
-          dir_path, merged, situation_now, loop):
-
+#total train function
+def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,train_op, placeholders, lr_rate, lr_decay, lr_decay_epoch, correct_num, dir_path, merged, situation_now, loop):
+    #get datasets
     train_dataset, validation_dataset, test_dataset = datasets
 
+    #define store path
     train_path = 'tmp/train'
     test_path = 'tmp/test'
-
     del_and_create_dir(train_path)
     del_and_create_dir(test_path)
 
+    #create writer for tensorboard
     train_writer = tf.summary.FileWriter(train_path, sess.graph)
     test_writer = tf.summary.FileWriter(test_path)
 
+    #init all variables
     sess.run(tf.global_variables_initializer())
 
+    #add saver to save model
     saver = tf.train.Saver()
 
+    #best_accuracy means we will store model
+    #which accuracy higher than 0.8 or equal 1.0
     last_accuracy = 0.0
     best_accuracy = 0.8
     best_path = ''
 
+    #get a dataset indexs
     indexs = get_random_seq_indexs(train_dataset)
 
+    #if out of dataset we reshuffle the dataset(reget the indexs)
     out_of_dataset = False
     last_index = 0
     train_acc = 0
@@ -318,25 +372,28 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
     # Train
     for step in xrange(max_step):
         before_time = time.time()
+
         if out_of_dataset == True:
             indexs = get_random_seq_indexs(train_dataset)
             last_index = 0
             out_of_dataset = False
 
+        #get batch data
         last_index, data, out_of_dataset = sequence_get_data(train_dataset, indexs, last_index, batch_size)
-
         feed_dict = get_feed_dict(placeholders, data, keep_prob_v)
-        #write summary
+
+        #write summary every 40 steps and last step
         if step % 40 == 0 or step == max_step - 1:
             summary, _, loss_v = sess.run([merged, train_op, loss],feed_dict=feed_dict)
             train_writer.add_summary(summary, step)
         else:
             _, loss_v = sess.run([train_op, loss],feed_dict=feed_dict)
-        #write loss and time
+
+        #write loss and time every 100 steps
         if step % 100 == 0:
             print '-----------loss in step %d is %f----------' % (step, loss_v)
 
-        #do evaluation
+        #do evaluation every 500 steps and last step
         if step % 500 == 0 or step == max_step - 1:
 
             last_time = time.time()
@@ -354,12 +411,19 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
                 merged, test_writer, step, True)
 
             print '----------valid acc in step %d is %f-------------' % (step, result)
+
+            #add log if good result then add whole log into file
             log += '\nva a s %d %.4f' % (step, result)
+
+            #check the result, if better than best_accuracy then store model
             if result > last_accuracy:
                 last_accuracy = result
                 break_result = result
                 best_path, best_accuracy = store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, step)
 
+        #if 4000 steps not higher than 0.44
+        #then we think this model is failed
+        #end train
         if (step % 4000 == 0 and step > 0):
             if break_result < 0.44:
                 train_writer.close()
@@ -367,17 +431,22 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
 
                 return break_result
 
+        #to decay learning rate
         if (step % lr_decay_epoch == 0 and step > 0):
             lr_rate *= lr_decay
 
+    #use the best model to do the test evaluation
+    #restore the best model
     if best_path != '':
         saver.restore(sess, best_path)
         print "Model restored."
 
+    #do the last test evaluation
     result = do_eval(sess, validation_dataset, correct_num, placeholders)
     print '-----------last accuracy is %f------------' % (result)
     log += '\nte a %.4f\n' % (result)
 
+    #store the good result model
     if result > 0.98:
 
         write_file(result, dir_path, situation_now+log)
@@ -389,6 +458,7 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
         copyFiles(train_path, train_log_path)
         copyFiles(test_path, test_log_path)
 
+    #store the bad model for check later
     if result < 0.4:
         train_log_path = 'modules/low/%s/logs/train' % dir_path
         test_log_path = 'modules/low/%s/logs/test' % dir_path

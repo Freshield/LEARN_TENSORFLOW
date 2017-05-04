@@ -3,6 +3,15 @@ import os.path
 import json
 
 
+################################################
+#                                              #
+# helper for store json file and load json file#
+#                                              #
+#                                              #
+################################################
+
+
+#to store the parameter into json file
 def para_to_json(parent_dir, filename, target_dir):
     dic = {}
     with open(os.path.join(parent_dir, filename)) as f:
@@ -24,11 +33,13 @@ def para_to_json(parent_dir, filename, target_dir):
             jf.write(json_data)
         print 'done'
 
+#load the json file and transfer it into dictionary
 def json_to_dic(filename):
     with open(filename) as f:
         dic = json.load(f)
     return dic
 
+#load lots json file into a list of dictionary
 def json_to_dic_list(rootdir):
     dic_list = []
     for parent, dirnames, filenames in os.walk(rootdir):

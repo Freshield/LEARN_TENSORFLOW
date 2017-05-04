@@ -3,8 +3,19 @@ import simple_linear as sl
 import tensorflow as tf
 import file_filter as ff
 
+################################################
+#                                              #
+#           use best model json file           #
+#      create model to train on whole dataset  #
+#                                              #
+################################################
+
+
+
 filename = 'ciena_test.csv'
 
+#just show the parameters
+#we will use the value in json file
 batch_size = 100
 lr_rate = 0.01
 max_step = 10000
@@ -18,17 +29,19 @@ hidden1_size = 200
 hidden2_size = 100
 hidden3_size = 30
 
-
+#get the dataset
 dataset = pd.read_csv(filename, header=None)
 train_dataset, validation_dataset, test_dataset = sl.split_dataset(dataset, radio=0.1)
 
 datasets = (train_dataset, validation_dataset, test_dataset)
 
+#get the dictionary list from json files
 best_para_list = ff.json_to_dic_list('json')
 
+#loop value for calculate time
 loop = len(best_para_list)
 
-
+#for loop to train each parameters
 for paras in best_para_list:
     reg = paras['reg']
     lr_rate = paras['lr_rate']
@@ -74,6 +87,7 @@ for paras in best_para_list:
             correct_num = sl.get_correct_num(y, y_one_hot)
             accuracy = sl.get_accuracy(y, y_one_hot)
 
+            #store all of the summary
             merged = tf.summary.merge_all()
 
             placeholders = (x, y_, keep_prob)
@@ -83,12 +97,16 @@ for paras in best_para_list:
                                    lr_decay, lr_decay_epoch, correct_num, dir_path,
                                    merged, situation_now, loop)
 
+            #if not have good result and was stopped
+            #give this model one more chance
             if last_result < 0.6:
                 last_result = sl.train(max_step, datasets, batch_size, sess, keep_prob_v,
                                        loss, accuracy, train_op, placeholders, lr_rate,
                                        lr_decay, lr_decay_epoch, correct_num, dir_path,
                                        merged, situation_now, loop)
 
+            #if not have good result and was stopped
+            #give this model one more chance
             if last_result < 0.6:
                 last_result = sl.train(max_step, datasets, batch_size, sess, keep_prob_v,
                                        loss, accuracy, train_op, placeholders, lr_rate,
