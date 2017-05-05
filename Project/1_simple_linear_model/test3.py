@@ -13,3 +13,6 @@ for parent, dirnames, filenames in os.walk(rootdir):
             dic_list.append(dic)
 
 print len(dic_list)
+
+for i in xrange(1,20):
+    print i

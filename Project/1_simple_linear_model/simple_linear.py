@@ -45,18 +45,20 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     return train_set, validation_set, test_set
 
 #get a random data(maybe have same value)
-def get_batch_data(data_set, batch_size):
+def get_batch_data(data_set, batch_size, spannum=20):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
     columns = data_set.values[random_index]
+    label_num = spannum - 21
     features = columns[:, :-20]
-    labels = columns[:, -1]
+    labels = columns[:, label_num]
     return {'features': features, 'labels': labels}
 
 #directly get whole dataset(only for small dataset)
-def get_whole_data(data_set):
+def get_whole_data(data_set, spannum=20):
     features = data_set.values[:, :-20]
-    labels = data_set.values[:, -1]
+    label_num = spannum - 21
+    labels = data_set.values[:, label_num]
     return {'features': features, 'labels': labels}
 
 #get a random indexs for dataset,
@@ -69,7 +71,7 @@ def get_random_seq_indexs(data_set):
 
 #use the indexs together,
 #so that we can sequence batch whole dataset
-def sequence_get_data(data_set, indexs, last_index, batch_size):
+def sequence_get_data(data_set, indexs, last_index, batch_size, spannum=20):
     next_index = last_index + batch_size
     out_of_dataset = False
 
@@ -85,7 +87,8 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
 
     columns = data_set.values[span_index]
     features = columns[:, :-20]
-    labels = columns[:, -1]
+    label_num = spannum - 21
+    labels = columns[:, label_num]
     return (next_index, {'features': features, 'labels': labels}, out_of_dataset)
 
 #ensure the path exist
@@ -271,10 +274,10 @@ def get_feed_dict(placeholders, data, keep_prob_v):
 #to random eval a batch size in sequence
 #for big dataset evaluate a bigger batch size
 def do_batch_eval(sess, data_set, batch_size, accuracy, placeholders,
-                  merged, test_writer, global_step,if_summary=True):
+                  merged, test_writer, global_step, spannum=20,if_summary=True):
     indexs = get_random_seq_indexs(data_set)
     last_index = 0
-    _, data, _ = sequence_get_data(data_set, indexs, last_index, batch_size)
+    _, data, _ = sequence_get_data(data_set, indexs, last_index, batch_size, spannum)
 
     feed_dict = get_feed_dict(placeholders, data, 1.0)
 
@@ -290,7 +293,7 @@ def do_batch_eval(sess, data_set, batch_size, accuracy, placeholders,
 #not directly feed whole data
 #feed batch size and get correct numbers
 #at last calculate the whole dataset accuracy
-def do_eval(sess, data_set, correct_num, placeholders):
+def do_eval(sess, data_set, correct_num, placeholders, spannum=20):
     #fix batch size in 100
     batch_size = 100
     #total epoch loop num
@@ -304,14 +307,14 @@ def do_eval(sess, data_set, correct_num, placeholders):
     count = 0
     for step in xrange(num_epoch):
         #will not out of dataset, not need care about it
-        last_index, data, _ = sequence_get_data(data_set, indexs, last_index, batch_size)
+        last_index, data, _ = sequence_get_data(data_set, indexs, last_index, batch_size, spannum)
         feed_dict = get_feed_dict(placeholders, data, 1.0)
         num = sess.run(correct_num, feed_dict=feed_dict)
         count += num
 
     if rest_data_size != 0:
         #the rest data
-        last_index, data, _ = sequence_get_data(data_set, indexs, last_index, rest_data_size)
+        last_index, data, _ = sequence_get_data(data_set, indexs, last_index, rest_data_size, spannum)
         feed_dict = get_feed_dict(placeholders, data, 1.0)
         num = sess.run(correct_num, feed_dict=feed_dict)
         count += num
@@ -331,7 +334,8 @@ def store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, 
 
 
 #total train function
-def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,train_op, placeholders, lr_rate, lr_decay, lr_decay_epoch, correct_num, dir_path, merged, situation_now, loop):
+def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,train_op, placeholders, lr_rate,
+          lr_decay, lr_decay_epoch, correct_num, dir_path, merged, situation_now, loop, spannum=20, earlyStop=True):
     #get datasets
     train_dataset, validation_dataset, test_dataset = datasets
 
@@ -378,7 +382,7 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,trai
             out_of_dataset = False
 
         #get batch data
-        last_index, data, out_of_dataset = sequence_get_data(train_dataset, indexs, last_index, batch_size)
+        last_index, data, out_of_dataset = sequence_get_data(train_dataset, indexs, last_index, batch_size, spannum)
         feed_dict = get_feed_dict(placeholders, data, keep_prob_v)
 
         #write summary every 40 steps and last step
@@ -402,12 +406,12 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,trai
 
             result = do_batch_eval(
                 sess, train_dataset, 1000, accuracy, placeholders,
-                merged, test_writer, step, True)
+                merged, test_writer, step, spannum, True)
             print '----------train acc in step %d is %f-------------' % (step, result)
             log += '\ntr a s %d %.4f' % (step, result)
             result = do_batch_eval(
                 sess, validation_dataset, 1000, accuracy, placeholders,
-                merged, test_writer, step, True)
+                merged, test_writer, step, spannum, True)
 
             print '----------valid acc in step %d is %f-------------' % (step, result)
 
@@ -423,12 +427,13 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,trai
         #if 4000 steps not higher than 0.44
         #then we think this model is failed
         #end train
-        if (step % 4000 == 0 and step > 0):
-            if break_result < 0.44:
-                train_writer.close()
-                test_writer.close()
+        if earlyStop == True:
+            if (step % 6000 == 0 and step > 0):
+                if break_result < 0.44:
+                    train_writer.close()
+                    test_writer.close()
 
-                return break_result
+                    return break_result
 
         #to decay learning rate
         if (step % lr_decay_epoch == 0 and step > 0):
@@ -441,7 +446,7 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,trai
         print "Model restored."
 
     #do the last test evaluation
-    result = do_eval(sess, validation_dataset, correct_num, placeholders)
+    result = do_eval(sess, validation_dataset, correct_num, placeholders, spannum)
     print '-----------last accuracy is %f------------' % (result)
     log += '\nte a %.4f\n' % (result)
 

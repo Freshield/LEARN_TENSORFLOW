@@ -20,6 +20,6 @@ print ta.eval()
 
 print tb.eval()
 
-dataset = pd.read_csv('/media/freshield/DATA_U/simple_linear_whole_data/ciena_test.csv', header=None)
+dataset = pd.read_csv('ciena_test.csv', header=None)
 
 print dataset.shape
