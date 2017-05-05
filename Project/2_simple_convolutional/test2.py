@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+import pandas as pd
 
 ta = tf.ones([3])
 
@@ -16,3 +17,9 @@ a = np.arange(10)
 print a
 
 print a[5:]
+
+filename = '/home/freshield/ciena_test/ciena10000.csv'
+
+dataset = pd.read_csv(filename, header=None)
+
+print dataset.shape

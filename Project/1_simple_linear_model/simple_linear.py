@@ -63,7 +63,6 @@ def get_whole_data(data_set):
 #so that we can shuffle the data every epoch
 def get_random_seq_indexs(data_set):
     data_size = data_set.shape[0]
-    # index = tf.random_shuffle(tf.range(0, data_size))#maybe can do it on tensorflow later
     indexs = np.arange(data_size)
     np.random.shuffle(indexs)
     return indexs
