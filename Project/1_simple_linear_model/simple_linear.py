@@ -40,8 +40,6 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     train_set = dataset[0:-test_dataset_size * 2]
     validation_set = dataset[-test_dataset_size * 2:-test_dataset_size]
     test_set = dataset[-test_dataset_size:len(dataset)]
-
-
     return train_set, validation_set, test_set
 
 #get a random data(maybe have same value)
@@ -334,7 +332,8 @@ def store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, 
 
 
 #total train function
-def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,train_op, placeholders, lr_rate,
+def train(y, y_one_hot, max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,train_op, placeholders,
+          lr_rate,
           lr_decay, lr_decay_epoch, correct_num, dir_path, merged, situation_now, loop, spannum=20, earlyStop=True):
     #get datasets
     train_dataset, validation_dataset, test_dataset = datasets
@@ -395,6 +394,9 @@ def train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,trai
         #write loss and time every 100 steps
         if step % 100 == 0:
             print '-----------loss in step %d is %f----------' % (step, loss_v)
+            print sess.run(y[0], feed_dict=feed_dict)
+            print sess.run(y_one_hot[0], feed_dict=feed_dict)
+
 
         #do evaluation every 500 steps and last step
         if step % 500 == 0 or step == max_step - 1:

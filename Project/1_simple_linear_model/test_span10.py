@@ -73,8 +73,10 @@ for spannum in xrange(1,21):
             merged = tf.summary.merge_all()
 
             placeholders = (x, y_, keep_prob)
+
             # train
-            last_result = sl.train(max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy, train_op,
+            last_result = sl.train(y, y_one_hot, max_step, datasets, batch_size, sess, keep_prob_v, loss, accuracy,
+                                   train_op,
                                    placeholders, lr_rate, lr_decay, lr_decay_epoch, correct_num, dir_path, merged,
                                    situation_now, loop, spannum, False)
 
@@ -82,6 +84,6 @@ for spannum in xrange(1,21):
 
             loop -= 1
 
-f = file(filename, 'w+')
+f = file('span_result', 'w+')
 f.write(log)
 f.close()

@@ -9,8 +9,8 @@ batch = 100
 lr_rate = 0.01
 max_step = 10000
 reg = 0.01
-lr_decay = 0.97
-lr_decay_epoch = 500
+lr_decay = 0.99
+lr_decay_epoch = 1500
 
 
 def split_dataset(dataset, test_dataset_size=None, radio=None):
@@ -28,7 +28,7 @@ def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
     features = data_set.values[random_index, :-20]
-    labels = data_set.values[random_index, -1]
+    labels = data_set.values[random_index, -2]
     np_labels = np.array(labels, dtype=np.int32)
     labels_one_hot = np.eye(3)[np_labels]
     return {'features': features, 'labels': labels_one_hot}
@@ -36,7 +36,7 @@ def get_batch_data(data_set, batch_size):
 
 def get_whole_data(data_set):
     features = data_set.values[:, :-20]
-    labels = data_set.values[:, -1]
+    labels = data_set.values[:, -2]
     np_labels = np.array(labels, dtype=np.int32)
     labels_one_hot = np.eye(3)[np_labels]
     return {'features': features, 'labels': labels_one_hot}
@@ -49,7 +49,7 @@ def sequence_get_data(data_set, last_index, batch_size):
     indexs = np.arange(last_index, next_index, 1)
 
     features = data_set.values[indexs, :-20]
-    labels = data_set.values[indexs, -1]
+    labels = data_set.values[indexs, -2]
     np_labels = np.array(labels, dtype=np.int32)
     labels_one_hot = np.eye(3)[np_labels]
     return (next_index, {'features': features, 'labels': labels_one_hot})
