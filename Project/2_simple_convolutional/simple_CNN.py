@@ -83,11 +83,14 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
     out_of_dataset = False
 
     if next_index > data_set.shape[0]:
-        last_index -= data_set.shape[0]
-        next_index -= data_set.shape[0]
-        out_of_dataset = True
 
-    span_index = indexs[last_index:next_index]
+        next_index -= data_set.shape[0]
+        last_part = np.arange(last_index,indexs.shape[0])
+        before_part = np.arange(next_index)
+        span_index = indexs[np.concatenate((last_part, before_part))]
+        out_of_dataset = True
+    else:
+        span_index = indexs[last_index:next_index]
 
     columns = data_set.values[span_index]
     real_C = columns[:, :3100]
@@ -168,7 +171,7 @@ def do_eval(sess, data_set, batch_size, correct_num, placeholders, merged, test_
 ############### test #######################################
 ############################################################
 
-filename = 'ciena1000.csv'
+filename = 'ciena10000.csv'
 
 dataset = pd.read_csv(filename, header=None)
 
@@ -179,14 +182,14 @@ data = get_batch_data(train_dataset, 100)
 batch_size = 100
 lr_rate = 0.002
 max_step = 25000
-keep_prob_v = 1.0
+keep_prob_v = 0.5
 conv1_depth = 64
 conv2_depth = 128
 conv3_depth = 256
 fc1_size = 2048
 fc2_size = 512
 reg = 0.01
-lr_decay = 0.97
+lr_decay = 0.99
 lr_loop = 4000
 
 loop_num = 1

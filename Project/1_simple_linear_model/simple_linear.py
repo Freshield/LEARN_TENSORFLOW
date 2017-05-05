@@ -88,6 +88,21 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
     labels = columns[:, -1]
     return (next_index, {'features': features, 'labels': labels}, out_of_dataset)
 
+#ensure the path exist
+def del_and_create_dir(dir_path):
+    if tf.gfile.Exists(dir_path):
+        tf.gfile.DeleteRecursively(dir_path)
+    tf.gfile.MakeDirs(dir_path)
+
+#write log file
+def write_file(result, dir_path, situation_now):
+    filename = 'modules/%f-%s' % (result, dir_path)
+    f = file(filename, 'w+')
+    f.write(dir_path)
+    f.write(situation_now)
+    f.close()
+    print 'best file writed'
+
 #####################################################################
 ############### create the graph ####################################
 #####################################################################
@@ -303,12 +318,6 @@ def do_eval(sess, data_set, correct_num, placeholders):
 
     return count / data_set.shape[0]
 
-#ensure the path exist
-def del_and_create_dir(dir_path):
-    if tf.gfile.Exists(dir_path):
-        tf.gfile.DeleteRecursively(dir_path)
-    tf.gfile.MakeDirs(dir_path)
-
 #store our model
 def store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, step):
     if last_accuracy > best_accuracy or last_accuracy == 1.0:
@@ -319,15 +328,6 @@ def store_model(last_accuracy, best_accuracy, best_path, dir_path, saver, sess, 
         save_path = saver.save(sess, path)
         print("Model saved in file: %s" % save_path)
     return best_path, best_accuracy
-
-#write log file
-def write_file(result, dir_path, situation_now):
-    filename = 'modules/%f-%s' % (result, dir_path)
-    f = file(filename, 'w+')
-    f.write(dir_path)
-    f.write(situation_now)
-    f.close()
-    print 'best file writed'
 
 
 #total train function

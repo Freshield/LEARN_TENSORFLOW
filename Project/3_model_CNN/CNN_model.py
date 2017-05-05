@@ -101,9 +101,53 @@ def sequence_get_data(data_set, indexs, last_index, batch_size, span_num=20):
     labels = columns[:, label_pos]
     return (next_index, {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}, out_of_dataset)
 
+#ensure the path exist
+def del_and_create_dir(dir_path):
+    if tf.gfile.Exists(dir_path):
+        tf.gfile.DeleteRecursively(dir_path)
+    tf.gfile.MakeDirs(dir_path)
+
+#write log file
+def write_file(result, dir_path, situation_now):
+    filename = 'modules/%f-%s' % (result, dir_path)
+    f = file(filename, 'w+')
+    f.write(dir_path)
+    f.write(situation_now)
+    f.close()
+    print 'best file writed'
+
 ###########################################################
 ################# graph helper ############################
 ###########################################################
+#for summary the tensors
+def variable_summaries(var):
+    """Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""
+    with tf.name_scope('summaries'):
+      mean = tf.reduce_mean(var)
+      tf.summary.scalar('mean', mean)
+      with tf.name_scope('stddev'):
+        stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))
+      tf.summary.scalar('stddev', stddev)
+      tf.summary.scalar('max', tf.reduce_max(var))
+      tf.summary.scalar('min', tf.reduce_min(var))
+      tf.summary.histogram('histogram', var)
+
+# create weights
+# important
+# the weight initial value stddev is kinds of hyper para
+# if a wrong stddev will stuck the network
+def weight_variable(shape, stddev):
+    initial = tf.truncated_normal(shape=shape, stddev=stddev)
+
+    return tf.Variable(initial, name='weights')
+
+# create biases
+def biases_variable(shape, value):
+    initial = tf.constant(value=value, dtype=tf.float32, shape=shape)
+
+    return tf.Variable(initial, name='biases')
+
+
 #for create convolution kernel
 def conv2d(x, W, stride, padding):
   """conv2d returns a 2d convolution layer with full stride."""
@@ -115,22 +159,167 @@ def max_pool_2x2(x):
   return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                         strides=[1, 2, 2, 1], padding='SAME')
 
+#get input placeholders,
+#also create one hot label here
+def get_inputs(summary=True):
+    with tf.name_scope('input'):
+        # inputs
+        real_C_pl = tf.placeholder(tf.float32, [None, 3100])
+        imag_C_pl = tf.placeholder(tf.float32, [None, 3100])
+        y_ = tf.placeholder(tf.int32, [None])
+        others_pl = tf.placeholder(tf.float32, [None, 41])
 
-#create weights
+        # reshape
+        real_C_reshape = tf.reshape(real_C_pl, [-1, 31, 100, 1])
+        imag_C_reshape = tf.reshape(imag_C_pl, [-1, 31, 100, 1])
+        image_no_padding = tf.concat([real_C_reshape, imag_C_reshape], axis=1)
+        others_r = tf.reshape(others_pl, shape=[-1, 1, 41, 1])
+        others_r = tf.concat([others_r, others_r], axis=2)
+        others_r_p = tf.pad(others_r, [[0, 0], [0, 0], [0, 18], [0, 0]], 'CONSTANT')
+        others_reshape = tf.concat([others_r_p, others_r_p, others_r_p], axis=1)
+
+        # put the others and image together
+        images = tf.concat([others_reshape, image_no_padding, others_reshape], axis=1)
+        y_one_hot = tf.one_hot(y_, 3)
+        if summary == True:
+            # add image to summary so that you can see it in tensorboard
+            tf.summary.image('input', images, 20)
+    return images, y_one_hot
+
+#create convolution layer,
+#return parameter for L2 regularzation
+def get_conv_layer(input, input_depth, conv_depth, stddev, b_value, F, name='conv', S=1, padding='SAME',
+                   act=tf.nn.relu, summary = True):
+    with tf.name_scope(name):
+        with tf.name_scope('weights'):
+            W_conv = weight_variable([F, F, input_depth, conv_depth], stddev)
+            if summary == True:
+                variable_summaries(W_conv)
+        with tf.name_scope('biases'):
+            b_conv = biases_variable([conv_depth], b_value)
+            if summary == True:
+                variable_summaries(b_conv)
+        with tf.name_scope('activation'):
+            h_conv = act(conv2d(input, W_conv, S, padding) + b_conv, name='activation')
+            if summary == True:
+                tf.summary.histogram('activation', h_conv)
+        with tf.name_scope('pooling'):
+            h_pool = max_pool_2x2(h_conv)
+            if summary == True:
+                tf.summary.histogram('activation', h_conv)
+        parameters = (W_conv, b_conv)
+
+    return h_pool, parameters
+
+#create fully connect layer,
+# relu(x * W + b)
+#return parameter for L2 regularzation
+def get_fc_layer(input, input_size, hidden_size, stddev, b_value, name='hidden', act=tf.nn.relu, summary = True):
+    with tf.name_scope(name):
+        with tf.name_scope('weights'):
+            W = weight_variable([input_size, hidden_size], stddev)
+            if summary == True:
+                variable_summaries(W)
+        with tf.name_scope('biases'):
+            b = biases_variable([hidden_size], b_value)
+            if summary == True:
+                variable_summaries(b)
+        with tf.name_scope('activation'):
+            activation = act(tf.matmul(input, W) + b, name='activation')
+            if summary == True:
+                tf.summary.histogram('activation', activation)
+
+        parameters = (W, b)
+
+    return activation, parameters
+
 #important
-#the weight initial value stddev is kinds of hyper para
-#if a wrong stddev will stuck the network
-def weight_variable(shape):
-  """weight_variable generates a weight variable of a given shape."""
-  initial = tf.truncated_normal(shape, stddev=0.35)
-  return tf.Variable(initial)
+#scores must different with hidden layer
+#because there have relu at the end of hidden
+#and score needn't
+# x * W + b
+#return parameter for L2 regularzation
+def get_scores(input, input_size, hidden_size, stddev, b_value, name='scores', summary = True):
+    with tf.name_scope(name):
+        with tf.name_scope('weights'):
+            W = weight_variable([input_size, hidden_size], stddev)
+            if summary == True:
+                variable_summaries(W)
+        with tf.name_scope('biases'):
+            b = biases_variable([hidden_size], b_value)
+            if summary == True:
+                variable_summaries(b)
+        with tf.name_scope('scores'):
+            y = tf.matmul(input, W) + b
+            if summary == True:
+                tf.summary.histogram('scores', y)
+
+        parameters = (W, b)
+
+    return y, parameters
+
+#drop the input
+def get_droppout(input):
+    with tf.name_scope('dropout'):
+        keep_prob = tf.placeholder(tf.float32)
+        dropout = tf.nn.dropout(input, keep_prob=keep_prob)
+    return dropout, keep_prob
+
+#3 layers neural network model
+#input 241, output 3
+def get_logits(x, conv1_depth, conv2_depth, conv3_depth, fc1_size, fc2_size, labels_size, stddev, b_value):
+
+    conv1, conv1_para = get_conv_layer(x, 1, conv1_depth, stddev, stddev, 3, 'conv1')
+
+    conv2, conv2_para = get_conv_layer(conv1, conv1_depth, conv2_depth, stddev, stddev, 3, 'conv2')
+
+    conv2_pad = tf.pad(conv2, [[0, 0], [1, 1], [1, 1], [0, 0]], 'CONSTANT')
+
+    conv3, conv3_para = get_conv_layer(conv2_pad, conv2_depth, conv3_depth, stddev, stddev, 1, 'conv3', 2, 'VALID')
+
+    conv3_flat = tf.reshape(conv3, [-1, 5 * 7 * conv3_depth])
+
+    fc1, fc1_para = get_fc_layer(conv3_flat, 5 * 7 * conv3_depth, fc1_size, stddev, stddev, 'fc1')
+
+    fc2, fc2_para = get_fc_layer(fc1, fc1_size, fc2_size, stddev, stddev, 'fc2')
+
+    fc2_drop, keep_prob = get_droppout(fc2)
+
+    y, scores_para = get_fc_layer(fc2_drop, fc2_size, labels_size, stddev, stddev, 'scores')
+
+    total_parameters = [conv1_para, conv2_para, conv3_para, fc1_para, fc2_para, scores_para]
+
+    return y, total_parameters, keep_prob
 
 
-#create biases
-def bias_variable(shape):
-  """bias_variable generates a bias variable of a given shape."""
-  initial = tf.constant(0.1, shape=shape)
-  return tf.Variable(initial)
+#get loss by softmax
+#also can choose if use L2 regularzation or not
+def get_loss(y, y_one_hot, total_parameters, reg, summary = True, use_l2_loss = True):
+    with tf.name_scope('loss'):
+        cross_entropy = tf.reduce_mean(
+            tf.nn.softmax_cross_entropy_with_logits(labels=y_one_hot, logits=y), name='xentropy')
+        if use_l2_loss == True:
+            reg_loss = 0
+            for parameter in total_parameters:
+                W, b = parameter
+                reg_loss += 0.5 * reg * (tf.nn.l2_loss(W) + tf.nn.l2_loss(b))
+            loss = cross_entropy + reg_loss
+        else:
+            loss = cross_entropy
+
+        if summary == True:
+            tf.summary.scalar('cross_entropy', cross_entropy)
+            tf.summary.scalar('loss', loss)
+
+        return loss
+
+# get train handle for training and backpropagation
+# use adam function
+def get_train_op(loss, lr_rate, optimizer=tf.train.AdamOptimizer):
+    with tf.name_scope('train'):
+        train_op = optimizer(lr_rate).minimize(loss)
+    return train_op
+
 
 #to do the evaluation part for the whole data
 #not use all data together, but many batchs
