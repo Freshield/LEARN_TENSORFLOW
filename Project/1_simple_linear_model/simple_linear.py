@@ -44,7 +44,7 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
 #get a random data(maybe have same value)
 def get_batch_data(data_set, batch_size, spannum=20):
-    lines_num = data_set.shape[0] - 1
+    lines_num = data_set.shape[0]
     random_index = np.random.randint(lines_num, size=[batch_size])
     columns = data_set.values[random_index]
     label_num = spannum - 21
@@ -394,8 +394,8 @@ def train(y, y_one_hot, max_step, datasets, batch_size, sess, keep_prob_v, loss,
         #write loss and time every 100 steps
         if step % 100 == 0:
             print '-----------loss in step %d is %f----------' % (step, loss_v)
-            print sess.run(y[0], feed_dict=feed_dict)
-            print sess.run(y_one_hot[0], feed_dict=feed_dict)
+            #print sess.run(y[0], feed_dict=feed_dict)
+            #print sess.run(y_one_hot[0], feed_dict=feed_dict)
 
 
         #do evaluation every 500 steps and last step
