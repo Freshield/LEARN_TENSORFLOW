@@ -17,8 +17,8 @@ def split_dataset(dataset, radio):
 
 def get_whole_data(data_set):
     features = data_set[:,:241]
-    labels = data_set[:,260]
-    return {'features':features, 'labels':labels.astype(np.int32)}
+    labels = data_set[:,259]
+    return {'features':features.astype(np.float64), 'labels':labels.astype(np.int64)}
 #-----------------------------
 filename = 'ciena_test.csv'
 dataset = pd.read_csv(filename, header=None)
@@ -33,16 +33,17 @@ data = {'X_train':train_data['features'], 'y_train':train_data['labels'],
 hidden_dims = [512, 256, 128]
 reg = 0.01
 lr = 0.002
-weight_scale = 1.00
-num_epoch = 5000
+weight_scale = 0.1
+num_epoch = 500
 
 model = FullyConnectedNet(hidden_dims=hidden_dims, input_dim=241, num_classes=3,
-                          dtype=np.float64, reg=reg, weight_scale=weight_scale)
+                          dtype=np.float64, reg=reg, weight_scale=weight_scale,
+                          use_batchnorm=True, dropout=0.0)
 
 solver = Solver(model, data, num_epochs=num_epoch, batch_size=100, update_rule='adam',
                 optim_config={
                     'learning_rate':lr
                 },
-                print_every=100, lr_decay=0.99, verbose=True)
+                print_every=500, lr_decay=0.99, verbose=True)
 
 solver.train()
