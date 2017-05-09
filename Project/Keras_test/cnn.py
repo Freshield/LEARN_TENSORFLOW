@@ -15,6 +15,7 @@ from keras.callbacks import EarlyStopping
 import pickle
 import sys
 K.set_image_dim_ordering('th')
+print K.image_data_format()
 
 #Load data from csv files
 
@@ -29,13 +30,15 @@ if len(sys.argv)>1:
         print 'SPAN ', s
         SPAN.append(int(s))
 else:
-    SPAN=[10]
+    SPAN=[1]
 
 
-NROWS = 200000 # for smaller datasets, choose from 100, 1000, 10000, and 'all'
+NROWS = 10000 # for smaller datasets, choose from 100, 1000, 10000, and 'all'
 #SPAN = [1]# choose the span from 1 to 20 for the prediciton
 
-data = pd.read_csv('data/FiberID_Data_noPCA.csv', header=None, nrows=NROWS)
+filename = '~/Ciena_data/ciena10000.csv'
+
+data = pd.read_csv(filename, header=None, nrows=NROWS)
 
 print "Data Shape: %s" % str(data.shape)
 
@@ -54,6 +57,7 @@ input_data[:,2,:,:] = np.reshape(np.tile(np_data[:,6200:6241],76)[:,:3100],(NROW
 if len(SPAN)==2:
     output_data = create_output(np_data[:,6240+SPAN[0]], np_data[:,6240+SPAN[1]])
 else:
+    print SPAN
     output_data = np_data[:,6240+SPAN[0]]
 output_data = np_utils.to_categorical(output_data)
 
