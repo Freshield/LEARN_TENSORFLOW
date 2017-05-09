@@ -16,12 +16,12 @@ def get_batch_data(data_set, batch_size):
     random_index = np.random.randint(data_set.shape[0], size=[batch_size])
     columns = data_set[random_index]
     features = columns[:,:241]
-    labels = columns[:,251]
+    labels = columns[:,259]
     return {'features':features, 'labels':labels}
 
 def get_whole_data(data_set):
     features = data_set[:,:241]
-    labels = data_set[:,251]
+    labels = data_set[:,259]
     return {'features':features, 'labels':labels}
 #-----------------------------
 filename = 'ciena_test.csv'
