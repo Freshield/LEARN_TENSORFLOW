@@ -15,7 +15,7 @@ from keras.callbacks import EarlyStopping
 import pickle
 import sys
 #set channels first
-K.set_image_dim_ordering('th')
+#K.set_image_dim_ordering('th')
 print K.image_data_format()
 
 #Load data from csv files
@@ -44,14 +44,14 @@ data = pd.read_csv(filename, header=None, nrows=NROWS)
 print "Data Shape: %s" % str(data.shape)
 
 # Split to input and output
-input_data = np.zeros((NROWS,3,31,100))
+input_data = np.zeros((NROWS,31,100,3))
 
 
 np_data = data.as_matrix()
-temp_data = np.reshape(np_data[:,:6200], (NROWS,2,31,100))
-input_data[:,0,:,:] = temp_data[:,0,:,:]
-input_data[:,1,:,:] = temp_data[:,1,:,:]
-input_data[:,2,:,:] = np.reshape(np.tile(np_data[:,6200:6241],76)[:,:3100],(NROWS,31,100))
+temp_data = np.reshape(np_data[:,:6200], (NROWS,31,100,2))
+input_data[:,:,:,0] = temp_data[:,:,:,0]
+input_data[:,:,:,1] = temp_data[:,:,:,1]
+input_data[:,:,:,2] = np.reshape(np.tile(np_data[:,6200:6241],76)[:,:3100],(NROWS,31,100))
 
 # TODO instead of tiling, add 41 parameters in extra layer
 
@@ -67,10 +67,10 @@ print output_data.shape
 
 # normalize data
 
-input_data[:,:2,:,:] = input_data[:,:2,:,:] - np.amin(input_data[:,:2,:,:])
-input_data[:,:2,:,:] = input_data[:,:2,:,:]/np.amax(input_data[:,:2,:,:])
-input_data[:,2,:,:] = input_data[:,2,:,:] - np.amin(input_data[:,2,:,:])
-input_data[:,2,:,:] = input_data[:,2,:,:]/np.amax(input_data[:,2,:,:])
+input_data[:,:,:,:2] = input_data[:,:,:,:2] - np.amin(input_data[:,:,:,:2])
+input_data[:,:,:,:2] = input_data[:,:,:,:2]/np.amax(input_data[:,:,:,:2])
+input_data[:,:,:,2] = input_data[:,:,:,2] - np.amin(input_data[:,:,:,2])
+input_data[:,:,:,2] = input_data[:,:,:,2]/np.amax(input_data[:,:,:,2])
 
 print 'Max of data is: ', np.amax(input_data)
 print 'Min of data is: ', np.amin(input_data)
@@ -89,13 +89,14 @@ print y_test.shape
 print np.amax(X_train)
 print np.amin(X_train)
 print X_train.dtype
+print y_train.dtype
 
 
 num_classes = y_test.shape[1]
 
 # Create the model
 model = Sequential()
-model.add(Conv2D(32, (3, 3), input_shape=(3, 31,100), padding='same', activation='relu', kernel_constraint=maxnorm(3)))
+model.add(Conv2D(32, (3, 3), input_shape=(31,100,3), padding='same', activation='relu', kernel_constraint=maxnorm(3)))
 model.add(Dropout(0.2))
 model.add(Conv2D(32, (3, 3), activation='relu', padding='same', kernel_constraint=maxnorm(3)))
 model.add(MaxPooling2D(pool_size=(2, 2)))

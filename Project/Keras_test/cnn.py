@@ -31,7 +31,7 @@ if len(sys.argv)>1:
         print 'SPAN ', s
         SPAN.append(int(s))
 else:
-    SPAN=[1]
+    SPAN=[20]
 
 
 NROWS = 10000 # for smaller datasets, choose from 100, 1000, 10000, and 'all'
