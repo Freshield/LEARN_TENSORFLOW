@@ -13,3 +13,7 @@ b = tf.minimum(b, 2)
 sess = tf.InteractiveSession()
 
 print b.eval()
+
+c = tf.ones([3,4,5])
+
+print np.arange(len(c.shape) - 1)

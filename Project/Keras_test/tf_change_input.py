@@ -4,9 +4,6 @@ import numpy as np
 import time
 import os
 
-from keras.utils import np_utils
-from sklearn.cross_validation import train_test_split
-
 ################################################
 #                                              #
 #           use best model parameter           #
@@ -41,9 +38,9 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     if radio != None:
         test_dataset_size = int(radio * len(dataset))
 
-    train_set = dataset[0:-test_dataset_size * 2]
-    validation_set = dataset[-test_dataset_size * 2:-test_dataset_size]
-    test_set = dataset[-test_dataset_size:len(dataset)]
+    train_set = dataset.values[0:-test_dataset_size * 2]
+    validation_set = dataset.values[-test_dataset_size * 2:-test_dataset_size]
+    test_set = dataset.values[-test_dataset_size:len(dataset)]
 
 
     return train_set, validation_set, test_set
@@ -122,6 +119,15 @@ def bias_variable(shape):
   initial = tf.constant(0.1,tf.float32, shape=shape)
   return tf.Variable(initial)
 
+def batch_norm(bn_in):
+    with tf.name_scope('BN'):
+        offset = tf.Variable(tf.constant(0.0, shape=[bn_in.shape[-1]]), name='offset')
+        scale = tf.Variable(tf.constant(1.0, shape=[bn_in.shape[-1]]), name='sclae')
+        axises = np.arange(len(bn_in.shape) - 1)
+        bn_mean, bn_var = tf.nn.moments(bn_in, axises, name='moment')
+        normed = tf.nn.batch_normalization(bn_in, bn_mean, bn_var, offset, scale, 1e-3, name='bn_out')
+    return normed
+
 #to do the evaluation part for the whole data
 #not use all data together, but many batchs
 def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged, test_writer, if_summary,
@@ -161,6 +167,24 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
     return count / X_dataset.shape[0]
 
 
+def reshape_and_norm_dataset(dataset, SPAN):
+    input_data = np.zeros((dataset.shape[0], 31, 100, 3))
+    temp_data = np.reshape(dataset[:, :6200], (dataset.shape[0], 31, 100, 2))
+    input_data[:, :, :, 0] = temp_data[:, :, :, 0]
+    input_data[:, :, :, 1] = temp_data[:, :, :, 1]
+    input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 76)[:, :3100], (dataset.shape[0], 31, 100))
+
+    output_data = dataset[:, 6240 + SPAN[0]]
+
+    # normalize data
+    input_data[:, :, :, :2] = input_data[:, :, :, :2] - np.amin(input_data[:, :, :, :2])
+    input_data[:, :, :, :2] = input_data[:, :, :, :2] / np.amax(input_data[:, :, :, :2])
+    input_data[:, :, :, 2] = input_data[:, :, :, 2] - np.amin(input_data[:, :, :, 2])
+    input_data[:, :, :, 2] = input_data[:, :, :, 2] / np.amax(input_data[:, :, :, 2])
+
+    return input_data, output_data
+
+
 ############################################################
 ############### test #######################################
 ############################################################
@@ -176,35 +200,12 @@ data = pd.read_csv(filename, header=None, nrows=NROWS)
 
 print "Data Shape: %s" % str(data.shape)
 
-# Split to input and output
-input_data = np.zeros((NROWS,31,100,3))
-
-np_data = data.as_matrix()
-temp_data = np.reshape(np_data[:,:6200], (NROWS,31,100,2))
-input_data[:,:,:,0] = temp_data[:,:,:,0]
-input_data[:,:,:,1] = temp_data[:,:,:,1]
-input_data[:,:,:,2] = np.reshape(np.tile(np_data[:,6200:6241],76)[:,:3100],(NROWS,31,100))
-
-print SPAN
-output_data = np_data[:,6240+SPAN[0]]
-#output_data = np_utils.to_categorical(output_data)
-
-print input_data.shape
-print output_data.shape
-
-# normalize data
-
-input_data[:,:,:,:2] = input_data[:,:,:,:2] - np.amin(input_data[:,:,:,:2])
-input_data[:,:,:,:2] = input_data[:,:,:,:2]/np.amax(input_data[:,:,:,:2])
-input_data[:,:,:,2] = input_data[:,:,:,2] - np.amin(input_data[:,:,:,2])
-input_data[:,:,:,2] = input_data[:,:,:,2]/np.amax(input_data[:,:,:,2])
-
-print 'Max of data is: ', np.amax(input_data)
-print 'Min of data is: ', np.amin(input_data)
 
 # Split into training and testing
+train_set, validation_set, test_set = split_dataset(data, radio=0.1)
 
-X_train, X_test,y_train,y_test=train_test_split(input_data,output_data,test_size=0.15)
+X_train, y_train = reshape_and_norm_dataset(train_set, SPAN)
+X_test, y_test = reshape_and_norm_dataset(test_set, SPAN)
 
 print X_train.shape
 print X_test.shape
@@ -239,22 +240,27 @@ with tf.Graph().as_default():
         # inputs
         input_x = tf.placeholder(tf.float32, [None, 31, 100, 3])
         input_y = tf.placeholder(tf.int32, [None])
-        input_y_one_hot = tf.one_hot(input_y)
+        input_y_one_hot = tf.one_hot(input_y, 3)
         keep_prob1 = tf.placeholder(tf.float32)
         keep_prob2 = tf.placeholder(tf.float32)
 
         #add image to summary so that you can see it in tensorboard
         #tf.summary.image('input', input_x, 20)
 
+        bn_input = batch_norm(input_x)
+
         # build graph
         #convolution layer 1
         with tf.name_scope('conv1'):
+
             W_conv1 = tf.get_variable('weights1', [3, 3, 3, 32],initializer=tf.contrib.layers.xavier_initializer())
             #constraints
             W_conv1 = tf.minimum(W_conv1, 3)
             b_conv1 = bias_variable([32])
-            h_conv1 = tf.nn.relu(conv2d(input_x, W_conv1, 1, 'SAME') + b_conv1)
-            h_conv1_drop = tf.nn.dropout(h_conv1, keep_prob1)
+            h_conv1 = conv2d(input_x, W_conv1, 1, 'SAME') + b_conv1
+            bn_conv1 = batch_norm(h_conv1)
+            act_conv1 = tf.nn.relu(h_conv1)
+            h_conv1_drop = tf.nn.dropout(act_conv1, keep_prob1)
 
 
         #convolution layer2
@@ -263,10 +269,12 @@ with tf.Graph().as_default():
             #constraints
             W_conv2 = tf.minimum(W_conv2, 3)
             b_conv2 = bias_variable([32])
-            h_conv2 = tf.nn.relu(conv2d(h_conv1_drop, W_conv2, 1, 'SAME') + b_conv2)
+            h_conv2 = conv2d(h_conv1_drop, W_conv2, 1, 'SAME') + b_conv2
+            bn_conv2 = batch_norm(h_conv2)
+            act_conv2 = tf.nn.relu(h_conv2)
 
             #16,50,32
-            h_pool = max_pool_2x2(h_conv2)
+            h_pool = max_pool_2x2(act_conv2)
 
         #fully connect layer1
         with tf.name_scope('fc1'):
@@ -276,8 +284,10 @@ with tf.Graph().as_default():
             b_fc1 = bias_variable([512])
             #flatten the matrix
             h_pool_flat = tf.reshape(h_pool, [-1, 16 * 50 * 32])
-            h_fc1 = tf.nn.relu(tf.matmul(h_pool_flat, W_fc1) + b_fc1)
-            h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob2)
+            h_fc1 = tf.matmul(h_pool_flat, W_fc1) + b_fc1
+            bn_fc1 = batch_norm(h_fc1)
+            act_fc1 = tf.nn.relu(h_fc1)
+            h_fc1_drop = tf.nn.dropout(act_fc1, keep_prob2)
 
         #the scores
         with tf.name_scope('scores'):
@@ -350,37 +360,6 @@ with tf.Graph().as_default():
                 result = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders, merged, test_writer,
                                  False, step)
                 print '----------accuracy in step %d is %f-------------' % (step, result)
-                """
-                if result > last_accuracy or result == 1.0:
-                    last_accuracy = result
-                    if last_accuracy > best_accuracy or result == 1.0:
-                        best_accuracy = result
-                        path = "modules/%d/%.2f/model.ckpt" % (step, result)
-                        best_path = path
-                        if tf.gfile.Exists(path):
-                            tf.gfile.DeleteRecursively(path)
-                        tf.gfile.MakeDirs(path)
-                        save_path = saver.save(sess, path)
-                        print("Model saved in file: %s" % save_path)
 
-            if step > 0 and step % lr_loop == 0:
-                lr_rate *= lr_decay
-
-        if best_path != '':
-            saver.restore(sess, best_path)
-            print "Model restored."
-        """
         result = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders, merged, test_writer, False, step)
         print '-----------last accuracy is %f------------' % (result)
-        """
-        filename = '%.2f-%s' % (best_accuracy, situation_now)
-        f = file(filename, 'w+')
-        f.write(str(best_accuracy))
-        f.write(situation_now)
-        f.write('-----------last accuracy is %f------------' % (result))
-        f.close()
-
-        test_writer.close()
-
-        loop_num -= 1
-        """
