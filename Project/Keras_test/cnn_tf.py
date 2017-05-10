@@ -34,7 +34,7 @@ else:
     SPAN=[1]
 
 
-NROWS = 10000 # for smaller datasets, choose from 100, 1000, 10000, and 'all'
+NROWS = 1000 # for smaller datasets, choose from 100, 1000, 10000, and 'all'
 #SPAN = [1]# choose the span from 1 to 20 for the prediciton
 
 filename = '~/Ciena_data/ciena10000.csv'

@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import time
 import os
+from keras.utils import np_utils
 
 ################################################
 #                                              #
@@ -38,9 +39,9 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     if radio != None:
         test_dataset_size = int(radio * len(dataset))
 
-    train_set = dataset[0:-test_dataset_size * 2]
-    validation_set = dataset[-test_dataset_size * 2:-test_dataset_size]
-    test_set = dataset[-test_dataset_size:len(dataset)]
+    train_set = dataset.values[0:-test_dataset_size * 2]
+    validation_set = dataset.values[-test_dataset_size * 2:-test_dataset_size]
+    test_set = dataset.values[-test_dataset_size:len(dataset)]
 
 
     return train_set, validation_set, test_set
@@ -49,21 +50,23 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 def get_batch_data(data_set, batch_size):
     lines_num = data_set.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
-    columns = data_set.values[random_index]
+    columns = data_set[random_index]
     real_C = columns[:, :3100]
     imag_C = columns[:, 3100 : 6200]
     others = columns[:, 6200 : 6241]
-    labels = columns[:, -10]
+    labels = columns[:, -2]
+    labels = np_utils.to_categorical(labels)
 
     return {'real_C':real_C, 'imag_C':imag_C, 'others':others, 'labels':labels}
 
 #directly get whole dataset(only for small dataset)
 def get_whole_data(data_set):
-    columns = data_set.values
+    columns = data_set
     real_C = columns[:, :3100]
     imag_C = columns[:, 3100: 6200]
     others = columns[:, 6200: 6241]
-    labels = columns[:, -10]
+    labels = columns[:, -2]
+    labels = np_utils.to_categorical(labels)
 
     return {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}
 
@@ -92,11 +95,12 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
     else:
         span_index = indexs[last_index:next_index]
 
-    columns = data_set.values[span_index]
+    columns = data_set[span_index]
     real_C = columns[:, :3100]
     imag_C = columns[:, 3100: 6200]
     others = columns[:, 6200: 6241]
-    labels = columns[:, -10]
+    labels = columns[:, -2]
+    labels = np_utils.to_categorical(labels)
     return (next_index, {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}, out_of_dataset)
 
 ###########################################################
@@ -118,23 +122,23 @@ def max_pool_2x2(x):
 #important
 #the weight initial value stddev is kinds of hyper para
 #if a wrong stddev will stuck the network
-def weight_variable(shape):
+def weight_variable(shape, name):
   """weight_variable generates a weight variable of a given shape."""
-  initial = tf.truncated_normal(shape, stddev=0.35)
-  return tf.Variable(initial)
+  weight = tf.get_variable(name, shape=shape, initializer=tf.contrib.layers.xavier_initializer())
+  return weight
 
 
 #create biases
 def bias_variable(shape):
   """bias_variable generates a bias variable of a given shape."""
-  initial = tf.constant(0.1, shape=shape)
+  initial = tf.constant(0.01, shape=shape)
   return tf.Variable(initial)
 
 #to do the evaluation part for the whole data
 #not use all data together, but many batchs
 def do_eval(sess, data_set, batch_size, correct_num, placeholders, merged, test_writer, if_summary, global_step):
 
-    real_C_pl, imag_C_pl, others_pl, labels_pl = placeholders
+    real_C_pl, imag_C_pl, others_pl, labels_pl, keep_prob = placeholders
     num_epoch = data_set.shape[0] / batch_size
     rest_data_size = data_set.shape[0] % batch_size
 
@@ -171,24 +175,54 @@ def do_eval(sess, data_set, batch_size, correct_num, placeholders, merged, test_
 ############### test #######################################
 ############################################################
 
-filename = 'ciena10000.csv'
+filename = 'ciena1000.csv'
 
 dataset = pd.read_csv(filename, header=None)
 
 train_dataset, validation_dataset, test_dataset = split_dataset(dataset, radio=0.1)
 
-data = get_batch_data(train_dataset, 100)
+train_dataset[:, :3100] = train_dataset[:, :3100] - np.amin(train_dataset[:, :3100])
+train_dataset[:, :3100] = train_dataset[:, :3100] / np.amax(train_dataset[:, :3100])
+
+train_dataset[:,3100:6200] = train_dataset[:,3100:6200] - np.amin(train_dataset[:,3100:6200])
+train_dataset[:,3100:6200] = train_dataset[:,3100:6200] / np.amax(train_dataset[:,3100:6200])
+
+train_dataset[:,6200:6241] = train_dataset[:,6200:6241] - np.amin(train_dataset[:,6200:6241])
+train_dataset[:,6200:6241] = train_dataset[:,6200:6241] / np.amax(train_dataset[:,6200:6241])
+
+
+
+validation_dataset[:, :3100] = validation_dataset[:, :3100] - np.amin(validation_dataset[:, :3100])
+validation_dataset[:, :3100] = validation_dataset[:, :3100] / np.amax(validation_dataset[:, :3100])
+
+validation_dataset[:,3100:6200] = validation_dataset[:,3100:6200] - np.amin(validation_dataset[:,3100:6200])
+validation_dataset[:,3100:6200] = validation_dataset[:,3100:6200] / np.amax(validation_dataset[:,3100:6200])
+
+validation_dataset[:,6200:6241] = validation_dataset[:,6200:6241] - np.amin(validation_dataset[:,6200:6241])
+validation_dataset[:,6200:6241] = validation_dataset[:,6200:6241] / np.amax(validation_dataset[:,6200:6241])
+
+
+test_dataset[:, :3100] = test_dataset[:, :3100] - np.amin(test_dataset[:, :3100])
+test_dataset[:, :3100] = test_dataset[:, :3100] / np.amax(test_dataset[:, :3100])
+
+test_dataset[:,3100:6200] = test_dataset[:,3100:6200] - np.amin(test_dataset[:,3100:6200])
+test_dataset[:,3100:6200] = test_dataset[:,3100:6200] / np.amax(test_dataset[:,3100:6200])
+
+test_dataset[:,6200:6241] = test_dataset[:,6200:6241] - np.amin(test_dataset[:,6200:6241])
+test_dataset[:,6200:6241] = test_dataset[:,6200:6241] / np.amax(test_dataset[:,6200:6241])
+
+#data = get_batch_data(train_dataset, 100)
 
 batch_size = 100
 lr_rate = 0.002
 max_step = 25000
-keep_prob_v = 0.5
+keep_prob_v = 1.0
 conv1_depth = 64
 conv2_depth = 128
 conv3_depth = 256
 fc1_size = 2048
 fc2_size = 512
-reg = 0.01
+reg = 0.02
 lr_decay = 0.99
 lr_loop = 4000
 
@@ -209,7 +243,7 @@ with tf.Graph().as_default():
         # inputs
         real_C_pl = tf.placeholder(tf.float32, [None, 3100])
         imag_C_pl = tf.placeholder(tf.float32, [None, 3100])
-        labels_pl = tf.placeholder(tf.int32, [None])
+        labels_pl = tf.placeholder(tf.float32, [None, 3])
         keep_prob = tf.placeholder(tf.float32)
         others_pl = tf.placeholder(tf.float32, [None, 41])
 
@@ -224,21 +258,23 @@ with tf.Graph().as_default():
 
         #put the others and image together
         images = tf.concat([others_reshape, image_no_padding, others_reshape], axis=1)
-        labels_one_hot = tf.one_hot(labels_pl, 3)
+        labels_one_hot = labels_pl
         #add image to summary so that you can see it in tensorboard
         tf.summary.image('input', images, 20)
 
         # build graph
         #convolution layer 1
         with tf.name_scope('conv1'):
-            W_conv1 = weight_variable([3, 3, 1, conv1_depth])
+            W_conv1 = weight_variable([3, 3, 1, conv1_depth], 'w1')
+            W_conv1 = tf.minimum(W_conv1, 3)
             b_conv1 = bias_variable([conv1_depth])
             h_conv1 = tf.nn.relu(conv2d(images, W_conv1, 1, 'SAME') + b_conv1)
 
             h_pool1 = max_pool_2x2(h_conv1)
         #convolution layer2
         with tf.name_scope('conv2'):
-            W_conv2 = weight_variable([3, 3, conv1_depth, conv2_depth])
+            W_conv2 = weight_variable([3, 3, conv1_depth, conv2_depth], 'w2')
+            W_conv2 = tf.minimum(W_conv2, 3)
             b_conv2 = bias_variable([conv2_depth])
             h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2, 1, 'SAME') + b_conv2)
 
@@ -247,28 +283,32 @@ with tf.Graph().as_default():
         with tf.name_scope('conv3'):
             h_pool2_pad = tf.pad(h_pool2, [[0, 0], [1, 1], [1, 1], [0, 0]], 'CONSTANT')
 
-            W_conv3 = weight_variable([1, 1, conv2_depth, conv3_depth])
+            W_conv3 = weight_variable([1, 1, conv2_depth, conv3_depth], 'w3')
+            W_conv3 = tf.minimum(W_conv3, 3)
             b_conv3 = bias_variable([conv3_depth])
             h_conv3 = tf.nn.relu(conv2d(h_pool2_pad, W_conv3, 2, 'VALID') + b_conv3)
 
             h_pool3 = max_pool_2x2(h_conv3)
         #fully connect layer1
         with tf.name_scope('fc1'):
-            W_fc1 = weight_variable([5 * 7 * conv3_depth, fc1_size])
+            W_fc1 = weight_variable([5 * 7 * conv3_depth, fc1_size], 'w4')
+            W_fc1 = tf.minimum(W_fc1, 3)
             b_fc1 = bias_variable([fc1_size])
             #flatten the matrix
             h_pool3_flat = tf.reshape(h_pool3, [-1, 5 * 7 * conv3_depth])
             h_fc1 = tf.nn.relu(tf.matmul(h_pool3_flat, W_fc1) + b_fc1)
         #fully connect layer2
         with tf.name_scope('fc2'):
-            W_fc2 = weight_variable([fc1_size, fc2_size])
+            W_fc2 = weight_variable([fc1_size, fc2_size], 'w5')
+            W_fc2 = tf.minimum(W_fc2, 3)
             b_fc2 = bias_variable([fc2_size])
             h_fc2 = tf.nn.relu(tf.matmul(h_fc1, W_fc2) + b_fc2)
 
             h_fc2_drop = tf.nn.dropout(h_fc2, keep_prob)
         #the scores
         with tf.name_scope('fc3'):
-            W_fc3 = weight_variable([fc2_size, 3])
+            W_fc3 = weight_variable([fc2_size, 3], 'w6')
+            W_fc3 = tf.minimum(W_fc3, 3)
             b_fc3 = bias_variable([3])
 
             y_conv = tf.matmul(h_fc2_drop, W_fc3) + b_fc3
@@ -281,14 +321,14 @@ with tf.Graph().as_default():
         # loss
         loss = cross_entropy + reg_loss
 
-        train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
+        train_step = tf.train.MomentumOptimizer(lr_rate, 0.9).minimize(loss)
         correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(labels_one_hot, 1))
         correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
         merged = tf.summary.merge_all()
 
-        placeholders = (real_C_pl, imag_C_pl, others_pl, labels_pl)
+        placeholders = (real_C_pl, imag_C_pl, others_pl, labels_pl, keep_prob)
 
         writer = tf.summary.FileWriter('graph/', sess.graph)
 

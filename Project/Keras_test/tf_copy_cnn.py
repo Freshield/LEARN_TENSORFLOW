@@ -49,26 +49,18 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     return train_set, validation_set, test_set
 
 #get a random data(maybe have same value)
-def get_batch_data(data_set, batch_size):
-    lines_num = data_set.shape[0] - 1
+def get_batch_data(X_dataset, y_dataset, batch_size):
+    lines_num = X_dataset.shape[0] - 1
     random_index = np.random.randint(lines_num, size=[batch_size])
-    columns = data_set.values[random_index]
-    real_C = columns[:, :3100]
-    imag_C = columns[:, 3100 : 6200]
-    others = columns[:, 6200 : 6241]
-    labels = columns[:, -10]
 
-    return {'real_C':real_C, 'imag_C':imag_C, 'others':others, 'labels':labels}
+    X_data = X_dataset[random_index]
+    y_data = y_dataset[random_index]
+    return {'X': X_data, 'y': y_data}
 
 #directly get whole dataset(only for small dataset)
-def get_whole_data(data_set):
-    columns = data_set.values
-    real_C = columns[:, :3100]
-    imag_C = columns[:, 3100: 6200]
-    others = columns[:, 6200: 6241]
-    labels = columns[:, -10]
+def get_whole_data(X_dataset, y_dataset):
 
-    return {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}
+    return {'X': X_dataset, 'y': y_dataset}
 
 #get a random indexs for dataset,
 #so that we can shuffle the data every epoch
@@ -81,13 +73,13 @@ def get_random_seq_indexs(data_set):
 
 #use the indexs together,
 #so that we can sequence batch whole dataset
-def sequence_get_data(data_set, indexs, last_index, batch_size):
+def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
     next_index = last_index + batch_size
     out_of_dataset = False
 
-    if next_index > data_set.shape[0]:
+    if next_index > X_dataset.shape[0]:
 
-        next_index -= data_set.shape[0]
+        next_index -= X_dataset.shape[0]
         last_part = np.arange(last_index,indexs.shape[0])
         before_part = np.arange(next_index)
         span_index = indexs[np.concatenate((last_part, before_part))]
@@ -95,12 +87,9 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
     else:
         span_index = indexs[last_index:next_index]
 
-    columns = data_set.values[span_index]
-    real_C = columns[:, :3100]
-    imag_C = columns[:, 3100: 6200]
-    others = columns[:, 6200: 6241]
-    labels = columns[:, -10]
-    return (next_index, {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}, out_of_dataset)
+    X_data = X_dataset[span_index]
+    y_data = y_dataset[span_index]
+    return (next_index, {'X':X_data,'y':y_data}, out_of_dataset)
 
 ###########################################################
 ################# graph helper ############################
@@ -123,51 +112,53 @@ def max_pool_2x2(x):
 #if a wrong stddev will stuck the network
 def weight_variable(shape):
   """weight_variable generates a weight variable of a given shape."""
-  initial = tf.truncated_normal(shape, stddev=0.35)
+  initial = tf.truncated_normal(shape, stddev=0.35,dtype=tf.float32)
   return tf.Variable(initial)
 
 
 #create biases
 def bias_variable(shape):
   """bias_variable generates a bias variable of a given shape."""
-  initial = tf.constant(0.1, shape=shape)
+  initial = tf.constant(0.1,tf.float32, shape=shape)
   return tf.Variable(initial)
 
 #to do the evaluation part for the whole data
 #not use all data together, but many batchs
-def do_eval(sess, data_set, batch_size, correct_num, placeholders, merged, test_writer, if_summary, global_step):
+def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged, test_writer, if_summary,
+            global_step):
 
-    real_C_pl, imag_C_pl, others_pl, labels_pl = placeholders
-    num_epoch = data_set.shape[0] / batch_size
-    rest_data_size = data_set.shape[0] % batch_size
+    input_x, input_y, keep_prob1, keep_prob2 = placeholders
+    num_epoch = X_dataset.shape[0] / batch_size
+    rest_data_size = X_dataset.shape[0] % batch_size
 
     index = 0
     count = 0.0
-    indexs = np.arange(data_set.shape[0])
+    indexs = np.arange(X_dataset.shape[0])
 
     for step in xrange(num_epoch):
-        index, data, _ = sequence_get_data(data_set, indexs, index, batch_size)
+        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, batch_size)
 
         if step == num_epoch - 1:
             if if_summary:
-                summary, num = sess.run([merged, correct_num], feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'], others_pl: data['others'], labels_pl: data['labels'], keep_prob: 1.0})
+                summary, num = sess.run([merged, correct_num], feed_dict={input_x:data['X'], input_y:data['y'],
+                                                                          keep_prob1:1.0,keep_prob2:1.0})
                 #add summary
-                test_writer.add_summary(summary, global_step)
+                #test_writer.add_summary(summary, global_step)
             else:
-                num = sess.run(correct_num, feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'],others_pl: data['others'], labels_pl: data['labels'],keep_prob: 1.0})
+                num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0})
 
         else:
-            num = sess.run(correct_num, feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'],others_pl: data['others'], labels_pl: data['labels'],keep_prob: 1.0})
+            num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0})
 
         count += num
 
     if rest_data_size != 0:
         #the rest data
-        index, data, _ = sequence_get_data(data_set, indexs, index, rest_data_size)
-        num = sess.run(correct_num, feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'],others_pl: data['others'], labels_pl: data['labels'], keep_prob: 1.0})
+        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
+        num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0})
 
         count += num
-    return count / data_set.shape[0]
+    return count / X_dataset.shape[0]
 
 
 ############################################################
@@ -229,119 +220,90 @@ print y_train.dtype
 
 
 num_classes = y_test.shape[1]
-
-data = get_batch_data(train_dataset, 100)
-
-batch_size = 100
-lr_rate = 0.002
-max_step = 25000
-keep_prob_v = 0.5
-conv1_depth = 64
-conv2_depth = 128
-conv3_depth = 256
-fc1_size = 2048
-fc2_size = 512
-reg = 0.01
-lr_decay = 0.99
-lr_loop = 4000
-
-loop_num = 1
+lr_rate = 0.01
+reg = 0
+max_step = 10000
+batch_size = 64
 
 print '-------------------now changed-----------------'
 print 'lr_rate is', lr_rate
 print 'reg is', reg
-print 'keep_prob', keep_prob_v
 print '------------------------------------------------'
 
 situation_now = '\n-------------------now changed-----------------\n' \
-                'lr_rate is %.3f\nreg is %.3f\nkeep_prob is %.2f\n' \
-                '------------------------------------------------\n' % (lr_rate, reg, keep_prob_v)
+                'lr_rate is %.3f\nreg is %.3f\n' \
+                '------------------------------------------------\n' % (lr_rate, reg)
 
 with tf.Graph().as_default():
     with tf.Session() as sess:
         # inputs
-        input_x = tf.placeholder(tf.float64, )
+        input_x = tf.placeholder(tf.float32, [None, 31, 100, 3])
+        input_y = tf.placeholder(tf.float32, [None, 3])
+        keep_prob1 = tf.placeholder(tf.float32)
+        keep_prob2 = tf.placeholder(tf.float32)
 
-        # reshape
-        real_C_reshape = tf.reshape(real_C_pl, [-1, 31, 100, 1])
-        imag_C_reshape = tf.reshape(imag_C_pl, [-1, 31, 100, 1])
-        image_no_padding = tf.concat([real_C_reshape, imag_C_reshape], axis=1)
-        others_r = tf.reshape(others_pl, shape=[-1, 1, 41, 1])
-        others_r = tf.concat([others_r, others_r], axis=2)
-        others_r_p = tf.pad(others_r, [[0, 0], [0, 0], [0, 18], [0, 0]], 'CONSTANT')
-        others_reshape = tf.concat([others_r_p, others_r_p, others_r_p], axis=1)
-
-        #put the others and image together
-        images = tf.concat([others_reshape, image_no_padding, others_reshape], axis=1)
-        labels_one_hot = tf.one_hot(labels_pl, 3)
         #add image to summary so that you can see it in tensorboard
-        tf.summary.image('input', images, 20)
+        #tf.summary.image('input', input_x, 20)
 
         # build graph
         #convolution layer 1
         with tf.name_scope('conv1'):
-            W_conv1 = weight_variable([3, 3, 1, conv1_depth])
-            b_conv1 = bias_variable([conv1_depth])
-            h_conv1 = tf.nn.relu(conv2d(images, W_conv1, 1, 'SAME') + b_conv1)
+            W_conv1 = tf.get_variable('weights1', [3, 3, 3, 32],initializer=tf.contrib.layers.xavier_initializer())
+            #constraints
+            W_conv1 = tf.minimum(W_conv1, 3)
+            b_conv1 = bias_variable([32])
+            h_conv1 = tf.nn.relu(conv2d(input_x, W_conv1, 1, 'SAME') + b_conv1)
+            h_conv1_drop = tf.nn.dropout(h_conv1, keep_prob1)
 
-            h_pool1 = max_pool_2x2(h_conv1)
+
         #convolution layer2
         with tf.name_scope('conv2'):
-            W_conv2 = weight_variable([3, 3, conv1_depth, conv2_depth])
-            b_conv2 = bias_variable([conv2_depth])
-            h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2, 1, 'SAME') + b_conv2)
+            W_conv2 = tf.get_variable('weights2', [3, 3, 32, 32],initializer=tf.contrib.layers.xavier_initializer())
+            #constraints
+            W_conv2 = tf.minimum(W_conv2, 3)
+            b_conv2 = bias_variable([32])
+            h_conv2 = tf.nn.relu(conv2d(h_conv1_drop, W_conv2, 1, 'SAME') + b_conv2)
 
-            h_pool2 = max_pool_2x2(h_conv2)
-        #convolution layer3
-        with tf.name_scope('conv3'):
-            h_pool2_pad = tf.pad(h_pool2, [[0, 0], [1, 1], [1, 1], [0, 0]], 'CONSTANT')
+            #16,50,32
+            h_pool = max_pool_2x2(h_conv2)
 
-            W_conv3 = weight_variable([1, 1, conv2_depth, conv3_depth])
-            b_conv3 = bias_variable([conv3_depth])
-            h_conv3 = tf.nn.relu(conv2d(h_pool2_pad, W_conv3, 2, 'VALID') + b_conv3)
-
-            h_pool3 = max_pool_2x2(h_conv3)
         #fully connect layer1
         with tf.name_scope('fc1'):
-            W_fc1 = weight_variable([5 * 7 * conv3_depth, fc1_size])
-            b_fc1 = bias_variable([fc1_size])
+            W_fc1 = tf.get_variable('weights3', [16 * 50 * 32, 512],initializer=tf.contrib.layers.xavier_initializer())
+            # constraints
+            W_fc1 = tf.minimum(W_fc1, 3)
+            b_fc1 = bias_variable([512])
             #flatten the matrix
-            h_pool3_flat = tf.reshape(h_pool3, [-1, 5 * 7 * conv3_depth])
-            h_fc1 = tf.nn.relu(tf.matmul(h_pool3_flat, W_fc1) + b_fc1)
-        #fully connect layer2
-        with tf.name_scope('fc2'):
-            W_fc2 = weight_variable([fc1_size, fc2_size])
-            b_fc2 = bias_variable([fc2_size])
-            h_fc2 = tf.nn.relu(tf.matmul(h_fc1, W_fc2) + b_fc2)
+            h_pool_flat = tf.reshape(h_pool, [-1, 16 * 50 * 32])
+            h_fc1 = tf.nn.relu(tf.matmul(h_pool_flat, W_fc1) + b_fc1)
+            h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob2)
 
-            h_fc2_drop = tf.nn.dropout(h_fc2, keep_prob)
         #the scores
-        with tf.name_scope('fc3'):
-            W_fc3 = weight_variable([fc2_size, 3])
-            b_fc3 = bias_variable([3])
+        with tf.name_scope('scores'):
+            W_fc2 = tf.get_variable('weights4', [512, 3],initializer=tf.contrib.layers.xavier_initializer())
+            b_fc2 = bias_variable([3])
 
-            y_conv = tf.matmul(h_fc2_drop, W_fc3) + b_fc3
+            y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
         #softmax
-        cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels_one_hot, logits=y_conv),
+        cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=input_y, logits=y_conv),
             name='xentropy')
-        #L2 regularzation
-        reg_loss = 0.5 * reg * (tf.nn.l2_loss(W_conv1) + tf.nn.l2_loss(b_conv1) + tf.nn.l2_loss(W_conv2) + tf.nn.l2_loss(b_conv2) + tf.nn.l2_loss(W_conv3) + tf.nn.l2_loss(b_conv3) + tf.nn.l2_loss(W_fc1) + tf.nn.l2_loss(b_fc1) + tf.nn.l2_loss(W_fc2) + tf.nn.l2_loss(b_fc2) + tf.nn.l2_loss(W_fc3) + tf.nn.l2_loss(b_fc3))
 
         # loss
-        loss = cross_entropy + reg_loss
+        loss = cross_entropy
 
-        train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
-        correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(labels_one_hot, 1))
+        train_step = tf.train.MomentumOptimizer(lr_rate, 0.9).minimize(loss)
+        correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(input_y, 1))
         correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
         merged = tf.summary.merge_all()
 
-        placeholders = (real_C_pl, imag_C_pl, others_pl, labels_pl)
+        placeholders = (input_x, input_y, keep_prob1, keep_prob2)
 
-        writer = tf.summary.FileWriter('graph/', sess.graph)
+        #writer = tf.summary.FileWriter('graph/', sess.graph)
 
         sess.run(tf.global_variables_initializer())
+
 
         test_path = 'tmp/test/logs'
         if tf.gfile.Exists(test_path):
@@ -351,41 +313,43 @@ with tf.Graph().as_default():
 
         # train
         # Train
-        last_accuracy = 0.0
-        best_accuracy = 0.8
-        best_path = ''
 
-        indexs = get_random_seq_indexs(train_dataset)
+
+        indexs = get_random_seq_indexs(X_train)
         out_of_dataset = False
         last_index = 0
-        saver = tf.train.Saver()
+        #saver = tf.train.Saver()
 
         for step in range(max_step):
             before_time = time.time()
 
             if out_of_dataset == True:
-                indexs = get_random_seq_indexs(train_dataset)
+                indexs = get_random_seq_indexs(X_train)
                 last_index = 0
                 out_of_dataset = False
 
-            last_index, data, out_of_dataset = sequence_get_data(train_dataset, indexs, last_index, batch_size)
+            last_index, data, out_of_dataset = sequence_get_data(X_train, y_train, indexs, last_index, batch_size)
 
-            _, loss_v = sess.run([train_step, loss], feed_dict={real_C_pl: data['real_C'], imag_C_pl: data['imag_C'],others_pl: data['others'], labels_pl: data['labels'],keep_prob: keep_prob_v})
+            _, loss_v = sess.run([train_step, loss], feed_dict={input_x:data['X'], input_y:data['y'], keep_prob1:0.8,
+                                                                keep_prob2:0.5})
 
             if step % 100 == 0:
                 print 'loss in step %d is %f' % (step, loss_v)
-                last_time = time.time()
-                span_time = last_time - before_time
-                print ('last 100 loop use %f sec' % (span_time * 100))
-                print ('rest time is %f minutes' % (span_time * (max_step - step) * loop_num / 60))
+
 
             if step % 500 == 0 or step == max_step - 1:
-                result = do_eval(sess, train_dataset, batch_size, correct_num, placeholders, merged, test_writer, False,
+                last_time = time.time()
+                span_time = last_time - before_time
+                print ('last 500 loop use %f sec' % (span_time * 500))
+                print ('rest time is %f minutes' % (span_time * (max_step - step)/ 60))
+
+                result = do_eval(sess, X_train, y_train, batch_size, correct_num, placeholders, merged, test_writer, False,
                                  step)
                 print '----------train acc in step %d is %f-------------' % (step, result)
-                result = do_eval(sess, validation_dataset, batch_size, correct_num, placeholders, merged, test_writer,
-                                 True, step)
+                result = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders, merged, test_writer,
+                                 False, step)
                 print '----------accuracy in step %d is %f-------------' % (step, result)
+                """
                 if result > last_accuracy or result == 1.0:
                     last_accuracy = result
                     if last_accuracy > best_accuracy or result == 1.0:
@@ -404,10 +368,10 @@ with tf.Graph().as_default():
         if best_path != '':
             saver.restore(sess, best_path)
             print "Model restored."
-
-        result = do_eval(sess, test_dataset, batch_size, correct_num, placeholders, merged, test_writer, False, step)
+        """
+        result = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders, merged, test_writer, False, step)
         print '-----------last accuracy is %f------------' % (result)
-
+        """
         filename = '%.2f-%s' % (best_accuracy, situation_now)
         f = file(filename, 'w+')
         f.write(str(best_accuracy))
@@ -418,3 +382,4 @@ with tf.Graph().as_default():
         test_writer.close()
 
         loop_num -= 1
+        """
