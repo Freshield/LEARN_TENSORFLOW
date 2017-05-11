@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 import time
 import os
+from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
 ################################################
 #                                              #
@@ -119,7 +120,7 @@ def bias_variable(shape):
   initial = tf.constant(0.1,tf.float32, shape=shape)
   return tf.Variable(initial)
 
-def batch_norm(bn_in):
+def batch_norm_layer0(bn_in):
     with tf.name_scope('BN'):
         offset = tf.Variable(tf.constant(0.0, shape=[bn_in.shape[-1]]), name='offset')
         scale = tf.Variable(tf.constant(1.0, shape=[bn_in.shape[-1]]), name='sclae')
@@ -128,12 +129,30 @@ def batch_norm(bn_in):
         normed = tf.nn.batch_normalization(bn_in, bn_mean, bn_var, offset, scale, 1e-3, name='bn_out')
     return normed
 
+def batch_norm_layer1(x,train_phase,scope_bn):
+    bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
+    updates_collections=None,
+    is_training=True,
+    reuse=None,
+    trainable=True,
+    scope=scope_bn)
+
+    bn_inference = batch_norm(x, decay=0.999, center=True, scale=True,
+    updates_collections=None,
+    is_training=False,
+    reuse=True,
+    trainable=True,
+    scope=scope_bn)
+
+    z = tf.cond(train_phase, lambda: bn_train, lambda: bn_inference)
+    return z
+
 #to do the evaluation part for the whole data
 #not use all data together, but many batchs
 def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged, test_writer, if_summary,
             global_step):
 
-    input_x, input_y, keep_prob1, keep_prob2 = placeholders
+    input_x, input_y, keep_prob1, keep_prob2, train_phase = placeholders
     num_epoch = X_dataset.shape[0] / batch_size
     rest_data_size = X_dataset.shape[0] % batch_size
 
@@ -147,21 +166,21 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
         if step == num_epoch - 1:
             if if_summary:
                 summary, num = sess.run([merged, correct_num], feed_dict={input_x:data['X'], input_y:data['y'],
-                                                                          keep_prob1:1.0,keep_prob2:1.0})
+                                                                          keep_prob1:1.0,keep_prob2:1.0,train_phase:False})
                 #add summary
                 #test_writer.add_summary(summary, global_step)
             else:
-                num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0})
+                num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0,train_phase:False})
 
         else:
-            num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0})
+            num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0,train_phase:False})
 
         count += num
 
     if rest_data_size != 0:
         #the rest data
         index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
-        num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0})
+        num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],keep_prob1:1.0,keep_prob2:1.0,train_phase:False})
 
         count += num
     return count / X_dataset.shape[0]
@@ -177,10 +196,11 @@ def reshape_and_norm_dataset(dataset, SPAN):
     output_data = dataset[:, 6240 + SPAN[0]]
 
     # normalize data
-    input_data[:, :, :, :2] = input_data[:, :, :, :2] - np.amin(input_data[:, :, :, :2])
-    input_data[:, :, :, :2] = input_data[:, :, :, :2] / np.amax(input_data[:, :, :, :2])
-    input_data[:, :, :, 2] = input_data[:, :, :, 2] - np.amin(input_data[:, :, :, 2])
-    input_data[:, :, :, 2] = input_data[:, :, :, 2] / np.amax(input_data[:, :, :, 2])
+    input_data[:, :, :, 0] = input_data[:, :, :, 0] - np.mean(input_data[:, :, :, 0])
+    input_data[:, :, :, 1] = input_data[:, :, :, 1] - np.mean(input_data[:, :, :, 1])
+    #input_data[:, :, :, :2] = input_data[:, :, :, :2] / np.amax(input_data[:, :, :, :2])
+    input_data[:, :, :, 2] = input_data[:, :, :, 2] - np.mean(input_data[:, :, :, 2])
+    #input_data[:, :, :, 2] = input_data[:, :, :, 2] / np.amax(input_data[:, :, :, 2])
 
     return input_data, output_data
 
@@ -243,11 +263,12 @@ with tf.Graph().as_default():
         input_y_one_hot = tf.one_hot(input_y, 3)
         keep_prob1 = tf.placeholder(tf.float32)
         keep_prob2 = tf.placeholder(tf.float32)
+        train_phase = tf.placeholder(tf.bool, name='phase_train')
 
         #add image to summary so that you can see it in tensorboard
         #tf.summary.image('input', input_x, 20)
 
-        bn_input = batch_norm(input_x)
+        bn_input = batch_norm_layer1(input_x, train_phase, 'input')
 
         # build graph
         #convolution layer 1
@@ -257,9 +278,9 @@ with tf.Graph().as_default():
             #constraints
             W_conv1 = tf.minimum(W_conv1, 3)
             b_conv1 = bias_variable([32])
-            h_conv1 = conv2d(input_x, W_conv1, 1, 'SAME') + b_conv1
-            bn_conv1 = batch_norm(h_conv1)
-            act_conv1 = tf.nn.relu(h_conv1)
+            h_conv1 = conv2d(bn_input, W_conv1, 1, 'SAME') + b_conv1
+            bn_conv1 = batch_norm_layer1(h_conv1, train_phase, 'bn_conv1')
+            act_conv1 = tf.nn.relu(bn_conv1)
             h_conv1_drop = tf.nn.dropout(act_conv1, keep_prob1)
 
 
@@ -270,8 +291,8 @@ with tf.Graph().as_default():
             W_conv2 = tf.minimum(W_conv2, 3)
             b_conv2 = bias_variable([32])
             h_conv2 = conv2d(h_conv1_drop, W_conv2, 1, 'SAME') + b_conv2
-            bn_conv2 = batch_norm(h_conv2)
-            act_conv2 = tf.nn.relu(h_conv2)
+            bn_conv2 = batch_norm_layer1(h_conv2, train_phase, 'bn_conv2')
+            act_conv2 = tf.nn.relu(bn_conv2)
 
             #16,50,32
             h_pool = max_pool_2x2(act_conv2)
@@ -285,8 +306,8 @@ with tf.Graph().as_default():
             #flatten the matrix
             h_pool_flat = tf.reshape(h_pool, [-1, 16 * 50 * 32])
             h_fc1 = tf.matmul(h_pool_flat, W_fc1) + b_fc1
-            bn_fc1 = batch_norm(h_fc1)
-            act_fc1 = tf.nn.relu(h_fc1)
+            bn_fc1 = batch_norm_layer1(h_fc1, train_phase, 'bn_fc1')
+            act_fc1 = tf.nn.relu(bn_fc1)
             h_fc1_drop = tf.nn.dropout(act_fc1, keep_prob2)
 
         #the scores
@@ -309,7 +330,7 @@ with tf.Graph().as_default():
 
         merged = tf.summary.merge_all()
 
-        placeholders = (input_x, input_y, keep_prob1, keep_prob2)
+        placeholders = (input_x, input_y, keep_prob1, keep_prob2, train_phase)
 
         #writer = tf.summary.FileWriter('graph/', sess.graph)
 
@@ -342,7 +363,7 @@ with tf.Graph().as_default():
             last_index, data, out_of_dataset = sequence_get_data(X_train, y_train, indexs, last_index, batch_size)
 
             _, loss_v = sess.run([train_step, loss], feed_dict={input_x:data['X'], input_y:data['y'], keep_prob1:0.8,
-                                                                keep_prob2:0.5})
+                                                                keep_prob2:0.5, train_phase:True})
 
             if step % 100 == 0:
                 print 'loss in step %d is %f' % (step, loss_v)
