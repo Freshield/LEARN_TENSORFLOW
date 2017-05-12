@@ -24,6 +24,9 @@ d = np.arange(12, dtype=np.float32).reshape([3,4])
 
 print d
 
-d -= np.std(d, axis=0)
+d[:,0] = d[:,0] - np.mean(d[:,0])
+d[:,1] = d[:,1] - np.mean(d[:,1])
+d[:,2] = d[:,2] - np.mean(d[:,2])
+d[:,3] = d[:,3] - np.mean(d[:,3])
 
 print d
