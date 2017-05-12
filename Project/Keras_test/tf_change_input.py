@@ -196,10 +196,10 @@ def reshape_and_norm_dataset(dataset, SPAN):
     output_data = dataset[:, 6240 + SPAN[0]]
 
     # normalize data
-    input_data[:, :, :, 0] = input_data[:, :, :, 0] - np.mean(input_data[:, :, :, 0])
-    input_data[:, :, :, 1] = input_data[:, :, :, 1] - np.mean(input_data[:, :, :, 1])
+    #input_data[:, :, :, 0] = input_data[:, :, :, 0] - np.mean(input_data[:, :, :, 0])
+    #input_data[:, :, :, 1] = input_data[:, :, :, 1] - np.mean(input_data[:, :, :, 1])
     #input_data[:, :, :, :2] = input_data[:, :, :, :2] / np.amax(input_data[:, :, :, :2])
-    input_data[:, :, :, 2] = input_data[:, :, :, 2] - np.mean(input_data[:, :, :, 2])
+    #input_data[:, :, :, 2] = input_data[:, :, :, 2] - np.mean(input_data[:, :, :, 2])
     #input_data[:, :, :, 2] = input_data[:, :, :, 2] / np.amax(input_data[:, :, :, 2])
 
     return input_data, output_data
@@ -243,8 +243,8 @@ print y_train.dtype
 num_classes = 3
 lr_rate = 0.01
 reg = 0
-max_step = 10000
-batch_size = 64
+max_step = 50000
+batch_size = 100
 
 print '-------------------now changed-----------------'
 print 'lr_rate is', lr_rate
@@ -323,7 +323,7 @@ with tf.Graph().as_default():
         # loss
         loss = cross_entropy
 
-        train_step = tf.train.MomentumOptimizer(lr_rate, 0.9).minimize(loss)
+        train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
         correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(input_y_one_hot, 1))
         correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -362,11 +362,12 @@ with tf.Graph().as_default():
 
             last_index, data, out_of_dataset = sequence_get_data(X_train, y_train, indexs, last_index, batch_size)
 
-            _, loss_v = sess.run([train_step, loss], feed_dict={input_x:data['X'], input_y:data['y'], keep_prob1:0.8,
+            _, loss_v, acc = sess.run([train_step, loss, accuracy], feed_dict={input_x:data['X'], input_y:data['y'],
+                                                                    keep_prob1:0.8,
                                                                 keep_prob2:0.5, train_phase:True})
 
             if step % 100 == 0:
-                print 'loss in step %d is %f' % (step, loss_v)
+                print 'loss in step %d is %f, acc is %.3f' % (step, loss_v, acc)
 
 
             if step % 500 == 0 or step == max_step - 1:
@@ -375,12 +376,21 @@ with tf.Graph().as_default():
                 print ('last 500 loop use %f sec' % (span_time * 500))
                 print ('rest time is %f minutes' % (span_time * (max_step - step)/ 60))
 
-                result = do_eval(sess, X_train, y_train, batch_size, correct_num, placeholders, merged, test_writer, False,
-                                 step)
+                result = do_eval(sess, X_train, y_train, batch_size, correct_num, placeholders, merged, test_writer,False, step)
+                #result = sess.run([train_step, loss, accuracy],
+                #feed_dict={input_x: X_train, input_y: y_train, keep_prob1: 1.0,
+                #keep_prob2: 1.0, train_phase: False})
+
                 print '----------train acc in step %d is %f-------------' % (step, result)
-                result = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders, merged, test_writer,
-                                 False, step)
+                result = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders, merged, test_writer,False, step)
+                #result = sess.run([train_step, loss, accuracy],
+                #feed_dict={input_x: X_test, input_y: y_test, keep_prob1: 1.0,
+                #keep_prob2: 1.0,train_phase: False})
+
                 print '----------accuracy in step %d is %f-------------' % (step, result)
+
+            if step % 1000 == 0:
+                lr_rate = lr_rate * 0.97
 
         result = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders, merged, test_writer, False, step)
         print '-----------last accuracy is %f------------' % (result)
