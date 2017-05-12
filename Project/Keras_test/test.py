@@ -19,3 +19,11 @@ c = tf.ones([3,4,5])
 print np.arange(len(c.shape) - 1)
 
 print np.random.randn(2,4)
+
+d = np.arange(12, dtype=np.float32).reshape([3,4])
+
+print d
+
+d -= np.std(d, axis=0)
+
+print d

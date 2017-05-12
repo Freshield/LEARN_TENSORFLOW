@@ -16,7 +16,10 @@ def split_dataset(dataset, radio):
 def normalize_dataset(dataset):
     norm_dataset = np.zeros((dataset.shape))
     norm_dataset[:,:] = dataset[:,:]
-    #norm_dataset[:,:241] = norm_dataset[:,:241] - np.mean(norm_dataset[:,:241])
+    temp_data = np.zeros((dataset.shape[0], 241))
+    temp_data = dataset[:,:241]
+    temp_data -= np.mean(temp_data, axis=0)
+    norm_dataset[:,:241] = temp_data
     #norm_dataset[:,:241] = norm_dataset[:,:241] - np.amin(norm_dataset[:,:241])
     #norm_dataset[:,:241] = norm_dataset[:,:241] / np.amax(norm_dataset[:,:241])
 
@@ -26,12 +29,12 @@ def get_batch_data(data_set, batch_size):
     random_index = np.random.randint(data_set.shape[0], size=[batch_size])
     columns = data_set[random_index]
     features = columns[:,:241]
-    labels = columns[:,-2]
+    labels = columns[:,-10]
     return {'features':features, 'labels':labels}
 
 def get_whole_data(data_set):
     features = data_set[:,:241]
-    labels = data_set[:,-2]
+    labels = data_set[:,-10]
     return {'features':features, 'labels':labels}
 #-----------------------------
 filename = 'ciena_test.csv'
