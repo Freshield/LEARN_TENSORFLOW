@@ -325,7 +325,7 @@ def get_train_op(loss, lr_rate, optimizer=tf.train.AdamOptimizer):
 #not use all data together, but many batchs
 def do_eval(sess, data_set, batch_size, correct_num, placeholders, merged, test_writer, if_summary, global_step):
 
-    real_C_pl, imag_C_pl, others_pl, labels_pl = placeholders
+    real_C_pl, imag_C_pl, others_pl, labels_pl, keep_prob = placeholders
     num_epoch = data_set.shape[0] / batch_size
     rest_data_size = data_set.shape[0] % batch_size
 

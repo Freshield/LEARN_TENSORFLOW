@@ -37,17 +37,7 @@ def get_whole_data(data_set):
     features = data_set[:,:241]
     labels = data_set[:,-10]
     return {'features':features, 'labels':labels}
-#-----------------------------
-filename = 'ciena_test.csv'
-dataset = pd.read_csv(filename, header=None)
-train_dataset, validation_dataset, test_dataset = split_dataset(dataset, 0.1)
-train_dataset, train_mean = normalize_dataset(train_dataset)
-validation_dataset,_ = normalize_dataset(validation_dataset,train_mean)
-test_dataset,_ = normalize_dataset(test_dataset,train_mean)
 
-reg = 1e-4
-lr_rate = 0.01
-max_step = 10000
 
 def weight_variable(shape, name):
   """weight_variable generates a weight variable of a given shape."""
@@ -91,6 +81,18 @@ def del_and_create_dir(dir_path):
     if tf.gfile.Exists(dir_path):
         tf.gfile.DeleteRecursively(dir_path)
     tf.gfile.MakeDirs(dir_path)
+
+#-----------------------------
+filename = 'ciena_test.csv'
+dataset = pd.read_csv(filename, header=None)
+train_dataset, validation_dataset, test_dataset = split_dataset(dataset, 0.1)
+train_dataset, train_mean = normalize_dataset(train_dataset)
+validation_dataset,_ = normalize_dataset(validation_dataset,train_mean)
+test_dataset,_ = normalize_dataset(test_dataset,train_mean)
+
+reg = 1e-4
+lr_rate = 0.01
+max_step = 10000
 
 with tf.Graph().as_default():
     with tf.Session() as sess:
@@ -176,7 +178,7 @@ with tf.Graph().as_default():
         for step in xrange(max_step):
             data = get_batch_data(train_dataset, 100)
 
-            feed_dict = {x:data['features'], y_:data['labels'], train_phase:True, keep_prob:0.5}
+            feed_dict = {x:data['features'], y_:data['labels'], train_phase:True, keep_prob:0.8}
 
             _, loss_v, acc = sess.run([train_op, loss, accuracy], feed_dict=feed_dict)
 
