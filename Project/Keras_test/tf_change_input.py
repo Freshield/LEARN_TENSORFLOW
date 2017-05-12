@@ -212,7 +212,7 @@ def reshape_and_norm_dataset(dataset, SPAN):
 #copy from cnn
 NROWS = 10000 # for smaller datasets, choose from 100, 1000, 10000, and 'all'
 
-SPAN=[20]
+SPAN=[2]
 
 filename = '~/Ciena_data/ciena10000.csv'
 
@@ -274,7 +274,7 @@ with tf.Graph().as_default():
         #convolution layer 1
         with tf.name_scope('conv1'):
 
-            W_conv1 = tf.get_variable('weights1', [3, 3, 3, 32],initializer=tf.contrib.layers.xavier_initializer())
+            W_conv1 = tf.get_variable('weights1', [3, 3, 3, 32],initializer=tf.contrib.layers.xavier_initializer(uniform=False))
             #constraints
             W_conv1 = tf.minimum(W_conv1, 3)
             b_conv1 = bias_variable([32])
@@ -286,7 +286,7 @@ with tf.Graph().as_default():
 
         #convolution layer2
         with tf.name_scope('conv2'):
-            W_conv2 = tf.get_variable('weights2', [3, 3, 32, 32],initializer=tf.contrib.layers.xavier_initializer())
+            W_conv2 = tf.get_variable('weights2', [3, 3, 32, 32],initializer=tf.contrib.layers.xavier_initializer(uniform=False))
             #constraints
             W_conv2 = tf.minimum(W_conv2, 3)
             b_conv2 = bias_variable([32])
@@ -299,7 +299,7 @@ with tf.Graph().as_default():
 
         #fully connect layer1
         with tf.name_scope('fc1'):
-            W_fc1 = tf.get_variable('weights3', [16 * 50 * 32, 512],initializer=tf.contrib.layers.xavier_initializer())
+            W_fc1 = tf.get_variable('weights3', [16 * 50 * 32, 512],initializer=tf.contrib.layers.xavier_initializer(uniform=False))
             # constraints
             W_fc1 = tf.minimum(W_fc1, 3)
             b_fc1 = bias_variable([512])
@@ -312,7 +312,7 @@ with tf.Graph().as_default():
 
         #the scores
         with tf.name_scope('scores'):
-            W_fc2 = tf.get_variable('weights4', [512, 3],initializer=tf.contrib.layers.xavier_initializer())
+            W_fc2 = tf.get_variable('weights4', [512, 3],initializer=tf.contrib.layers.xavier_initializer(uniform=False))
             b_fc2 = bias_variable([3])
 
             y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
