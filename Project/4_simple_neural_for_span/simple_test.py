@@ -18,11 +18,11 @@ def normalize_dataset(dataset, mean_value=None):
     norm_dataset[:, :] = dataset[:, :]
 
     if mean_value == None:
-        mean_value = np.mean(norm_dataset[:,:241])
+        mean_value = np.mean(norm_dataset[:,:200])
 
-    #norm_dataset[:,:241] = norm_dataset[:,:241] - np.amin(norm_dataset[:,:241])
-    #norm_dataset[:,:241] = norm_dataset[:,:241] / np.amax(norm_dataset[:,:241])
-    norm_dataset[:,:241] -= mean_value
+    #norm_dataset[:,:200] = norm_dataset[:,:200] - np.amin(norm_dataset[:,:200])
+    #norm_dataset[:,:200] = norm_dataset[:,:200] / np.amax(norm_dataset[:,:200])
+    norm_dataset[:,:200] -= mean_value
 
     return norm_dataset, mean_value
 
@@ -178,9 +178,7 @@ with tf.Graph().as_default():
         for step in xrange(max_step):
             data = get_batch_data(train_dataset, 100)
 
-            feed_dict = {x:data['features'], y_:data['labels'], train_phase:True, keep_prob:0.8}
-
-            _, loss_v, acc = sess.run([train_op, loss, accuracy], feed_dict=feed_dict)
+            feed_dict = {x:data['features'], y_:data['labels'], train_phase:True, keep_prob:1.0}
 
             if step % 40 == 0 or step == max_step -1:
                 summary, _, loss_v, acc = sess.run([merged, train_op, loss, accuracy], feed_dict=feed_dict)
