@@ -36,7 +36,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tf_copy_cnn.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tf_copy_cnn.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tf_copy_cnn.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-3337">
@@ -69,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tf_change_input.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="tf_change_input.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tf_change_input.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11049">
-              <caret line="386" column="49" lean-forward="false" selection-start-line="386" selection-start-column="49" selection-end-line="386" selection-end-column="49" />
+            <state relative-caret-position="259">
+              <caret line="126" column="48" lean-forward="true" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="48" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -793,16 +793,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tf_change_input.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11049">
-          <caret line="386" column="49" lean-forward="false" selection-start-line="386" selection-start-column="49" selection-end-line="386" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../4_simple_neural_for_span/simple_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -843,6 +833,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3337">
           <caret line="170" column="8" lean-forward="false" selection-start-line="170" selection-start-column="8" selection-end-line="170" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tf_change_input.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="126" column="48" lean-forward="true" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="48" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>

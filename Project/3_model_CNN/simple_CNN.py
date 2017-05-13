@@ -5,6 +5,8 @@ import time
 import os
 from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
+from tensorflow.python.ops import control_flow_ops
+from tensorflow.python.training import moving_averages
 ################################################
 #                                              #
 #           use best model parameter           #
@@ -54,7 +56,7 @@ def get_batch_data(data_set, batch_size):
     real_C = columns[:, :3100]
     imag_C = columns[:, 3100 : 6200]
     others = columns[:, 6200 : 6241]
-    labels = columns[:, -1]
+    labels = columns[:, -2]
 
     return {'real_C':real_C, 'imag_C':imag_C, 'others':others, 'labels':labels}
 
@@ -63,7 +65,7 @@ def get_whole_data(data_set):
     real_C = data_set[:, :3100]
     imag_C = data_set[:, 3100: 6200]
     others = data_set[:, 6200: 6241]
-    labels = data_set[:, -1]
+    labels = data_set[:, -2]
 
     return {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}
 
@@ -96,7 +98,7 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
     real_C = columns[:, :3100]
     imag_C = columns[:, 3100: 6200]
     others = columns[:, 6200: 6241]
-    labels = columns[:, -1]
+    labels = columns[:, -2]
     return (next_index, {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}, out_of_dataset)
 
 ###########################################################
@@ -121,7 +123,7 @@ def max_pool_2x2(x):
 def weight_variable(shape, name):
   """weight_variable generates a weight variable of a given shape."""
   weight = tf.get_variable(name, shape=shape, initializer=tf.contrib.layers.xavier_initializer())
-  # weight = tf.Variable(np.random.randn(shape[0],shape[1]).astype(np.float32) * np.sqrt(2.0/shape[0]),)
+
   return weight
 
 
@@ -131,6 +133,31 @@ def bias_variable(shape):
   initial = tf.constant(0.01, shape=shape)
   return tf.Variable(initial)
 
+def batch_norm_layer3(x, train_phase, scope_bn):
+    with tf.variable_scope(scope_bn):
+        beta = tf.Variable(tf.constant(0.0, shape=[x.shape[-1]]), name='beta', trainable=True)
+        gamma = tf.Variable(tf.constant(1.0, shape=[x.shape[-1]]), name='gamma', trainable=True)
+        axises = np.arange(len(x.shape) - 1)
+        batch_mean, batch_var = tf.nn.moments(x, axises, name='moments')
+        ema = tf.train.ExponentialMovingAverage(decay=0.5)
+
+        def mean_var_with_update():
+            ema_apply_op = ema.apply([batch_mean, batch_var])
+            with tf.control_dependencies([ema_apply_op]):
+                return tf.identity(batch_mean), tf.identity(batch_var)
+
+        mean, var = tf.cond(train_phase, mean_var_with_update,
+                            lambda: (ema.average(batch_mean), ema.average(batch_var)))
+        normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
+    return normed
+
+def batch_norm_layer2(x,train_phase,scope_bn):
+    return batch_norm(x, decay=0.99, center=True, scale=True,
+    updates_collections=None,
+    is_training=train_phase,
+    reuse=None,
+    trainable=True,
+    scope=scope_bn)
 
 def batch_norm_layer1(x,train_phase,scope_bn):
     bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
@@ -248,14 +275,14 @@ test_dataset, _ = normalize_dataset(test_dataset, train_mean)
 
 batch_size = 100
 lr_rate = 0.015
-max_step =1000
-keep_prob_v = 0.5
+max_step =2000
+keep_prob_v = 1.0
 conv1_depth = 64
 conv2_depth = 128
 conv3_depth = 256
 fc1_size = 512
 fc2_size = 256
-reg = 1e-2
+reg = 1e-4
 lr_decay = 0.99
 lr_loop = 1000
 
@@ -294,7 +321,7 @@ with tf.Graph().as_default():
         images = tf.concat([others_reshape, image_no_padding, others_reshape], axis=1)
         labels_one_hot = tf.one_hot(labels_pl, 3)
 
-        bn_input = batch_norm_layer1(images, train_phase, 'bn_input')
+        bn_input = batch_norm_layer3(images, train_phase, 'bn_input')
 
         # build graph
         #convolution layer 1
@@ -304,7 +331,7 @@ with tf.Graph().as_default():
             variable_summaries(W_conv1)
             b_conv1 = bias_variable([conv1_depth])
             h_conv1 = conv2d(bn_input, W_conv1, 1, 'SAME') + b_conv1
-            bn_conv1 = batch_norm_layer1(h_conv1, train_phase, 'bn_conv1')
+            bn_conv1 = batch_norm_layer3(h_conv1, train_phase, 'bn_conv1')
             act_conv1 = tf.nn.relu(bn_conv1)
             tf.summary.histogram('act_conv1',act_conv1)
 
@@ -316,7 +343,7 @@ with tf.Graph().as_default():
             variable_summaries(W_conv2)
             b_conv2 = bias_variable([conv2_depth])
             h_conv2 = conv2d(h_pool1, W_conv2, 1, 'SAME') + b_conv2
-            bn_conv2 = batch_norm_layer1(h_conv2, train_phase, 'bn_conv2')
+            bn_conv2 = batch_norm_layer3(h_conv2, train_phase, 'bn_conv2')
             act_conv2 = tf.nn.relu(bn_conv2)
             tf.summary.histogram('act_conv2',act_conv2)
 
@@ -330,7 +357,7 @@ with tf.Graph().as_default():
             variable_summaries(W_conv3)
             b_conv3 = bias_variable([conv3_depth])
             h_conv3 = conv2d(h_pool2_pad, W_conv3, 2, 'VALID') + b_conv3
-            bn_conv3 = batch_norm_layer1(h_conv3, train_phase, 'bn_conv3')
+            bn_conv3 = batch_norm_layer3(h_conv3, train_phase, 'bn_conv3')
             act_conv3 = tf.nn.relu(bn_conv3)
             tf.summary.histogram('act_conv3',act_conv3)
 
@@ -344,7 +371,7 @@ with tf.Graph().as_default():
             #flatten the matrix
             h_pool3_flat = tf.reshape(h_pool3, [-1, 5 * 7 * conv3_depth])
             h_fc1 = tf.matmul(h_pool3_flat, W_fc1) + b_fc1
-            bn_fc1 = batch_norm_layer1(h_fc1, train_phase, 'bn_fc1')
+            bn_fc1 = batch_norm_layer3(h_fc1, train_phase, 'bn_fc1')
             act_fc1 = tf.nn.relu(bn_fc1)
             tf.summary.histogram('act_fc1',act_fc1)
         #fully connect layer2
@@ -354,7 +381,7 @@ with tf.Graph().as_default():
             variable_summaries(W_fc2)
             b_fc2 = bias_variable([fc2_size])
             h_fc2 = tf.matmul(act_fc1, W_fc2) + b_fc2
-            bn_fc2 = batch_norm_layer1(h_fc2, train_phase, 'bn_fc2')
+            bn_fc2 = batch_norm_layer3(h_fc2, train_phase, 'bn_fc2')
             act_fc2 = tf.nn.relu(bn_fc2)
             tf.summary.histogram('act_fc2',act_fc2)
 
@@ -376,7 +403,9 @@ with tf.Graph().as_default():
         # loss
         loss = cross_entropy + reg_loss
 
-        train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
+        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+        with tf.control_dependencies(update_ops):
+            train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss)
         correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(labels_one_hot, 1))
         correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -434,24 +463,24 @@ with tf.Graph().as_default():
                 print ('last 100 loop use %f sec' % (span_time * 100))
                 print ('rest time is %f minutes' % (span_time * (max_step - step) * loop_num / 60))
 
-                #result = do_eval(sess, train_dataset, batch_size, correct_num, placeholders)
-                acc_data = get_whole_data(train_dataset)
+                result = do_eval(sess, train_dataset, batch_size, correct_num, placeholders)
+                #acc_data = get_whole_data(train_dataset)
 
-                feed_dict = {real_C_pl: acc_data['real_C'], imag_C_pl: acc_data['imag_C'], others_pl: acc_data['others'],
-                             labels_pl: acc_data['labels'], keep_prob: 1.0, train_phase: True}
+                #feed_dict = {real_C_pl: acc_data['real_C'], imag_C_pl: acc_data['imag_C'], others_pl: acc_data[
+                # 'others'],labels_pl: acc_data['labels'], keep_prob: 1.0, train_phase: True}
 
-                result = sess.run(accuracy, feed_dict=feed_dict)
+                #result = sess.run(accuracy, feed_dict=feed_dict)
 
                 print '----------train acc in step %d is %f-------------' % (step, result)
-                #result = do_eval(sess, validation_dataset, batch_size, correct_num, placeholders, merged,test_writer, step)
-                acc_data = get_whole_data(validation_dataset)
+                result = do_eval(sess, validation_dataset, batch_size, correct_num, placeholders, merged,test_writer, step)
+                #acc_data = get_whole_data(validation_dataset)
 
-                feed_dict = {real_C_pl: acc_data['real_C'], imag_C_pl: acc_data['imag_C'],
-                             others_pl: acc_data['others'], labels_pl: acc_data['labels'], keep_prob: 1.0,
-                             train_phase: True}
+                #feed_dict = {real_C_pl: acc_data['real_C'], imag_C_pl: acc_data['imag_C'],
+                #             others_pl: acc_data['others'], labels_pl: acc_data['labels'], keep_prob: 1.0,
+                #             train_phase: True}
 
-                summary, result = sess.run([merged, accuracy], feed_dict=feed_dict)
-                test_writer.add_summary(summary, step)
+                #summary, result = sess.run([merged, accuracy], feed_dict=feed_dict)
+                #test_writer.add_summary(summary, step)
 
                 print '----------accuracy in step %d is %f-------------' % (step, result)
 
