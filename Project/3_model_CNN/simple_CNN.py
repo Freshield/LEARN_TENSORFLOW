@@ -54,7 +54,7 @@ def get_batch_data(data_set, batch_size):
     real_C = columns[:, :3100]
     imag_C = columns[:, 3100 : 6200]
     others = columns[:, 6200 : 6241]
-    labels = columns[:, -2]
+    labels = columns[:, -1]
 
     return {'real_C':real_C, 'imag_C':imag_C, 'others':others, 'labels':labels}
 
@@ -63,7 +63,7 @@ def get_whole_data(data_set):
     real_C = data_set[:, :3100]
     imag_C = data_set[:, 3100: 6200]
     others = data_set[:, 6200: 6241]
-    labels = data_set[:, -2]
+    labels = data_set[:, -1]
 
     return {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}
 
@@ -96,7 +96,7 @@ def sequence_get_data(data_set, indexs, last_index, batch_size):
     real_C = columns[:, :3100]
     imag_C = columns[:, 3100: 6200]
     others = columns[:, 6200: 6241]
-    labels = columns[:, -2]
+    labels = columns[:, -1]
     return (next_index, {'real_C': real_C, 'imag_C': imag_C, 'others': others, 'labels': labels}, out_of_dataset)
 
 ###########################################################
