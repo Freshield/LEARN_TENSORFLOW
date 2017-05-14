@@ -27,8 +27,20 @@
       <file leaf-file-name="resnet_in_tensorboard.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resnet_in_tensorboard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="348">
+              <caret line="24" column="7" lean-forward="true" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+              <folding>
+                <element signature="e#196#214#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="hyper_parameters.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/hyper_parameters.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="404">
+              <caret line="45" column="0" lean-forward="true" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -47,6 +59,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/resnet_for_mnist.py" />
+        <option value="$PROJECT_DIR$/hyper_parameters.py" />
         <option value="$PROJECT_DIR$/resnet_in_tensorboard.py" />
       </list>
     </option>
@@ -278,11 +291,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/hyper_parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="404">
+          <caret line="45" column="0" lean-forward="true" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resnet_in_tensorboard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="348">
+          <caret line="24" column="7" lean-forward="true" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+          <folding>
+            <element signature="e#196#214#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
