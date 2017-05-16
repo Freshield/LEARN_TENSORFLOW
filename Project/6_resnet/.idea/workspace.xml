@@ -27,11 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="resnet_model.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="resnet_model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resnet_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="9568">
-              <caret line="302" column="33" lean-forward="false" selection-start-line="302" selection-start-column="4" selection-end-line="302" selection-end-column="33" />
+            <state relative-caret-position="1500">
+              <caret line="101" column="114" lean-forward="true" selection-start-line="101" selection-start-column="114" selection-end-line="101" selection-end-column="114" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -39,11 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="resnet_test1.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="resnet_test1.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resnet_test1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
+            <state relative-caret-position="141">
+              <caret line="95" column="61" lean-forward="false" selection-start-line="95" selection-start-column="61" selection-end-line="95" selection-end-column="61" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -85,8 +85,8 @@
         <option value="$PROJECT_DIR$/cifar10_train.py" />
         <option value="$PROJECT_DIR$/cifar10_input.py" />
         <option value="$PROJECT_DIR$/hyper_parameters.py" />
-        <option value="$PROJECT_DIR$/resnet_model.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/resnet_model.py" />
         <option value="$PROJECT_DIR$/resnet_test1.py" />
       </list>
     </option>
@@ -480,23 +480,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resnet_model.py">
+    <entry file="file://$PROJECT_DIR$/resnet_test1_log" />
+    <entry file="file://$PROJECT_DIR$/resnet_test1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9568">
-          <caret line="302" column="33" lean-forward="false" selection-start-line="302" selection-start-column="4" selection-end-line="302" selection-end-column="33" />
+        <state relative-caret-position="141">
+          <caret line="95" column="61" lean-forward="false" selection-start-line="95" selection-start-column="61" selection-end-line="95" selection-end-column="61" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resnet_test1_log" />
-    <entry file="file://$PROJECT_DIR$/resnet_test1.py">
+    <entry file="file://$PROJECT_DIR$/resnet_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
+        <state relative-caret-position="1500">
+          <caret line="101" column="114" lean-forward="true" selection-start-line="101" selection-start-column="114" selection-end-line="101" selection-end-column="114" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>

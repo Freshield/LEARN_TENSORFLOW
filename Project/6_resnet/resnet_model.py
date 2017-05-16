@@ -34,7 +34,6 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     validation_set = dataset.values[-test_dataset_size * 2:-test_dataset_size]
     test_set = dataset.values[-test_dataset_size:len(dataset)]
 
-
     return train_set, validation_set, test_set
 
 #get a random data(maybe have same value)
@@ -333,24 +332,14 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
         count += num
     return count / X_dataset.shape[0]
 
-def loss(labels, logits, reg, parameters=None):
-    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits,
-                                                                           name='xentropy'))
+def loss(labels, logits, reg=None, parameters=None):
+    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits,name='xentropy'))
 
     if parameters == None:
-        loss = cross_entropy
+        cost = cross_entropy
     else:
         reg_loss = 0.0
         for para in parameters:
             reg_loss += reg * 0.5 * tf.nn.l2_loss(para)
-        loss = cross_entropy + reg_loss
-    return loss
-
-x = tf.ones([100,32,100,3],dtype=tf.float32)
-
-train_phase = tf.placeholder(tf.bool)
-
-y, para = inference(x, train_phase)
-
-print y.shape
-print len(para)
+        cost = cross_entropy + reg_loss
+    return cost

@@ -88,12 +88,12 @@ with tf.Graph().as_default():
                 log += ('rest time is %.3f minutes\n' % (span_time * (max_step - step) / 60))
 
                 result = do_eval(sess, X_train, y_train, batch_size, correct_num, placeholders)
-                print ('----------train acc in step %d is %4f----------' % (step, result))
-                log += ('----------train acc in step %d is %4f----------\n' % (step, result))
+                print ('----------train acc in step %d is %.4f----------' % (step, result))
+                log += ('----------train acc in step %d is %.4f----------\n' % (step, result))
 
                 result = do_eval(sess, X_valid, y_valid, batch_size, correct_num, placeholders)
-                print ('----------valid acc in step %d is %4f----------' % (step, result))
-                log += ('----------valid acc in step %d is %4f----------\n' % (step, result))
+                print ('----------valid acc in step %d is %.4f----------' % (step, result))
+                log += ('----------valid acc in step %d is %.4f----------\n' % (step, result))
 
             if step > 0 and step % lr_epoch == 0:
                 lr_rate *= lr_decay
