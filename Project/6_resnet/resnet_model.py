@@ -1,6 +1,115 @@
 import tensorflow as tf
 import numpy as np
+import os
+from keras.utils import np_utils
 
+############################################################
+############# helpers ######################################
+############################################################
+
+#to copy files from source dir to target dir
+def copyFiles(sourceDir,  targetDir):
+    if sourceDir.find(".csv") > 0:
+        print 'error'
+        return
+    for file in os.listdir(sourceDir):
+        sourceFile = os.path.join(sourceDir,  file)
+        targetFile = os.path.join(targetDir,  file)
+        if os.path.isfile(sourceFile):
+            if not os.path.exists(targetDir):
+                os.makedirs(targetDir)
+            if not os.path.exists(targetFile) or(os.path.exists(targetFile) and (os.path.getsize(targetFile) != os.path.getsize(sourceFile))):
+                    open(targetFile, "wb").write(open(sourceFile, "rb").read())
+        if os.path.isdir(sourceFile):
+            First_Directory = False
+            copyFiles(sourceFile, targetFile)
+
+#split the dataset into three part:
+#training, validation, test
+def split_dataset(dataset, test_dataset_size=None, radio=None):
+    if radio != None:
+        test_dataset_size = int(radio * len(dataset))
+
+    train_set = dataset.values[0:-test_dataset_size * 2]
+    validation_set = dataset.values[-test_dataset_size * 2:-test_dataset_size]
+    test_set = dataset.values[-test_dataset_size:len(dataset)]
+
+
+    return train_set, validation_set, test_set
+
+#get a random data(maybe have same value)
+def get_batch_data(X_dataset, y_dataset, batch_size):
+    lines_num = X_dataset.shape[0] - 1
+    random_index = np.random.randint(lines_num, size=[batch_size])
+
+    X_data = X_dataset[random_index]
+    y_data = y_dataset[random_index]
+    return {'X': X_data, 'y': y_data}
+
+#directly get whole dataset(only for small dataset)
+def get_whole_data(X_dataset, y_dataset):
+
+    return {'X': X_dataset, 'y': y_dataset}
+
+#get a random indexs for dataset,
+#so that we can shuffle the data every epoch
+def get_random_seq_indexs(data_set):
+    data_size = data_set.shape[0]
+    #index = tf.random_shuffle(tf.range(0, data_size))#maybe can do it on tensorflow later
+    indexs = np.arange(data_size)
+    np.random.shuffle(indexs)
+    return indexs
+
+#use the indexs together,
+#so that we can sequence batch whole dataset
+def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
+    next_index = last_index + batch_size
+    out_of_dataset = False
+
+    if next_index > X_dataset.shape[0]:
+
+        next_index -= X_dataset.shape[0]
+        last_part = np.arange(last_index,indexs.shape[0])
+        before_part = np.arange(next_index)
+        span_index = indexs[np.concatenate((last_part, before_part))]
+        out_of_dataset = True
+    else:
+        span_index = indexs[last_index:next_index]
+
+    X_data = X_dataset[span_index]
+    y_data = y_dataset[span_index]
+    return (next_index, {'X':X_data,'y':y_data}, out_of_dataset)
+
+def normalize_dataset(dataset, mean_value=None):
+    norm_dataset = np.zeros((dataset.shape))
+    norm_dataset[:, :] = dataset[:, :]
+
+    if mean_value == None:
+        real_mean_value = np.mean(norm_dataset[:,:3100])
+        imag_mean_value = np.mean(norm_dataset[:,3100:6200])
+    else:
+        real_mean_value, imag_mean_value = mean_value
+
+    norm_dataset[:,:3100] -= real_mean_value
+    norm_dataset[:,3100:6200] -= imag_mean_value
+
+    return norm_dataset, (real_mean_value, imag_mean_value)
+
+def reshape_dataset(dataset, SPAN):
+    input_data = np.zeros((dataset.shape[0], 32, 100, 3))
+    temp_data = np.reshape(dataset[:, :6200], (dataset.shape[0], 31, 100, 2))
+    input_data[:, 1:, :, 0] = temp_data[:, :, :, 0]
+    input_data[:, 1:, :, 1] = temp_data[:, :, :, 1]
+    input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 79)[:, :3200], (dataset.shape[0], 32, 100))
+
+    output_data = dataset[:, 6240 + SPAN[0]]
+    output_data = np_utils.to_categorical(output_data)
+
+    return input_data, output_data
+
+###########################################################
+################# graph helper ############################
+###########################################################
 
 #create weights
 def weight_variable(shape, name):
@@ -180,8 +289,62 @@ def inference(input_layer, train_phase):
 
     return y_pred, parameters
 
+def corr_num_acc(labels, logits):
+    correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(labels, 1))
+    correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    return correct_num, accuracy
 
+#to do the evaluation part for the whole data
+#not use all data together, but many batchs
+def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged=None, test_writer=None,
+            global_step=None):
 
+    input_x, input_y, train_phase = placeholders
+    num_epoch = X_dataset.shape[0] // batch_size
+    rest_data_size = X_dataset.shape[0] % batch_size
+
+    index = 0
+    count = 0.0
+    indexs = np.arange(X_dataset.shape[0])
+
+    for step in xrange(num_epoch):
+        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, batch_size)
+
+        if step == num_epoch - 1:
+            if merged != None :
+                summary, num = sess.run([merged, correct_num], feed_dict={input_x:data['X'], input_y:data['y'],
+                                                                          train_phase:False})
+                #add summary
+                #test_writer.add_summary(summary, global_step)
+            else:
+                num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'], train_phase:False})
+
+        else:
+            num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],train_phase:False})
+
+        count += num
+
+    if rest_data_size != 0:
+        #the rest data
+        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
+        num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'], train_phase:False})
+
+        count += num
+    return count / X_dataset.shape[0]
+
+def loss(labels, logits, reg, parameters=None):
+    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits,
+                                                                           name='xentropy'))
+
+    if parameters == None:
+        loss = cross_entropy
+    else:
+        reg_loss = 0.0
+        for para in parameters:
+            reg_loss += reg * 0.5 * tf.nn.l2_loss(para)
+        loss = cross_entropy + reg_loss
+    return loss
 
 x = tf.ones([100,32,100,3],dtype=tf.float32)
 

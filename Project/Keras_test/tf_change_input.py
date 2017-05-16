@@ -129,7 +129,7 @@ def batch_norm_layer0(bn_in):
         normed = tf.nn.batch_normalization(bn_in, bn_mean, bn_var, offset, scale, 1e-3, name='bn_out')
     return normed
 
-def batch_norm_layer1(x,train_phase,scope_bn):
+def batch_norm_layer2(x,train_phase,scope_bn):
     bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
     updates_collections=None,
     is_training=True,
@@ -146,6 +146,24 @@ def batch_norm_layer1(x,train_phase,scope_bn):
 
     z = tf.cond(train_phase, lambda: bn_train, lambda: bn_inference)
     return z
+
+def batch_norm_layer1(x, train_phase, scope_bn):
+    with tf.variable_scope(scope_bn):
+        beta = tf.Variable(tf.constant(0.0, shape=[x.shape[-1]]), name='beta', trainable=True)
+        gamma = tf.Variable(tf.constant(1.0, shape=[x.shape[-1]]), name='gamma', trainable=True)
+        axises = np.arange(len(x.shape) - 1)
+        batch_mean, batch_var = tf.nn.moments(x, axises, name='moments')
+        ema = tf.train.ExponentialMovingAverage(decay=0.5)
+
+        def mean_var_with_update():
+            ema_apply_op = ema.apply([batch_mean, batch_var])
+            with tf.control_dependencies([ema_apply_op]):
+                return tf.identity(batch_mean), tf.identity(batch_var)
+
+        mean, var = tf.cond(train_phase, mean_var_with_update,
+                            lambda: (ema.average(batch_mean), ema.average(batch_var)))
+        normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
+    return normed
 
 #to do the evaluation part for the whole data
 #not use all data together, but many batchs
@@ -212,7 +230,7 @@ def reshape_and_norm_dataset(dataset, SPAN):
 #copy from cnn
 NROWS = 10000 # for smaller datasets, choose from 100, 1000, 10000, and 'all'
 
-SPAN=[2]
+SPAN=[20]
 
 filename = '~/Ciena_data/ciena10000.csv'
 
