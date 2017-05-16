@@ -4,7 +4,7 @@ from zhuge_nn_model import *
 
 NROWS = 10000
 
-SPAN=[20]
+SPAN=[19]
 
 log = ''
 
@@ -49,7 +49,7 @@ with tf.Graph().as_default():
         loss_value = loss(input_y, y_pred)
 
         #train
-        train_step = tf.train.GradientDescentOptimizer(lr_rate).minimize(loss_value)
+        train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss_value)
 
         #predict
         correct_num, accuracy = corr_num_acc(input_y, y_pred)
