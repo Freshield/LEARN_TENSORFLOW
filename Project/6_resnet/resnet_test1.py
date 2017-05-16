@@ -82,9 +82,9 @@ with tf.Graph().as_default():
             if step % 300 == 0 or step == max_step - 1:
                 last_time = time.time()
                 span_time = last_time - before_time
-                print ('last 300 loop use %f minutes' % (span_time * 300) / 60)
+                print ('last 300 loop use %f minutes' % (span_time * 300 / 60))
                 print ('rest time is %.3f minutes' % (span_time * (max_step - step) / 60))
-                log += ('last 300 loop use %f minutes\n' % (span_time * 300) / 60)
+                log += ('last 300 loop use %f minutes\n' % (span_time * 300 / 60))
                 log += ('rest time is %.3f minutes\n' % (span_time * (max_step - step) / 60))
 
                 result = do_eval(sess, X_train, y_train, batch_size, correct_num, placeholders)
