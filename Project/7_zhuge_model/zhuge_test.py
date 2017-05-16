@@ -6,13 +6,22 @@ NROWS = 10000
 
 SPAN=[20]
 
+log = ''
+
 filename = '/home/freshield/Ciena_data/ciena_pca_10000.csv'
 
 data = pd.read_csv(filename, header=None, nrows=NROWS)
 
-print 'Data Shape: %s' % str(data.shape)
+words = 'Data Shape: %s' % str(data.shape)
+print words
+log += words + '\n'
 
 train_set, validation_set, test_set = split_dataset(data, radio=0.1)
+
+#normalize dataset
+train_set, train_mean = normalize_dataset(train_set)
+validation_set, _ = normalize_dataset(validation_set, train_mean)
+test_set, _ = normalize_dataset(test_set, train_mean)
 
 X_train, y_train = reshape_dataset(train_set, SPAN)
 X_valid, y_valid = reshape_dataset(validation_set, SPAN)
@@ -27,8 +36,6 @@ batch_size = 100
 lr_decay = 0.99
 lr_epoch = 1000
 
-log = ''
-
 with tf.Graph().as_default():
     with tf.Session() as sess:
         #inputs
@@ -36,7 +43,7 @@ with tf.Graph().as_default():
         input_y = tf.placeholder(tf.float32, [None, 3], name='input_y')
 
         #logits
-        y_pred, parameters = inference(input_x)
+        y_pred, parameters = inference(input_x, tf.nn.relu)
 
         #loss
         loss_value = loss(input_y, y_pred)

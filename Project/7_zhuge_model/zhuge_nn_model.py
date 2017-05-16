@@ -19,6 +19,17 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
     return train_set, validation_set, test_set
 
+def normalize_dataset(dataset, mean_value=None):
+    norm_dataset = np.zeros((dataset.shape))
+    norm_dataset[:, :] = dataset[:, :]
+
+    if mean_value == None:
+        mean_value = np.mean(norm_dataset[:,:200])
+
+    norm_dataset[:,:200] -= mean_value
+
+    return norm_dataset, mean_value
+
 def reshape_dataset(dataset, SPAN):
     input_data = dataset[:, :241]
 
@@ -61,8 +72,9 @@ def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
 #create weights
 def weight_variable(shape, name):
   """weight_variable generates a weight variable of a given shape."""
-  weight = tf.get_variable(name, shape=shape, initializer=tf.random_normal_initializer())
-
+  weight = tf.get_variable(name, shape=shape, initializer=tf.contrib.layers.xavier_initializer())
+  #tf.random_normal_initializer()
+  #tf.contrib.layers.xavier_initializer()
   return weight
 
 
@@ -89,17 +101,17 @@ def fc_layer(input_layer, label_size, name):
     return output, [W]
 
 
-def inference(input_layer):
+def inference(input_layer, act=tf.nn.sigmoid):
     parameters = []
     #input shape should be (N,241)
 
-    h1_layer, p1 = hidden_layer(input_layer, 50, 'h1')
+    h1_layer, p1 = hidden_layer(input_layer, 50, 'h1', act)
     parameters[0:0] = p1
 
-    h2_layer, p2 = hidden_layer(h1_layer, 40, 'h2')
+    h2_layer, p2 = hidden_layer(h1_layer, 40, 'h2', act)
     parameters[0:0] = p2
 
-    h3_layer, p3 = hidden_layer(h2_layer, 30, 'h3')
+    h3_layer, p3 = hidden_layer(h2_layer, 30, 'h3', act)
     parameters[0:0] = p3
 
     y_pred, p4 = fc_layer(h3_layer, 3, 'scores')
