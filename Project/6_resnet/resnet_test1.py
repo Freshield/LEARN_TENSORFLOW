@@ -15,9 +15,9 @@ print 'Data Shape: %s' % str(data.shape)
 train_set, validation_set, test_set = split_dataset(data, radio=0.1)
 
 #normalize dataset
-train_set, train_mean = normalize_dataset(train_set)
-validation_set, _ = normalize_dataset(validation_set, train_mean)
-test_set, _ = normalize_dataset(test_set, train_mean)
+train_set, train_min, train_max = normalize_dataset(train_set)
+validation_set, _, _ = normalize_dataset(validation_set, train_min, train_max)
+test_set, _, _ = normalize_dataset(test_set, train_min, train_max)
 
 #reshape dataset
 X_train, y_train = reshape_dataset(train_set, SPAN)

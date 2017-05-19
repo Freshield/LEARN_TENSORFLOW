@@ -13,18 +13,40 @@ def split_dataset(dataset, radio):
     test_set = dataset.values[indexs[-test_dataset_size : ]]
     return train_set, validation_set, test_set
 
-def normalize_dataset(dataset, mean_value=None):
+def normalize_dataset(dataset, min_values=None, max_values=None):
     norm_dataset = np.zeros((dataset.shape))
     norm_dataset[:, :] = dataset[:, :]
 
-    if mean_value == None:
-        mean_value = np.mean(norm_dataset[:,:200])
+    if min_values == None:
+        CM_min = np.min(norm_dataset[:,:200])
+        CD_min = np.min(norm_dataset[:,200:201])
+        length_min = np.min(norm_dataset[:,201:221])
+        power_min = np.min(norm_dataset[:,221:241])
+    else:
+        CM_min, CD_min, length_min, power_min = min_values
 
-    #norm_dataset[:,:200] = norm_dataset[:,:200] - np.amin(norm_dataset[:,:200])
-    #norm_dataset[:,:200] = norm_dataset[:,:200] / np.amax(norm_dataset[:,:200])
-    norm_dataset[:,:200] -= mean_value
 
-    return norm_dataset, mean_value
+    if max_values == None:
+        CM_max = np.max(norm_dataset[:,0:200])
+        CD_max = np.max(norm_dataset[:,200:201])
+        length_max = np.max(norm_dataset[:,201:221])
+        power_max = np.max(norm_dataset[:,221:241])
+    else:
+        CM_max, CD_max, length_max, power_max = max_values
+
+    def calcul_norm(dataset, min, max):
+        return (dataset - min) / (max - min)
+
+
+    norm_dataset[:,0:200] = calcul_norm(norm_dataset[:,0:200], CM_min, CM_max)
+    norm_dataset[:,200:201] = calcul_norm(norm_dataset[:,200:201], CD_min, CD_max)
+    norm_dataset[:,201:221] = calcul_norm(norm_dataset[:,201:221], length_min, length_max)
+    norm_dataset[:,221:241] = calcul_norm(norm_dataset[:,221:241], power_min, power_max)
+
+    min_values = (CM_min, CD_min, length_min, power_min)
+    max_values = (CM_max, CD_max, length_max, power_max)
+
+    return norm_dataset, min_values, max_values
 
 def get_batch_data(data_set, batch_size):
     random_index = np.random.randint(data_set.shape[0], size=[batch_size])
@@ -57,7 +79,7 @@ def variable_summaries(var):
       tf.summary.scalar('min', tf.reduce_min(var))
       tf.summary.histogram('histogram', var)
 
-
+"""
 def batch_norm_layer1(x,train_phase,scope_bn):
     bn_train = batch_norm(x, decay=0.999, center=True, scale=True,
     updates_collections=None,
@@ -75,6 +97,25 @@ def batch_norm_layer1(x,train_phase,scope_bn):
 
     z = tf.cond(train_phase, lambda: bn_train, lambda: bn_inference)
     return z
+"""
+
+def batch_norm_layer1(x, train_phase, scope_bn):
+    with tf.variable_scope(scope_bn):
+        beta = tf.Variable(tf.constant(0.0, shape=[x.shape[-1]]), name='beta', trainable=True)
+        gamma = tf.Variable(tf.constant(1.0, shape=[x.shape[-1]]), name='gamma', trainable=True)
+        axises = np.arange(len(x.shape) - 1)
+        batch_mean, batch_var = tf.nn.moments(x, axises, name='moments')
+        ema = tf.train.ExponentialMovingAverage(decay=0.5)
+
+        def mean_var_with_update():
+            ema_apply_op = ema.apply([batch_mean, batch_var])
+            with tf.control_dependencies([ema_apply_op]):
+                return tf.identity(batch_mean), tf.identity(batch_var)
+
+        mean, var = tf.cond(train_phase, mean_var_with_update,
+                            lambda: (ema.average(batch_mean), ema.average(batch_var)))
+        normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
+    return normed
 
 #ensure the path exist
 def del_and_create_dir(dir_path):
@@ -83,16 +124,17 @@ def del_and_create_dir(dir_path):
     tf.gfile.MakeDirs(dir_path)
 
 #-----------------------------
-filename='ciena_test.csv'
-#filename = 'pca1000_1.csv'
+#filename='ciena_test.csv'
+filename = 'pca1000_1.csv'
+#filename = 'norm.csv'
 dataset = pd.read_csv(filename, header=None)
 train_dataset, validation_dataset, test_dataset = split_dataset(dataset, 0.1)
-train_dataset, train_mean = normalize_dataset(train_dataset)
-validation_dataset,_ = normalize_dataset(validation_dataset,train_mean)
-test_dataset,_ = normalize_dataset(test_dataset,train_mean)
+train_dataset, train_mins, train_maxs = normalize_dataset(train_dataset)
+validation_dataset,_,_ = normalize_dataset(validation_dataset,train_mins, train_maxs)
+test_dataset,_,_ = normalize_dataset(test_dataset,train_mins, train_maxs)
 
 reg = 5e-3
-lr_rate = 0.002
+lr_rate = 0.0002
 max_step = 10000
 
 with tf.Graph().as_default():
@@ -108,9 +150,9 @@ with tf.Graph().as_default():
         W1 = weight_variable([241, 1024], 'W1')
         variable_summaries(W1)
         b1 = tf.Variable(tf.constant(0.1, shape=[1024]))
-        h1 = tf.matmul(x, W1) + b1
+        h1 = tf.matmul(bn_input, W1) + b1
         bn_h1 = batch_norm_layer1(h1, train_phase, 'bn_h1')
-        act_h1 = tf.nn.relu(h1)
+        act_h1 = tf.nn.relu(bn_h1)
         tf.summary.histogram('act_h1',act_h1)
         drop_h1 = tf.nn.dropout(act_h1, keep_prob=keep_prob)
 
@@ -119,7 +161,7 @@ with tf.Graph().as_default():
         b2 = tf.Variable(tf.constant(0.1, shape=[512]))
         h2 = tf.matmul(drop_h1, W2) + b2
         bn_h2 = batch_norm_layer1(h2, train_phase, 'bn_h2')
-        act_h2 = tf.nn.relu(h2)
+        act_h2 = tf.nn.relu(bn_h2)
         tf.summary.histogram('act_h2',act_h2)
         drop_h2 = tf.nn.dropout(act_h2, keep_prob=keep_prob)
 
@@ -128,7 +170,7 @@ with tf.Graph().as_default():
         b3 = tf.Variable(tf.constant(0.1, shape=[256]))
         h3 = tf.matmul(drop_h2, W3) + b3
         bn_h3 = batch_norm_layer1(h3, train_phase, 'bn_h3')
-        act_h3 = tf.nn.relu(h3)
+        act_h3 = tf.nn.relu(bn_h3)
         tf.summary.histogram('act_h3',act_h3)
         drop_h3 = tf.nn.dropout(act_h3, keep_prob=keep_prob)
 
@@ -137,7 +179,7 @@ with tf.Graph().as_default():
         b4 = tf.Variable(tf.constant(0.1, shape=[128]))
         h4 = tf.matmul(drop_h3, W4) + b4
         bn_h4 = batch_norm_layer1(h4, train_phase, 'bn_h4')
-        act_h4 = tf.nn.relu(h4)
+        act_h4 = tf.nn.relu(bn_h4)
         tf.summary.histogram('act_h4',act_h4)
         drop_h4 = tf.nn.dropout(act_h4, keep_prob=keep_prob)
 
@@ -179,7 +221,7 @@ with tf.Graph().as_default():
         for step in xrange(max_step):
             data = get_batch_data(train_dataset, 100)
 
-            feed_dict = {x:data['features'], y_:data['labels'], train_phase:True, keep_prob:1.0}
+            feed_dict = {x:data['features'], y_:data['labels'], train_phase:True, keep_prob:0.5}
 
             if step % 40 == 0 or step == max_step -1:
                 summary, _, loss_v, acc = sess.run([merged, train_op, loss, accuracy], feed_dict=feed_dict)
