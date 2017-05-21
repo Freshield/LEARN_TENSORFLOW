@@ -10,7 +10,7 @@ powerVariation = [];
 Cmatrix = [];
 
 
-DataBase_Fiber = load(['ciena10000.csv']);
+DataBase_Fiber = load(['ciena10000.csv']);%read the file
     
 NLpower = [NLpower; DataBase_Fiber.NLpower];
 fiberType = [fiberType; DataBase_Fiber.fiberType];
@@ -20,7 +20,8 @@ Cmatrix = [Cmatrix DataBase_Fiber.Cmatrix];
 powerVariation = [powerVariation; DataBase_Fiber.powerVariation];
 
 
-index = 1:length(NLpower(:,1));
+index = 1:length(NLpower(:,1));%get the dataset lines
+%[index,~]=size(DataBase_Fiber)
 
 C_feature = zeros(index(end),3100);
 
