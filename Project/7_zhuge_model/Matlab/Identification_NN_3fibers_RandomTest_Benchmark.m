@@ -8,53 +8,61 @@ CDprecomp = [];
 spanLength = [];
 powerVariation = [];
 Cmatrix = [];
+C_Input=[];
 
 
-DataBase_Fiber = load(['ciena10000.csv']);%read the file
+DataBase_Fiber = load(['ciena1000.csv']);%read the file
     
-NLpower = [NLpower; DataBase_Fiber.NLpower];
-fiberType = [fiberType; DataBase_Fiber.fiberType];
-CDprecomp = [CDprecomp; DataBase_Fiber.fiberType];
-spanLength = [spanLength; DataBase_Fiber.spanLength];
-Cmatrix = [Cmatrix DataBase_Fiber.Cmatrix];
-powerVariation = [powerVariation; DataBase_Fiber.powerVariation];
+
+CDprecomp = [CDprecomp; DataBase_Fiber(:,6201)];
+spanLength = [spanLength; DataBase_Fiber(:,6202:6221)];
+%NLpower = [NLpower; DataBase_Fiber(:,6222:6241)];
+powerVariation = [powerVariation; DataBase_Fiber(:,6222:6241)];
+fiberType = [fiberType; DataBase_Fiber(:,6242:6261)];
+%Cmatrix = [Cmatrix DataBase_Fiber.Cmatrix];
 
 
-index = 1:length(NLpower(:,1));%get the dataset lines
-%[index,~]=size(DataBase_Fiber)
+%index = 1:length(NLpower(:,1));%get the dataset lines
+[index,~]=size(DataBase_Fiber)
 
-C_feature = zeros(index(end),3100);
-
-
-NLpower = NLpower(index,:);
-fiberType = fiberType(index,:);
-CDprecomp = CDprecomp(index,:);
-spanLength = spanLength(index,:);
-powerVariation = powerVariation(index,:);
+%C_feature = zeros(index(end),3100);
 
 
-for i = index
+%NLpower = NLpower(index,:);
+%fiberType = fiberType(index,:);
+%CDprecomp = CDprecomp(index,:);
+%spanLength = spanLength(index,:);
+%powerVariation = powerVariation(index,:);
+
+
+%for i = index
     
-    aaa = squeeze(Cmatrix{i}(1:1:20,:,:));
-    C_feature(i,:) = [aaa(:)];
+%    aaa = squeeze(Cmatrix{i}(1:1:20,:,:));
+%    C_feature(i,:) = [aaa(:)];
     
-end
+%end
 
 
 
 
 
-%%
+
 hiddenLayerSize = [50 40 30];
 
-C_Input = [real(C_feature) imag(C_feature)];
+C_Input = [C_Input;DataBase_Fiber(:,1:6200)];
 
-[CoefPCA,~,~,~,EXPLAINED] = pca(C_Input(1:10000,:));
+[CoefPCA,~,~,~,EXPLAINED] = pca(C_Input(:,:));
 
 C_Input_PCA = C_Input*CoefPCA(:,1:200);
 
 NN_Input = [C_Input_PCA.';CDprecomp(:,end).';spanLength.';powerVariation.';];
 %         NN_Output = [fiberType(aa,iSpan).'];
+
+NN_All=[NN_Input' fiberType];
+
+size(NN_All)
+
+csvwrite('pca1000.csv',NN_All)
 
    %%
    
