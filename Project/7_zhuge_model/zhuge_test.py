@@ -8,7 +8,8 @@ SPAN=[19]
 
 log = ''
 
-filename = '/home/freshield/Ciena_data/ciena_pca_10000.csv'
+#filename = '/home/freshield/Ciena_data/ciena_pca_10000.csv'
+filename = 'pca1000_1.csv'
 
 data = pd.read_csv(filename, header=None, nrows=NROWS)
 

@@ -8,11 +8,12 @@ from zhuge_nn_model import *
 
 NROWS = 10000
 
-SPAN=[19]
+SPAN=[20]
 
 log = ''
 
-filename = '/home/freshield/Ciena_data/ciena_pca_10000.csv'
+#filename = '/home/freshield/Ciena_data/ciena_pca_10000.csv'
+filename = 'pca1000_1.csv'
 
 data = pd.read_csv(filename, header=None, nrows=NROWS)
 

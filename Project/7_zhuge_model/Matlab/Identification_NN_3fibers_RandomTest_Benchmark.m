@@ -62,7 +62,7 @@ NN_All=[NN_Input' fiberType];
 
 size(NN_All)
 
-csvwrite('pca1000.csv',NN_All)
+csvwrite('pca1000_1.csv',NN_All)
 
    %%
    

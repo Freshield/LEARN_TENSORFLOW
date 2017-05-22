@@ -83,15 +83,16 @@ def del_and_create_dir(dir_path):
     tf.gfile.MakeDirs(dir_path)
 
 #-----------------------------
-filename = 'ciena_test.csv'
+filename='ciena_test.csv'
+#filename = 'pca1000_1.csv'
 dataset = pd.read_csv(filename, header=None)
 train_dataset, validation_dataset, test_dataset = split_dataset(dataset, 0.1)
 train_dataset, train_mean = normalize_dataset(train_dataset)
 validation_dataset,_ = normalize_dataset(validation_dataset,train_mean)
 test_dataset,_ = normalize_dataset(test_dataset,train_mean)
 
-reg = 1e-4
-lr_rate = 0.01
+reg = 5e-3
+lr_rate = 0.002
 max_step = 10000
 
 with tf.Graph().as_default():
@@ -107,9 +108,9 @@ with tf.Graph().as_default():
         W1 = weight_variable([241, 1024], 'W1')
         variable_summaries(W1)
         b1 = tf.Variable(tf.constant(0.1, shape=[1024]))
-        h1 = tf.matmul(bn_input, W1) + b1
+        h1 = tf.matmul(x, W1) + b1
         bn_h1 = batch_norm_layer1(h1, train_phase, 'bn_h1')
-        act_h1 = tf.nn.relu(bn_h1)
+        act_h1 = tf.nn.relu(h1)
         tf.summary.histogram('act_h1',act_h1)
         drop_h1 = tf.nn.dropout(act_h1, keep_prob=keep_prob)
 
@@ -118,7 +119,7 @@ with tf.Graph().as_default():
         b2 = tf.Variable(tf.constant(0.1, shape=[512]))
         h2 = tf.matmul(drop_h1, W2) + b2
         bn_h2 = batch_norm_layer1(h2, train_phase, 'bn_h2')
-        act_h2 = tf.nn.relu(bn_h2)
+        act_h2 = tf.nn.relu(h2)
         tf.summary.histogram('act_h2',act_h2)
         drop_h2 = tf.nn.dropout(act_h2, keep_prob=keep_prob)
 
@@ -127,7 +128,7 @@ with tf.Graph().as_default():
         b3 = tf.Variable(tf.constant(0.1, shape=[256]))
         h3 = tf.matmul(drop_h2, W3) + b3
         bn_h3 = batch_norm_layer1(h3, train_phase, 'bn_h3')
-        act_h3 = tf.nn.relu(bn_h3)
+        act_h3 = tf.nn.relu(h3)
         tf.summary.histogram('act_h3',act_h3)
         drop_h3 = tf.nn.dropout(act_h3, keep_prob=keep_prob)
 
@@ -136,7 +137,7 @@ with tf.Graph().as_default():
         b4 = tf.Variable(tf.constant(0.1, shape=[128]))
         h4 = tf.matmul(drop_h3, W4) + b4
         bn_h4 = batch_norm_layer1(h4, train_phase, 'bn_h4')
-        act_h4 = tf.nn.relu(bn_h4)
+        act_h4 = tf.nn.relu(h4)
         tf.summary.histogram('act_h4',act_h4)
         drop_h4 = tf.nn.dropout(act_h4, keep_prob=keep_prob)
 
