@@ -7,8 +7,5 @@ for i = 1:10,
     end
 end
 size(a)
-%csvwrite('testlist.csv',a)
-b=1:1:20
-c=[];
-c={a a}
-c{1}(1:1:20,:)
+b=[1,2,3,4]
+minmax(b)
