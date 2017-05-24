@@ -2,6 +2,7 @@ clear all;
 close all;
 % % construct input and output
 
+%--to create space
 NLpower = [];
 fiberType = [];
 CDprecomp = [];
@@ -9,9 +10,10 @@ spanLength = [];
 powerVariation = [];
 Cmatrix = [];
 
+%--read the dataset
 data = csvread('ciena10000.csv');
 
-
+%--split the different part of dataset
 C_feature_real = data(:,1:3100);
 C_feature_imag = data(:,3101:6200);
 netCD = data(:,6201);
@@ -22,21 +24,29 @@ iLayerSize = 1;
 
 
 %%
+%--set the three layers hidden size
 hiddenLayerSize = [50 40 30];
 
+%--set the C_Input(N,6200)
 C_Input = [C_feature_real C_feature_imag];
 
+%--do the pca for the first 10000 data
+%--CoefPCA(6200,6200)
 [CoefPCA,~,~,~,EXPLAINED] = pca(C_Input(1:10000,:));
 
+%--C_Input_PCA(N,200)
 C_Input_PCA = C_Input*CoefPCA(:,1:200);
 
+%--there turn the matrix around, NN_Input(241,N)
 NN_Input = [C_Input_PCA.';netCD.';spanLength.';powerVariation.';];
 %         NN_Output = [fiberType(aa,iSpan).'];
 
    %%
-   
+  
+%--just predict the span10, use for can extend later
 for iSpan = 10:10
     
+    %--NN_Output(1,N)
     NN_Output = [fiberType(:,iSpan).'];
     
     
@@ -49,8 +59,16 @@ for iSpan = 10:10
     %   b - input data.
     %   c - target data.
     
+    %--x is input(241,N)
+    %--t is output(1,N)
     x = NN_Input;
     t = NN_Output;
+    
+    %--TO DO
+    %--understant scaled conjugate gradient method
+    %--preprocessing and postprocessing
+    %--performance
+    %--the result part
     
     % Choose a Training Function
     % For a list of all training functions type: help nntrain
