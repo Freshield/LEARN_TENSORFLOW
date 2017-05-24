@@ -64,11 +64,12 @@ for iSpan = 10:10
     x = NN_Input;
     t = NN_Output;
     
-    %--TO DO
+    %--TO DO------------------------------------------------------------
     %--understant scaled conjugate gradient method
     %--preprocessing and postprocessing
     %--performance
     %--the result part
+    %-------------------------------------------------------------------
     
     % Choose a Training Function
     % For a list of all training functions type: help nntrain
