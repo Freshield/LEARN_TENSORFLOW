@@ -4,7 +4,7 @@ from resnet_model import *
 
 NROWS = 10000
 
-SPAN=[20]
+SPAN=[10]
 
 filename = '~/Ciena_data/ciena10000.csv'
 
