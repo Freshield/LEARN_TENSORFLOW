@@ -141,10 +141,10 @@ train_dataset, train_mins, train_maxs = normalize_dataset(train_dataset)
 validation_dataset,_,_ = normalize_dataset(validation_dataset,train_mins, train_maxs)
 test_dataset,_,_ = normalize_dataset(test_dataset,train_mins, train_maxs)
 
-regs = random_uniform_array(17, -5, -1)
-lr_rates = random_uniform_array(17, -7, -2)
-keeps = random_uniform_array(8, -0.3, 0)
-max_step = 15000
+regs = random_uniform_array(20, -5, -1)
+lr_rates = random_uniform_array(25, -7, -2)
+keeps = random_uniform_array(10, -0.3, 0)
+max_step = 10000
 
 log = ''
 count = len(regs) * len(lr_rates) * len(keeps)
@@ -170,43 +170,43 @@ for reg in regs:
                     bn_input = batch_norm_layer1(x, train_phase, 'bn_input')
 
                     W1 = weight_variable([241, 512], 'W1')
-                    variable_summaries(W1)
+                    #variable_summaries(W1)
                     b1 = tf.Variable(tf.constant(0.1, shape=[512]))
                     h1 = tf.matmul(bn_input, W1) + b1
                     bn_h1 = batch_norm_layer1(h1, train_phase, 'bn_h1')
                     act_h1 = tf.nn.relu(bn_h1)
-                    tf.summary.histogram('act_h1', act_h1)
+                    #tf.summary.histogram('act_h1', act_h1)
                     drop_h1 = tf.nn.dropout(act_h1, keep_prob=keep_prob)
 
                     W2 = weight_variable([512, 256], 'W2')
-                    variable_summaries(W2)
+                    #variable_summaries(W2)
                     b2 = tf.Variable(tf.constant(0.1, shape=[256]))
                     h2 = tf.matmul(drop_h1, W2) + b2
                     bn_h2 = batch_norm_layer1(h2, train_phase, 'bn_h2')
                     act_h2 = tf.nn.relu(bn_h2)
-                    tf.summary.histogram('act_h2', act_h2)
+                    #tf.summary.histogram('act_h2', act_h2)
                     drop_h2 = tf.nn.dropout(act_h2, keep_prob=keep_prob)
 
                     W3 = weight_variable([256, 128], 'W3')
-                    variable_summaries(W3)
+                    #variable_summaries(W3)
                     b3 = tf.Variable(tf.constant(0.1, shape=[128]))
                     h3 = tf.matmul(drop_h2, W3) + b3
                     bn_h3 = batch_norm_layer1(h3, train_phase, 'bn_h3')
                     act_h3 = tf.nn.relu(bn_h3)
-                    tf.summary.histogram('act_h3', act_h3)
+                    #tf.summary.histogram('act_h3', act_h3)
                     drop_h3 = tf.nn.dropout(act_h3, keep_prob=keep_prob)
 
                     W4 = weight_variable([128, 64], 'W4')
-                    variable_summaries(W4)
+                    #variable_summaries(W4)
                     b4 = tf.Variable(tf.constant(0.1, shape=[64]))
                     h4 = tf.matmul(drop_h3, W4) + b4
                     bn_h4 = batch_norm_layer1(h4, train_phase, 'bn_h4')
                     act_h4 = tf.nn.relu(bn_h4)
-                    tf.summary.histogram('act_h4', act_h4)
+                    #tf.summary.histogram('act_h4', act_h4)
                     drop_h4 = tf.nn.dropout(act_h4, keep_prob=keep_prob)
 
                     W5 = weight_variable([64, 3], 'W5')
-                    variable_summaries(W5)
+                    #variable_summaries(W5)
                     b5 = tf.Variable(tf.constant(0.1, shape=[3]))
                     y = tf.matmul(drop_h4, W5) + b5
 
@@ -218,26 +218,26 @@ for reg in regs:
                             W5) + tf.nn.l2_loss(b5))
 
                     loss = cross_entropy + reg_loss
-                    tf.summary.scalar('loss', loss)
+                    #tf.summary.scalar('loss', loss)
 
                     train_op = tf.train.AdamOptimizer(lr_rate).minimize(loss)
 
                     correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_one_hot, 1))
 
                     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-                    tf.summary.scalar('acc', accuracy)
+                    #tf.summary.scalar('acc', accuracy)
 
-                    merged = tf.summary.merge_all()
+                    #merged = tf.summary.merge_all()
 
                     # define store path
-                    train_path = 'tmp/train'
-                    test_path = 'tmp/test'
-                    del_and_create_dir(train_path)
-                    del_and_create_dir(test_path)
+                    #train_path = 'tmp/train'
+                    #test_path = 'tmp/test'
+                    #del_and_create_dir(train_path)
+                    #del_and_create_dir(test_path)
 
                     # create writer for tensorboard
-                    train_writer = tf.summary.FileWriter(train_path, sess.graph)
-                    test_writer = tf.summary.FileWriter(test_path)
+                    #train_writer = tf.summary.FileWriter(train_path, sess.graph)
+                    #test_writer = tf.summary.FileWriter(test_path)
 
                     sess.run(tf.global_variables_initializer())
 
@@ -249,8 +249,8 @@ for reg in regs:
                         feed_dict = {x: data['features'], y_: data['labels'], train_phase: True, keep_prob: keep}
 
                         if step % 40 == 0 or step == max_step - 1:
-                            summary, _, loss_v, acc = sess.run([merged, train_op, loss, accuracy], feed_dict=feed_dict)
-                            train_writer.add_summary(summary, step)
+                            _, loss_v, acc = sess.run([train_op, loss, accuracy], feed_dict=feed_dict)
+                            #train_writer.add_summary(summary, step)
                         else:
                             _, loss_v, acc = sess.run([train_op, loss, accuracy], feed_dict=feed_dict)
 
@@ -278,8 +278,8 @@ for reg in regs:
 
                             feed_dict = {x: data['features'], y_: data['labels'], train_phase: False, keep_prob: 1.0}
 
-                            summary, result = sess.run([merged, accuracy], feed_dict=feed_dict)
-                            test_writer.add_summary(summary, step)
+                            result = sess.run(accuracy, feed_dict=feed_dict)
+                            #test_writer.add_summary(summary, step)
 
                             print '--------valida acc in step %d is %f--------' % (step, result)
                             log += '--------valida acc in step %d is %f--------\n' % (step, result)
@@ -297,8 +297,8 @@ for reg in regs:
                         if step % 1000 == 0:
                             lr_rate = lr_rate * 0.99
 
-                    test_writer.close()
-                    train_writer.close()
+                    #test_writer.close()
+                    #train_writer.close()
 
                     del_and_create_dir('log')
                     filename = 'log/%.3f_loop%d' % (result, count)
