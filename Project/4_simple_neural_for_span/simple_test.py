@@ -1,7 +1,6 @@
 import tensorflow as tf
 import pandas as pd
 import numpy as np
-from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
 def split_dataset(dataset, radio):
     test_dataset_size = int(radio * len(dataset))
@@ -123,6 +122,13 @@ def del_and_create_dir(dir_path):
         tf.gfile.DeleteRecursively(dir_path)
     tf.gfile.MakeDirs(dir_path)
 
+def random_uniform_array(number, start, end):
+    array = np.zeros(number)
+    for i in np.arange(number):
+        array[i] = 10 ** np.random.uniform(start, end)
+
+    return array
+
 #-----------------------------
 #filename='ciena_test.csv'
 filename = 'pca1000_1.csv'
@@ -137,6 +143,8 @@ reg = 5e-3
 lr_rate = 0.0002
 max_step = 10000
 
+log = ''
+
 with tf.Graph().as_default():
     with tf.Session() as sess:
         x = tf.placeholder(tf.float32, [None, 241])
@@ -147,43 +155,43 @@ with tf.Graph().as_default():
 
         bn_input = batch_norm_layer1(x, train_phase, 'bn_input')
 
-        W1 = weight_variable([241, 1024], 'W1')
+        W1 = weight_variable([241, 512], 'W1')
         variable_summaries(W1)
-        b1 = tf.Variable(tf.constant(0.1, shape=[1024]))
+        b1 = tf.Variable(tf.constant(0.1, shape=[512]))
         h1 = tf.matmul(bn_input, W1) + b1
         bn_h1 = batch_norm_layer1(h1, train_phase, 'bn_h1')
         act_h1 = tf.nn.relu(bn_h1)
         tf.summary.histogram('act_h1',act_h1)
         drop_h1 = tf.nn.dropout(act_h1, keep_prob=keep_prob)
 
-        W2 = weight_variable([1024, 512], 'W2')
+        W2 = weight_variable([512, 256], 'W2')
         variable_summaries(W2)
-        b2 = tf.Variable(tf.constant(0.1, shape=[512]))
+        b2 = tf.Variable(tf.constant(0.1, shape=[256]))
         h2 = tf.matmul(drop_h1, W2) + b2
         bn_h2 = batch_norm_layer1(h2, train_phase, 'bn_h2')
         act_h2 = tf.nn.relu(bn_h2)
         tf.summary.histogram('act_h2',act_h2)
         drop_h2 = tf.nn.dropout(act_h2, keep_prob=keep_prob)
 
-        W3 = weight_variable([512, 256], 'W3')
+        W3 = weight_variable([256, 128], 'W3')
         variable_summaries(W3)
-        b3 = tf.Variable(tf.constant(0.1, shape=[256]))
+        b3 = tf.Variable(tf.constant(0.1, shape=[128]))
         h3 = tf.matmul(drop_h2, W3) + b3
         bn_h3 = batch_norm_layer1(h3, train_phase, 'bn_h3')
         act_h3 = tf.nn.relu(bn_h3)
         tf.summary.histogram('act_h3',act_h3)
         drop_h3 = tf.nn.dropout(act_h3, keep_prob=keep_prob)
 
-        W4 = weight_variable([256, 128], 'W4')
+        W4 = weight_variable([128, 64], 'W4')
         variable_summaries(W4)
-        b4 = tf.Variable(tf.constant(0.1, shape=[128]))
+        b4 = tf.Variable(tf.constant(0.1, shape=[64]))
         h4 = tf.matmul(drop_h3, W4) + b4
         bn_h4 = batch_norm_layer1(h4, train_phase, 'bn_h4')
         act_h4 = tf.nn.relu(bn_h4)
         tf.summary.histogram('act_h4',act_h4)
         drop_h4 = tf.nn.dropout(act_h4, keep_prob=keep_prob)
 
-        W5 = weight_variable([128, 3], 'W5')
+        W5 = weight_variable([64, 3], 'W5')
         variable_summaries(W5)
         b5 = tf.Variable(tf.constant(0.1, shape=[3]))
         y = tf.matmul(drop_h4, W5) + b5
