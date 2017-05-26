@@ -132,17 +132,18 @@ def random_uniform_array(number, start, end):
 
 #-----------------------------
 #filename='ciena_test.csv'
-filename = 'pca1000_1.csv'
+#filename = 'pca1000_1.csv'
 #filename = 'norm.csv'
+filename = '/home/freshield/Ciena_data/FiberID_Data.csv'
 dataset = pd.read_csv(filename, header=None)
 train_dataset, validation_dataset, test_dataset = split_dataset(dataset, 0.1)
 train_dataset, train_mins, train_maxs = normalize_dataset(train_dataset)
 validation_dataset,_,_ = normalize_dataset(validation_dataset,train_mins, train_maxs)
 test_dataset,_,_ = normalize_dataset(test_dataset,train_mins, train_maxs)
 
-regs = random_uniform_array(20, -5, -1)
-lr_rates = random_uniform_array(20, -7, -2)
-keeps = random_uniform_array(10, -0.3, 1)
+regs = random_uniform_array(17, -5, -1)
+lr_rates = random_uniform_array(17, -7, -2)
+keeps = random_uniform_array(8, -0.3, 0)
 max_step = 15000
 
 log = ''
@@ -261,9 +262,9 @@ for reg in regs:
                             last_time = time.time()
                             span_time = last_time - before_time
                             print ('last 500 loop use %f minutes' % (span_time * 500 / 60))
-                            print ('rest time is %.3f minutes' % (span_time * (max_step - step) * count / 60))
+                            print ('rest time is %.3f minutes' % (span_time * (max_step * count - step) / 60))
                             log += ('last 500 loop use %f minutes\n' % (span_time * 500 / 60))
-                            log += ('rest time is %.3f minutes\n' % (span_time * (max_step - step) * count / 60))
+                            log += ('rest time is %.3f minutes\n' % (span_time * (max_step * count - step) / 60))
                             data = get_whole_data(train_dataset)
 
                             feed_dict = {x: data['features'], y_: data['labels'], train_phase: False, keep_prob: 1.0}
