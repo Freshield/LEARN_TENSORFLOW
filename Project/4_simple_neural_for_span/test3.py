@@ -9,6 +9,6 @@ def random_uniform_array(number, start, end):
     return array
 
 
-a = random_uniform_array(10, -6, -2)
+a = random_uniform_array(10, -0.3, 0)
 
 print a
