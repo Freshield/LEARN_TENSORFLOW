@@ -149,6 +149,8 @@ max_step = 10000
 log = ''
 count = len(regs) * len(lr_rates) * len(keeps)
 
+del_and_create_dir('log')
+
 for reg in regs:
     for lr_rate in lr_rates:
         for keep in keeps:
@@ -300,7 +302,6 @@ for reg in regs:
                     #test_writer.close()
                     #train_writer.close()
 
-                    del_and_create_dir('log')
                     filename = 'log/%.3f_loop%d' % (result, count)
                     f = file(filename, 'w+')
                     f.write(log)
