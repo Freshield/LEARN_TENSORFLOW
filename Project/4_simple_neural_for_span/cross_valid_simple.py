@@ -146,7 +146,6 @@ lr_rates = random_uniform_array(25, -7, -2)
 keeps = random_uniform_array(10, -0.3, 0)
 max_step = 10000
 
-log = ''
 count = len(regs) * len(lr_rates) * len(keeps)
 
 del_and_create_dir('log')
@@ -156,6 +155,9 @@ for reg in regs:
         for keep in keeps:
             with tf.Graph().as_default():
                 with tf.Session() as sess:
+
+                    log = ''
+
                     info = '--------------------------------------\n' \
                            '-------reg is %f\n' \
                            '-------lr_rate is %f\n' \
