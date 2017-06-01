@@ -34,16 +34,53 @@ def copyFiles(sourceDir,  targetDir):
 
 #split the dataset into three part:
 #training, validation, test
-def split_dataset(dataset, test_dataset_size=None, radio=None):
-    if radio != None:
-        test_dataset_size = int(radio * len(dataset))
-
-    train_set = dataset[0:-test_dataset_size * 2]
-    validation_set = dataset[-test_dataset_size * 2:-test_dataset_size]
-    test_set = dataset[-test_dataset_size:len(dataset)]
-
-
+def split_dataset(dataset, radio):
+    test_dataset_size = int(radio * len(dataset))
+    data_size = dataset.shape[0]
+    indexs = np.arange(data_size)
+    np.random.shuffle(indexs)
+    train_set = dataset.values[indexs[:-test_dataset_size * 2]]
+    validation_set = dataset.values[indexs[-test_dataset_size * 2 : -test_dataset_size]]
+    test_set = dataset.values[indexs[-test_dataset_size : ]]
     return train_set, validation_set, test_set
+
+def normalize_dataset(dataset, min_values=None, max_values=None):
+    norm_dataset = np.zeros((dataset.shape))
+    norm_dataset[:, :] = dataset[:, :]
+
+    if min_values == None:
+        CM_r_min = np.min(norm_dataset[:,:3100])
+        CM_i_min = np.min(norm_dataset[:,3100:6200])
+        CD_min = np.min(norm_dataset[:,6200:6201])
+        length_min = np.min(norm_dataset[:,6201:6221])
+        power_min = np.min(norm_dataset[:,6221:6241])
+    else:
+        CM_r_min, CM_i_min, CD_min, length_min, power_min = min_values
+
+
+    if max_values == None:
+        CM_r_max = np.max(norm_dataset[:,0:3100])
+        CM_i_max = np.max(norm_dataset[:,3100:6200])
+        CD_max = np.max(norm_dataset[:,6200:6201])
+        length_max = np.max(norm_dataset[:,6201:6221])
+        power_max = np.max(norm_dataset[:,6221:6241])
+    else:
+        CM_r_max, CM_i_max, CD_max, length_max, power_max = max_values
+
+    def calcul_norm(dataset, min, max):
+        return (dataset - min) / (max - min)
+
+
+    norm_dataset[:,0:3100] = calcul_norm(norm_dataset[:,0:3100], CM_r_min, CM_r_max)
+    norm_dataset[:,3100:6200] = calcul_norm(norm_dataset[:,3100:6200], CM_i_min, CM_i_max)
+    norm_dataset[:,6200:6201] = calcul_norm(norm_dataset[:,6200:6201], CD_min, CD_max)
+    norm_dataset[:,6201:6221] = calcul_norm(norm_dataset[:,6201:6221], length_min, length_max)
+    norm_dataset[:,6221:6241] = calcul_norm(norm_dataset[:,6221:6241], power_min, power_max)
+
+    min_values = (CM_r_min, CM_i_min, CD_min, length_min, power_min)
+    max_values = (CM_r_max, CM_i_max, CD_max, length_max, power_max)
+
+    return norm_dataset, min_values, max_values
 
 #get a random data(maybe have same value)
 def get_batch_data(data_set, batch_size, span_num=20):
