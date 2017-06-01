@@ -40,7 +40,6 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 def get_batch_data(X_dataset, y_dataset, batch_size):
     lines_num = X_dataset.shape[0]
     random_index = np.random.randint(lines_num, size=[batch_size])
-
     X_data = X_dataset[random_index]
     y_data = y_dataset[random_index]
     return {'X': X_data, 'y': y_data}
@@ -70,7 +69,7 @@ def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
         next_index -= X_dataset.shape[0]
         last_part = np.arange(last_index,indexs.shape[0])
         before_part = np.arange(next_index)
-        span_index = indexs[np.concatenate((last_part, before_part))]
+        span_index = indexs[np.concatenate((last_part, before_part))]#link two parts together
         out_of_dataset = True
     else:
         span_index = indexs[last_index:next_index]
@@ -116,6 +115,12 @@ def normalize_dataset(dataset, min_values=None, max_values=None):
 
     return norm_dataset, min_values, max_values
 
+def num_to_one_hot(dataset, category_num):
+    lines = dataset.shape[0]
+    one_hot_dataset = np.zeros([lines,category_num], dtype=np.float32)
+    one_hot_dataset[np.arange(lines), dataset] = 1
+    return one_hot_dataset
+
 def reshape_dataset(dataset, SPAN):
     input_data = np.zeros((dataset.shape[0], 32, 100, 3))
     temp_data = np.reshape(dataset[:, :6200], (dataset.shape[0], 31, 100, 2))
@@ -124,6 +129,6 @@ def reshape_dataset(dataset, SPAN):
     input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 79)[:, :3200], (dataset.shape[0], 32, 100))
 
     output_data = dataset[:, 6240 + SPAN[0]]
-    output_data = np_utils.to_categorical(output_data)
+    output_data = num_to_one_hot(output_data, 3)
 
     return input_data, output_data

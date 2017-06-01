@@ -47,7 +47,6 @@ def get_batch_data(X_dataset, y_dataset, batch_size):
 
 #directly get whole dataset(only for small dataset)
 def get_whole_data(X_dataset, y_dataset):
-
     return {'X': X_dataset, 'y': y_dataset}
 
 #get a random indexs for dataset,
@@ -70,7 +69,7 @@ def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
         next_index -= X_dataset.shape[0]
         last_part = np.arange(last_index,indexs.shape[0])
         before_part = np.arange(next_index)
-        span_index = indexs[np.concatenate((last_part, before_part))]
+        span_index = indexs[np.concatenate((last_part, before_part))]#link two parts together
         out_of_dataset = True
     else:
         span_index = indexs[last_index:next_index]
@@ -79,6 +78,7 @@ def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
     y_data = y_dataset[span_index]
     return (next_index, {'X':X_data,'y':y_data}, out_of_dataset)
 
+#normalize the dataset in different parts
 def normalize_dataset(dataset, min_values=None, max_values=None):
     norm_dataset = np.zeros((dataset.shape))
     norm_dataset[:, :] = dataset[:, :]
@@ -116,6 +116,7 @@ def normalize_dataset(dataset, min_values=None, max_values=None):
 
     return norm_dataset, min_values, max_values
 
+#reshape the dataset into 32x100x3
 def reshape_dataset(dataset, SPAN):
     input_data = np.zeros((dataset.shape[0], 32, 100, 3))
     temp_data = np.reshape(dataset[:, :6200], (dataset.shape[0], 31, 100, 2))
