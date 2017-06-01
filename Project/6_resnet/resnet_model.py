@@ -38,7 +38,7 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
 #get a random data(maybe have same value)
 def get_batch_data(X_dataset, y_dataset, batch_size):
-    lines_num = X_dataset.shape[0] - 1
+    lines_num = X_dataset.shape[0]
     random_index = np.random.randint(lines_num, size=[batch_size])
 
     X_data = X_dataset[random_index]
