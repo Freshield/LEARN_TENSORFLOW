@@ -174,4 +174,24 @@ def batch_norm_layer(x, train_phase, scope_bn):
         normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
     return normed
 
+#fully connected layer
+#fc-bn-relu-drop
+def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
+    with tf.variable_scope(name):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, output_size], 'fc_weight')
+        b = bias_variable([output_size])
+        fc_out = tf.matmul(input_layer, W) + b
+        bn_out = batch_norm_layer(fc_out, train_phase, "fc_bn")
+        act_out = tf.nn.relu(bn_out)
+        output = tf.nn.dropout(act_out, keep_prob)
+    return output, [W]
 
+#score layer
+def score_layer(input_layer, label_size):
+    with tf.variable_scope("score"):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, label_size], 'score_weight')
+        b = bias_variable([label_size])
+        output = tf.matmul(input_layer, W) + b
+    return output, [W]
