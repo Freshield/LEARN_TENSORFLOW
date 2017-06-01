@@ -19,3 +19,10 @@ def num_to_one_hot(dataset, category_num):
     return one_hot_dataset
 
 print num_to_one_hot(b, 3)
+
+c = []
+c.append(10)
+c.append(20)
+c.append(30)
+
+print c

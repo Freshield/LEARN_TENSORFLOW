@@ -155,6 +155,12 @@ def conv2d(x, W, stride, padding):
   """conv2d returns a 2d convolution layer with full stride."""
   return tf.nn.conv2d(x, W, strides=[1, stride, stride, 1], padding=padding)
 
+#for create the pooling
+def max_pool_2x2(x):
+  """max_pool_2x2 downsamples a feature map by 2X."""
+  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
+                        strides=[1, 2, 2, 1], padding='SAME')
+
 #for create batch norm layer
 def batch_norm_layer(x, train_phase, scope_bn):
     with tf.variable_scope(scope_bn):
@@ -174,6 +180,18 @@ def batch_norm_layer(x, train_phase, scope_bn):
         normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
     return normed
 
+#conv-bn-relu-maxpooling
+def conv_bn_pool_layer(input_layer, filter_depth, train_phase, keep_prob, name):
+    input_depth = input_layer.shape[-1]
+    with tf.variable_scope(name):
+        filter = weight_variable([3,3,input_depth,filter_depth])
+        biases = bias_variable([filter_depth])
+        conv_output = conv2d(input_layer, filter, 1, "SAME") + biases
+        bn_output = batch_norm_layer(conv_output, train_phase, "conv_bn")
+        act_output = tf.nn.relu(bn_output)
+        output = max_pool_2x2(act_output)
+    return output,filter
+
 #fully connected layer
 #fc-bn-relu-drop
 def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
@@ -185,7 +203,7 @@ def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
         bn_out = batch_norm_layer(fc_out, train_phase, "fc_bn")
         act_out = tf.nn.relu(bn_out)
         output = tf.nn.dropout(act_out, keep_prob)
-    return output, [W]
+    return output, W
 
 #score layer
 def score_layer(input_layer, label_size):
@@ -194,4 +212,11 @@ def score_layer(input_layer, label_size):
         W = weight_variable([input_size, label_size], 'score_weight')
         b = bias_variable([label_size])
         output = tf.matmul(input_layer, W) + b
-    return output, [W]
+    return output, W
+
+#get the y_pred
+def inference(input_layer, train_phase, keep_prob):
+    with tf.variable_scope("inference"):
+        
+
+
