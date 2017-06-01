@@ -122,11 +122,11 @@ def num_to_one_hot(dataset, category_num):
     return one_hot_dataset
 
 def reshape_dataset(dataset, SPAN):
-    input_data = np.zeros((dataset.shape[0], 32, 100, 3))
+    input_data = np.zeros((dataset.shape[0], 32, 104, 3))
     temp_data = np.reshape(dataset[:, :6200], (dataset.shape[0], 31, 100, 2))
-    input_data[:, :31, :, 0] = temp_data[:, :, :, 0]#cause input size is 32 not 31
-    input_data[:, :31, :, 1] = temp_data[:, :, :, 1]
-    input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 79)[:, :3200], (dataset.shape[0], 32, 100))
+    input_data[:, :31, 2:102, 0] = temp_data[:, :, :, 0]#cause input size is 32 not 31
+    input_data[:, :31, 2:102, 1] = temp_data[:, :, :, 1]
+    input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 82)[:, :3328], (dataset.shape[0], 32, 104))
 
     output_data = dataset[:, 6240 + SPAN[0]]
     output_data = num_to_one_hot(output_data, 3)
@@ -181,7 +181,7 @@ def batch_norm_layer(x, train_phase, scope_bn):
     return normed
 
 #conv-bn-relu-maxpooling
-def conv_bn_pool_layer(input_layer, filter_depth, train_phase, keep_prob, name):
+def conv_bn_pool_layer(input_layer, filter_depth, train_phase, name):
     input_depth = input_layer.shape[-1]
     with tf.variable_scope(name):
         filter = weight_variable([3,3,input_depth,filter_depth])
@@ -217,6 +217,38 @@ def score_layer(input_layer, label_size):
 #get the y_pred
 def inference(input_layer, train_phase, keep_prob):
     with tf.variable_scope("inference"):
-        
+        #input (N,32,104,3)
+        bn_input = batch_norm_layer(input_layer, train_phase, "bn_input")
+
+        #conv1 (N,16,52,64)
+        conv1, filter1 = conv_bn_pool_layer(bn_input, 64, train_phase, "conv1")
+
+        #conv2 (N,8,26,128)
+        conv2, filter2 = conv_bn_pool_layer(conv1, 128, train_phase, "conv2")
+
+        #conv3 (N, 4, 13, 256)
+        conv3, filter3 = conv_bn_pool_layer(conv2, 256, train_phase, "conv3")
+
+        #flat
+        flat_conv3 = tf.reshape(conv3, [-1,4*13*256])
+
+        #fc layer
+        fc1, fc_weight = fc_bn_drop_layer(flat_conv3, 1024, train_phase, keep_prob, "fc1")
+
+        #score layer
+        y_pred, score_weight = score_layer(fc1, 3)
+
+        parameters = (filter1, filter2, filter3, fc_weight, score_weight)
+
+    return y_pred, parameters
+
+def corr_num_acc(labels, logits):
+    correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(labels, 1))
+    correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    return correct_num, accuracy
+
+
+
 
 

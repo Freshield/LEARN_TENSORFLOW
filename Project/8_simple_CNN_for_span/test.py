@@ -26,3 +26,7 @@ c.append(20)
 c.append(30)
 
 print c
+
+c = np.arange(20)
+d = c[2:12]
+print len(d)
