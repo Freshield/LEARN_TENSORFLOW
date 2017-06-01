@@ -270,100 +270,42 @@ def fc_layer(input_layer, label_size):
         output = tf.matmul(input_layer, W) + b
     return output, [W]
 
-def inference(input_layer, train_phase):
-    parameters = []
-    #input shape should be (N,32,100,3)
-    input_depth = input_layer.shape[-1]
+input_layer = tf.ones([100,32,100,3],dtype=tf.float32)
+train_phase = tf.constant(True)
 
-    #input[N,32,100,3],output[N,32,100,64]
-    with tf.variable_scope('preprocess'):
-        bn_input = batch_norm_layer(input_layer, train_phase, 'bn_input')
-        filter = weight_variable([3,3,input_depth,64], 'filter_input')
-        biases = bias_variable([64])
-        conv_input = conv2d(bn_input, filter, 1, 'SAME') + biases
+parameters = []  # input shape should be (N,32,100,3)
+input_depth = input_layer.shape[-1]
 
-    #input[N,32,100,64],output[N,32,100,256]
-    #first layer not change the depth
-    resnet_l1, p1 = resnet_first_layer(conv_input, 256, train_phase, 'resnet_l1')
-    parameters[0:0] = p1
+# input[N,32,100,3],output[N,32,100,64]
+with tf.variable_scope('preprocess'):
+    bn_input = batch_norm_layer(input_layer, train_phase, 'bn_input')
+    filter = weight_variable([3, 3, input_depth, 64], 'filter_input')
+    biases = bias_variable([64])
+    conv_input = conv2d(bn_input, filter, 1, 'SAME') + biases
 
-    #input[N,32,100,256],output[N,16,50,512]
-    resnet_l2, p2 = resnet_layer(resnet_l1, 512, train_phase, 'resnet_l2')
-    parameters[0:0] = p2
+# input[N,32,100,64],output[N,32,100,256]
+resnet_l1, p1 = resnet_first_layer(conv_input, 256, train_phase, 'resnet_l1')
+parameters[0:0] = p1
 
-    #input[N,16,50,512],output[N,8,25,1024]
-    resnet_l3, p3 = resnet_layer(resnet_l2, 1024, train_phase, 'resnet_l3')
-    parameters[0:0] = p3
+# input[N,32,100,256],output[N,16,50,512]
+resnet_l2, p2 = resnet_layer(resnet_l1, 512, train_phase, 'resnet_l2')
+parameters[0:0] = p2
 
-    #pad for avg pool
-    #input[N,8,25,1024],output[N,10,27,1024]
-    resnet_l3_pad = tf.pad(resnet_l3, [[0,0],[2,2],[2,2],[0,0]], 'CONSTANT', 'l3_pad')
-    #input[N,10,27,1024],output[N,4,9,1024]
-    avg_pool_layer = tf.nn.avg_pool(resnet_l3_pad, [1,3,3,1], [1,3,3,1], 'VALID')
+# input[N,16,50,512],output[N,8,25,1024]
+resnet_l3, p3 = resnet_layer(resnet_l2, 1024, train_phase, 'resnet_l3')
+parameters[0:0] = p3
 
-    #platten for fc
-    #input[N,10,27,1024],output[N,4*9*1024]
-    avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 4 * 9 * 1024])
+# pad for avg pool
+# input[N,8,25,1024],output[N,10,27,1024]
+resnet_l3_pad = tf.pad(resnet_l3, [[0, 0], [2, 2], [2, 2], [0, 0]], 'CONSTANT', 'l3_pad')
+# input[N,10,27,1024],output[N,4,9,1024]
+avg_pool_layer = tf.nn.avg_pool(resnet_l3_pad, [1, 3, 3, 1], [1, 3, 3, 1], 'VALID')
 
-    #fc layer
-    #input[N,4*9*1024],output[N,3]
-    y_pred, p_fc = fc_layer(avg_pool_flat, 3)
-    parameters[0:0] = p_fc
+# platten for fc
+# input[N,10,27,1024],output[N,4*9*1024]
+avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 4 * 9 * 1024])
 
-    return y_pred, parameters
-
-def corr_num_acc(labels, logits):
-    correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(labels, 1))
-    correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-    return correct_num, accuracy
-
-#to do the evaluation part for the whole data
-#not use all data together, but many batchs
-def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged=None, test_writer=None,
-            global_step=None):
-
-    input_x, input_y, train_phase = placeholders
-    num_epoch = X_dataset.shape[0] // batch_size
-    rest_data_size = X_dataset.shape[0] % batch_size
-
-    index = 0
-    count = 0.0
-    indexs = np.arange(X_dataset.shape[0])
-
-    for step in xrange(num_epoch):
-        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, batch_size)
-
-        if step == num_epoch - 1:
-            if merged != None :
-                summary, num = sess.run([merged, correct_num], feed_dict={input_x:data['X'], input_y:data['y'],
-                                                                          train_phase:False})
-                #add summary
-                #test_writer.add_summary(summary, global_step)
-            else:
-                num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'], train_phase:False})
-
-        else:
-            num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],train_phase:False})
-
-        count += num
-
-    if rest_data_size != 0:
-        #the rest data
-        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
-        num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'], train_phase:False})
-
-        count += num
-    return count / X_dataset.shape[0]
-
-def loss(labels, logits, reg=None, parameters=None):
-    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits,name='xentropy'))
-
-    if parameters == None:
-        cost = cross_entropy
-    else:
-        reg_loss = 0.0
-        for para in parameters:
-            reg_loss += reg * 0.5 * tf.nn.l2_loss(para)
-        cost = cross_entropy + reg_loss
-    return cost
+# fc layer
+# input[N,4*9*1024],output[N,3]
+y_pred, p_fc = fc_layer(avg_pool_flat, 3)
+parameters[0:0] = p_fc
