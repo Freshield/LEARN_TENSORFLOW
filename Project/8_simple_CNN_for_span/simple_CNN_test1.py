@@ -123,16 +123,16 @@ with tf.Graph().as_default():
                 print words
                 log += words
 
-                #each 100 loop, do evaluation
-                #!!!!!!!!!!!!!!!caution, loop from 0-99, but % 100 == 0, maybe have problem
-                if (loop != 0 and loop % 30 == 0) or loop == loops - 1:
+                #each 50 loop, do evaluation
+                #!!!!!!!!!!!!!!!caution, loop from 0-49, but % 50 == 0, maybe have problem
+                if (loop != 0 and loop % 50 == 0) or loop == loops - 1:
                     #show the time
                     last_time = time.time()
                     span_time = last_time - before_time
-                    print ('last 100 loop use %f minutes' % (span_time * 100 / 60))
+                    print ('last 50 loop use %f minutes' % (span_time * 50 / 60))
                     print ('rest loop need %.3f minutes' % (span_time * (loops - loop) / 60))
                     print ('rest epoch need %.3f hours' % (span_time * (loops - loop) * (epochs - epoch) / 3600))
-                    log += ('last 100 loop use %f minutes\n' % (span_time * 100 / 60))
+                    log += ('last 50 loop use %f minutes\n' % (span_time * 50 / 60))
                     log += ('rest loop need %.3f minutes\n' % (span_time * (loops - loop) / 60))
                     log += ('rest epoch need %.3f hours' % (span_time * (loops - loop) * (epochs - epoch) / 3600))
 
