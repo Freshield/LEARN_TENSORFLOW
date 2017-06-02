@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import os
+import pandas as pd
 
 
 ############################################################
@@ -132,6 +133,24 @@ def reshape_dataset(dataset, SPAN):
     output_data = num_to_one_hot(output_data, 3)
 
     return input_data, output_data
+
+def prepare_dataset(dir, file, model, SPAN, radio=0.1):
+    filename = dir + file
+
+    dataset = pd.read_csv(filename, header=None)
+
+    test_dataset_size = int(radio * dataset.shape[0])
+
+    cases = {
+        'train':dataset.values[0:-test_dataset_size * 2],
+        'validation':dataset.values[-test_dataset_size * 2:-test_dataset_size],
+        'test':dataset.values[-test_dataset_size:len(dataset)]
+    }
+
+    output = cases[model]
+
+    X_data, y_data = reshape_dataset(output, SPAN)
+    return X_data, y_data
 
 ###########################################################
 ################# graph helper ############################
