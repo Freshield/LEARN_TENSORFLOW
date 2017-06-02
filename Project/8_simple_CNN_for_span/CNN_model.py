@@ -248,7 +248,55 @@ def corr_num_acc(labels, logits):
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     return correct_num, accuracy
 
+def loss(labels, logits, reg=None, parameters=None):
+    with tf.variable_scope("loss"):
+        cross_entropy = tf.reduce_mean(
+            tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits, name='xentropy'))
 
+        if parameters == None:
+            cost = cross_entropy
+        else:
+            reg_loss = 0.0
+            for para in parameters:
+                reg_loss += reg * 0.5 * tf.nn.l2_loss(para)
+            cost = cross_entropy + reg_loss
+    return cost
 
+#to do the evaluation part for the whole data
+#not use all data together, but many batchs
+def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged=None, test_writer=None,
+            global_step=None):
 
+    #get the placeholders
+    input_x, input_y, train_phase, keep_prob = placeholders
+    #calculate the epoch and rest data
+    num_epoch = X_dataset.shape[0] // batch_size
+    rest_data_size = X_dataset.shape[0] % batch_size
 
+    index = 0
+    count = 0.0
+    indexs = np.arange(X_dataset.shape[0])
+
+    for step in xrange(num_epoch):
+        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, batch_size)
+
+        feed_dict = {input_x:data['X'], input_y:data['y'],train_phase:False,keep_prob:1.0}
+
+        if step != num_epoch -1 or merged == None:
+            num = sess.run(correct_num, feed_dict=feed_dict)
+        else:
+            summary, num = sess.run([merged, correct_num], feed_dict=feed_dict)
+            #test_writer.add_summary(summary, global_step)
+
+        count += num
+
+    if rest_data_size != 0:
+        #the rest data
+        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
+
+        feed_dict = {input_x:data['X'], input_y:data['y'],train_phase:False,keep_prob:1.0}
+
+        num = sess.run(correct_num, feed_dict=feed_dict)
+
+        count += num
+    return count / X_dataset.shape[0]

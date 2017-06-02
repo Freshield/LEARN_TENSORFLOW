@@ -30,3 +30,12 @@ print c
 c = np.arange(20)
 d = c[2:12]
 print len(d)
+
+e = 10
+f = 5
+g = 15
+h = (e,f,g)
+print h
+
+for para in h:
+    print para
