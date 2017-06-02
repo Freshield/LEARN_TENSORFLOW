@@ -100,8 +100,6 @@ while loop:
         #i += chunk.shape[0]
         count += 1
         print count
-        if count == 10:
-            break
 
 
     except StopIteration:
