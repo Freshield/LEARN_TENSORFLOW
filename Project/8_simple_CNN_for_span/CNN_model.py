@@ -25,6 +25,13 @@ def copyFiles(sourceDir,  targetDir):
             First_Directory = False
             copyFiles(sourceFile, targetFile)
 
+# ensure the path exist
+def del_and_create_dir(dir_path):
+    if tf.gfile.Exists(dir_path):
+        tf.gfile.DeleteRecursively(dir_path)
+    tf.gfile.MakeDirs(dir_path)
+
+
 #split the dataset into three part:
 #training, validation, test
 def split_dataset(dataset, test_dataset_size=None, radio=None):
@@ -56,6 +63,13 @@ def get_random_seq_indexs(data_set):
     data_size = data_set.shape[0]
     #index = tf.random_shuffle(tf.range(0, data_size))#maybe can do it on tensorflow later
     indexs = np.arange(data_size)
+    np.random.shuffle(indexs)
+    return indexs
+
+#get a random indexs for file,
+#so that we can shuffle the data every epoch
+def get_file_random_seq_indexs(num):
+    indexs = np.arange(num)
     np.random.shuffle(indexs)
     return indexs
 
@@ -124,21 +138,22 @@ def num_to_one_hot(dataset, category_num):
 
 def reshape_dataset(dataset, SPAN):
     input_data = np.zeros((dataset.shape[0], 32, 104, 3))
-    temp_data = np.reshape(dataset[:, :6200], (dataset.shape[0], 31, 100, 2))
+    temp_data = np.reshape(dataset[:, :6200], (-1, 31, 100, 2))
     input_data[:, :31, 2:102, 0] = temp_data[:, :, :, 0]#cause input size is 32 not 31
     input_data[:, :31, 2:102, 1] = temp_data[:, :, :, 1]
     input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 82)[:, :3328], (dataset.shape[0], 32, 104))
 
-    output_data = dataset[:, 6240 + SPAN[0]]
+    output_data = dataset[:, 6240 + SPAN[0]].astype(int)
     output_data = num_to_one_hot(output_data, 3)
 
     return input_data, output_data
 
-def prepare_dataset(dir, file, model, SPAN, radio=0.1):
+def prepare_dataset(dir, file, SPAN):
     filename = dir + file
 
     dataset = pd.read_csv(filename, header=None)
-
+    """
+    #needn't the split cause the data file was splited
     test_dataset_size = int(radio * dataset.shape[0])
 
     cases = {
@@ -146,10 +161,10 @@ def prepare_dataset(dir, file, model, SPAN, radio=0.1):
         'validation':dataset.values[-test_dataset_size * 2:-test_dataset_size],
         'test':dataset.values[-test_dataset_size:len(dataset)]
     }
-
+    
     output = cases[model]
-
-    X_data, y_data = reshape_dataset(output, SPAN)
+    """
+    X_data, y_data = reshape_dataset(dataset.values, SPAN)
     return X_data, y_data
 
 ###########################################################
@@ -203,7 +218,7 @@ def batch_norm_layer(x, train_phase, scope_bn):
 def conv_bn_pool_layer(input_layer, filter_depth, train_phase, name):
     input_depth = input_layer.shape[-1]
     with tf.variable_scope(name):
-        filter = weight_variable([3,3,input_depth,filter_depth])
+        filter = weight_variable([3,3,input_depth,filter_depth], "filter")
         biases = bias_variable([filter_depth])
         conv_output = conv2d(input_layer, filter, 1, "SAME") + biases
         bn_output = batch_norm_layer(conv_output, train_phase, "conv_bn")

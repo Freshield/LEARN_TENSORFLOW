@@ -10,3 +10,16 @@ cases = {
 }
 
 print cases['3']
+
+b = np.arange(0,2,0.1).reshape((4,5))
+c = [1.0,2.0,3.0]
+
+print b
+
+c = b.astype(int)
+print c
+
+print c[0]
+
+print "hello world",
+print "lol",
