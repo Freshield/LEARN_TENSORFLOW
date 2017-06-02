@@ -73,8 +73,8 @@
       <file leaf-file-name="test_calculate_min_max.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_calculate_min_max.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="78" column="0" lean-forward="true" selection-start-line="69" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+            <state relative-caret-position="-1323">
+              <caret line="73" column="22" lean-forward="true" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -85,8 +85,8 @@
       <file leaf-file-name="test_recut_file.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_recut_file.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="56" column="22" lean-forward="false" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
+            <state relative-caret-position="1032">
+              <caret line="111" column="0" lean-forward="true" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -170,7 +170,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_calculate_min_max">
+  <component name="RunManager" selected="Python.test_recut_file">
     <configuration default="false" name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -316,9 +316,9 @@
     </list>
     <recent_temporary>
       <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Python.test_calculate_min_max" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test_recut_file" />
+        <item index="0" class="java.lang.String" itemvalue="Python.test_recut_file" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test_calculate_min_max" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test" />
         <item index="3" class="java.lang.String" itemvalue="Python.test_res" />
       </list>
     </recent_temporary>
@@ -578,8 +578,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_calculate_min_max.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="78" column="0" lean-forward="true" selection-start-line="69" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+        <state relative-caret-position="-1323">
+          <caret line="73" column="22" lean-forward="true" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -588,8 +588,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test_recut_file.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="56" column="22" lean-forward="false" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
+        <state relative-caret-position="1032">
+          <caret line="111" column="0" lean-forward="true" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

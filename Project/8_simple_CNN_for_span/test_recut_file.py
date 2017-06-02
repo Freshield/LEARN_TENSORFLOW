@@ -51,8 +51,7 @@ def normalize_dataset(dataset, min_values=None, max_values=None):
 
     return norm_dataset, min_values, max_values
 
-def get_values_to_array(array, num):
-    CMr, CMi, CD, length, power = 0.0
+def get_values_from_array(array, num):
 
     CMr = array[num,0]
     CMi = array[num,1]
@@ -60,6 +59,9 @@ def get_values_to_array(array, num):
     length = array[num,3]
     power = array[num,4]
 
+    values = CMr, CMi, CD, length, power
+
+    return values
 
 filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
 
@@ -72,7 +74,11 @@ i = 0
 count = 0
 
 array_file = '/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv'
-array = pd.read_csv(array_file, header=None, dtype=np.float32)
+array = pd.read_csv(array_file, header=None, dtype=np.float32).values
+
+# get min and max
+min_values = get_values_from_array(array, 0)
+max_values = get_values_from_array(array, 1)
 
 before_time = time.time()
 while loop:
@@ -81,24 +87,22 @@ while loop:
 
         train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
 
-        #get min and max
-        min_values, max_values = get_min_max_values(train_set)
-
         # normalize dataset
-        train_set, train_min, train_max = normalize_dataset(train_set)
-        validation_set, _, _ = normalize_dataset(validation_set, train_min, train_max)
-        test_set, _, _ = normalize_dataset(test_set, train_min, train_max)
+        train_set, _, _ = normalize_dataset(train_set, min_values, max_values)
+        validation_set, _, _ = normalize_dataset(validation_set, min_values, max_values)
+        test_set, _, _ = normalize_dataset(test_set, min_values, max_values)
 
         np.savetxt("/media/freshield/LINUX/Ciena/CIENA/raw/norm/train_set_%d.csv" % count, train_set, delimiter=",")
         np.savetxt("/media/freshield/LINUX/Ciena/CIENA/raw/norm/validation_set_%d.csv" % count, validation_set, delimiter=",")
         np.savetxt("/media/freshield/LINUX/Ciena/CIENA/raw/norm/test_set_%d.csv" % count, test_set, delimiter=",")
 
 
-        i += chunk.shape[0]
+        #i += chunk.shape[0]
         count += 1
         print count
         if count == 10:
             break
+
 
     except StopIteration:
         print "stop"
@@ -106,5 +110,5 @@ while loop:
 span_time = time.time() - before_time
 print "use %.2f second in 10 loop" % span_time
 print "need %.2f minutes for all 600 loop" % (span_time * 60 / 60)
-print train_total_min
-print train_total_max
+#print train_total_min
+#print train_total_max
