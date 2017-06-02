@@ -80,7 +80,7 @@ array = pd.read_csv(array_file, header=None, dtype=np.float32).values
 min_values = get_values_from_array(array, 0)
 max_values = get_values_from_array(array, 1)
 
-before_time = time.time()
+#before_time = time.time()
 while loop:
     try:
         chunk = reader.get_chunk(chunkSize)
@@ -107,8 +107,8 @@ while loop:
     except StopIteration:
         print "stop"
         break
-span_time = time.time() - before_time
-print "use %.2f second in 10 loop" % span_time
-print "need %.2f minutes for all 600 loop" % (span_time * 60 / 60)
+#span_time = time.time() - before_time
+#print "use %.2f second in 10 loop" % span_time
+#print "need %.2f minutes for all 600 loop" % (span_time * 60 / 60)
 #print train_total_min
 #print train_total_max
