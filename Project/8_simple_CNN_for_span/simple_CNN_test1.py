@@ -74,7 +74,7 @@ with tf.Graph().as_default():
             words += epoch_dir[epoch // (epochs / 10)]
             words += "[%d/%d]\n" % (epoch, epochs)
             print words
-            log += words
+            log += words + "\n"
 
             loop_indexs = get_file_random_seq_indexs(loops)
 
@@ -121,7 +121,7 @@ with tf.Graph().as_default():
                 words += "[%d/%d] " % (loop,loops)
                 words += 'loss in loop %d is %f, acc is %.3f' % (loop, loop_loss_v, loop_acc)
                 print words
-                log += words
+                log += words + "\n"
 
                 #each 50 loop, do evaluation
                 #!!!!!!!!!!!!!!!caution, loop from 0-49, but % 50 == 0, maybe have problem
@@ -134,7 +134,7 @@ with tf.Graph().as_default():
                     print ('rest epoch need %.3f hours' % (span_time * (loops - loop) * (epochs - epoch) / 3600))
                     log += ('last 50 loop use %f minutes\n' % (span_time * 50 / 60))
                     log += ('rest loop need %.3f minutes\n' % (span_time * (loops - loop) / 60))
-                    log += ('rest epoch need %.3f hours' % (span_time * (loops - loop) * (epochs - epoch) / 3600))
+                    log += ('rest epoch need %.3f hours\n' % (span_time * (loops - loop) * (epochs - epoch) / 3600))
 
                     #do the evaluation for the last 10 files
                     #last 100 files are too slow
@@ -170,18 +170,19 @@ with tf.Graph().as_default():
             #each epoch do a test evaluation
             test_acc = 0.0
             print "step",
-            for loop in xrange(loops):
-                print loop,
-                test_file = "test_set_%d.csv" % loop
+            for test_loop in xrange(loops):
+                print test_loop,
+                test_file = "test_set_%d.csv" % test_loop
                 X_test, y_test = prepare_dataset(dir, test_file, SPAN)
                 loop_test_acc = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders)
                 test_acc += loop_test_acc
             test_acc /= loops
-            print ('----------epoch %d test accuracy is %f----------' % (test_acc))
-            log += ('----------epoch %d test accuracy is %f----------\n' % (test_acc))
+            print ""
+            print ('----------epoch %d test accuracy is %f----------' % (epoch,test_acc))
+            log += ('----------epoch %d test accuracy is %f----------\n' % (epoch,test_acc))
+            filename = log_dir + 'epoch%d' % epoch
+            f = file(filename, 'w+')
+            f.write(log)
+            f.close()
 
 
-        filename = log_dir + 'epoch%d' % epoch
-        f = file(filename, 'w+')
-        f.write(log)
-        f.close()
