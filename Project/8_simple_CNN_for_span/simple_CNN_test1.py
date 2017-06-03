@@ -7,7 +7,11 @@ dir = '/media/freshield/LINUX/Ciena/CIENA/raw/norm/'
 
 epochs = 100
 
-loops = 600
+data_size = 600000
+
+file_size = 1000
+
+loops = data_size // file_size
 
 batch_size = 100
 
@@ -16,6 +20,8 @@ train_file_size = 800
 valid_file_size = 100
 
 test_file_size = 100
+
+max_step = train_file_size // batch_size
 
 epoch_dir = {
     10:"[==========>]",
@@ -64,6 +70,7 @@ with tf.Graph().as_default():
 
         #placeholders
         placeholders = (input_x, input_y, train_phase, keep_prob)
+        train_pl = input_x, input_y, train_phase, keep_prob, train_step, loss_value, accuracy
 
         sess.run(tf.global_variables_initializer())
 
@@ -81,40 +88,11 @@ with tf.Graph().as_default():
             #caution loop is not in sequence
             for loop in xrange(loops):
                 before_time = time.time()
+
                 train_file = "train_set_%d.csv"  % loop_indexs[loop]
 
-                X_train, y_train = prepare_dataset(dir,train_file,SPAN)
+                loop_loss_v, loop_acc = do_train_file(sess, train_pl, dir, train_file, SPAN, max_step, batch_size, keep_prob_v)
 
-                indexs = get_random_seq_indexs(X_train)
-                out_of_dataset = False
-                last_index = 0
-
-                loop_loss_v = 0.0
-                loop_acc = 0.0
-
-                max_step = train_file_size // batch_size
-
-                #one loop, namely, one file
-                for step in xrange(max_step):
-
-                    #should not happen
-                    if out_of_dataset == True:
-                        print "out of dataset"
-                        indexs = get_random_seq_indexs(X_train)
-                        last_index = 0
-                        out_of_dataset = False
-
-                    last_index, data, out_of_dataset = sequence_get_data(X_train, y_train, indexs, last_index,
-                                                                         batch_size)
-
-                    feed_dict = {input_x: data['X'], input_y: data['y'], train_phase: True, keep_prob:keep_prob_v}
-                    _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
-
-                    loop_loss_v += loss_v
-                    loop_acc += acc
-
-                loop_loss_v /= max_step
-                loop_acc /= max_step
 
                 words = "loop "
                 words += epoch_dir[loop // (loops / 10)]
@@ -180,6 +158,7 @@ with tf.Graph().as_default():
             print ""
             print ('----------epoch %d test accuracy is %f----------' % (epoch,test_acc))
             log += ('----------epoch %d test accuracy is %f----------\n' % (epoch,test_acc))
+
             filename = log_dir + 'epoch%d' % epoch
             f = file(filename, 'w+')
             f.write(log)

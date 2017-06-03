@@ -334,3 +334,39 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
 
         count += num
     return count / X_dataset.shape[0]
+
+def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v):
+
+    input_x, input_y, train_phase, keep_prob, train_step, loss_value, accuracy = placeholders
+
+    X_train, y_train = prepare_dataset(dir, train_file, SPAN)
+
+    indexs = get_random_seq_indexs(X_train)
+    out_of_dataset = False
+    last_index = 0
+
+    loop_loss_v = 0.0
+    loop_acc = 0.0
+
+    # one loop, namely, one file
+    for step in xrange(max_step):
+
+        # should not happen
+        if out_of_dataset == True:
+            print "out of dataset"
+            indexs = get_random_seq_indexs(X_train)
+            last_index = 0
+            out_of_dataset = False
+
+        last_index, data, out_of_dataset = sequence_get_data(X_train, y_train, indexs, last_index,
+                                                             batch_size)
+
+        feed_dict = {input_x: data['X'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
+        _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
+
+        loop_loss_v += loss_v
+        loop_acc += acc
+
+    loop_loss_v /= max_step
+    loop_acc /= max_step
+    return loop_loss_v, loop_acc
