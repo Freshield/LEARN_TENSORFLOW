@@ -144,6 +144,7 @@ with tf.Graph().as_default():
 
             #each epoch decay the lr_rate
             lr_rate *= lr_decay
+            
 
             #each epoch do a test evaluation
             test_acc = 0.0
