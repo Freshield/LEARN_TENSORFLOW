@@ -143,9 +143,9 @@ train_dataset, train_mins, train_maxs = normalize_dataset(train_dataset)
 validation_dataset,_,_ = normalize_dataset(validation_dataset,train_mins, train_maxs)
 test_dataset,_,_ = normalize_dataset(test_dataset,train_mins, train_maxs)
 
-regs = random_uniform_array(15, -5, -1)
-lr_rates = random_uniform_array(20, -7, -2)
-keeps = random_uniform_array(8, -0.3, 0)
+regs = random_uniform_array(13, -5, -1)
+lr_rates = random_uniform_array(13, -7, -2)
+keeps = random_uniform_array(5, -0.3, 0)
 max_step = 20000
 
 count = len(regs) * len(lr_rates) * len(keeps)
