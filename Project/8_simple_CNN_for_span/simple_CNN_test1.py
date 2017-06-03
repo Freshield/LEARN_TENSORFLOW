@@ -169,7 +169,9 @@ with tf.Graph().as_default():
 
             #each epoch do a test evaluation
             test_acc = 0.0
+            print "step",
             for loop in xrange(loops):
+                print loop,
                 test_file = "test_set_%d.csv" % loop
                 X_test, y_test = prepare_dataset(dir, test_file, SPAN)
                 loop_test_acc = do_eval(sess, X_test, y_test, batch_size, correct_num, placeholders)
