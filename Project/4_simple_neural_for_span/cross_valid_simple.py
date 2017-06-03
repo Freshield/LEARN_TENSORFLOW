@@ -124,9 +124,11 @@ def del_and_create_dir(dir_path):
     tf.gfile.MakeDirs(dir_path)
 
 def random_uniform_array(number, start, end):
-    array = np.zeros(number)
+    array = np.zeros(number+2)
     for i in np.arange(number):
         array[i] = 10 ** np.random.uniform(start, end)
+    array[-2] = 10 ** start
+    array[-1] = 10 ** end
 
     return array
 
@@ -141,10 +143,10 @@ train_dataset, train_mins, train_maxs = normalize_dataset(train_dataset)
 validation_dataset,_,_ = normalize_dataset(validation_dataset,train_mins, train_maxs)
 test_dataset,_,_ = normalize_dataset(test_dataset,train_mins, train_maxs)
 
-regs = random_uniform_array(20, -5, -1)
-lr_rates = random_uniform_array(25, -7, -2)
-keeps = random_uniform_array(10, -0.3, 0)
-max_step = 10000
+regs = random_uniform_array(15, -5, -1)
+lr_rates = random_uniform_array(20, -7, -2)
+keeps = random_uniform_array(8, -0.3, 0)
+max_step = 20000
 
 count = len(regs) * len(lr_rates) * len(keeps)
 
