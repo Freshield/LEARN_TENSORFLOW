@@ -48,17 +48,18 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
 
 # get a random data(maybe have same value)
-def get_batch_data(X_dataset, y_dataset, batch_size):
+def get_batch_data(X_dataset, para_dataset, y_dataset, batch_size):
     lines_num = X_dataset.shape[0]
     random_index = np.random.randint(lines_num, size=[batch_size])
     X_data = X_dataset[random_index]
+    para_data = para_dataset[random_index]
     y_data = y_dataset[random_index]
-    return {'X': X_data, 'y': y_data}
+    return {'X': X_data, 'p':para_data, 'y': y_data}
 
 
 # directly get whole dataset(only for small dataset)
-def get_whole_data(X_dataset, y_dataset):
-    return {'X': X_dataset, 'y': y_dataset}
+def get_whole_data(X_dataset, para_dataset, y_dataset):
+    return {'X': X_dataset, 'p':para_dataset, 'y': y_dataset}
 
 
 # get a random indexs for dataset,
@@ -81,7 +82,7 @@ def get_file_random_seq_indexs(num):
 
 # use the indexs together,
 # so that we can sequence batch whole dataset
-def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
+def sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, last_index, batch_size):
     next_index = last_index + batch_size
     out_of_dataset = False
 
@@ -96,8 +97,9 @@ def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
         span_index = indexs[last_index:next_index]
 
     X_data = X_dataset[span_index]
+    para_data = para_dataset[span_index]
     y_data = y_dataset[span_index]
-    return (next_index, {'X': X_data, 'y': y_data}, out_of_dataset)
+    return (next_index, {'X': X_data, 'p':para_data, 'y': y_data}, out_of_dataset)
 
 
 def normalize_dataset(dataset, min_values=None, max_values=None):
@@ -145,16 +147,16 @@ def num_to_one_hot(dataset, category_num):
 
 
 def reshape_dataset(dataset, SPAN):
-    input_data = np.zeros((dataset.shape[0], 32, 104, 3))
+    input_data = np.zeros((dataset.shape[0], 32, 104, 2))
     temp_data = np.reshape(dataset[:, :6200], (-1, 31, 100, 2))
     input_data[:, :31, 2:102, 0] = temp_data[:, :, :, 0]  # cause input size is 32 not 31
     input_data[:, :31, 2:102, 1] = temp_data[:, :, :, 1]
-    input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 82)[:, :3328], (dataset.shape[0], 32, 104))
+    para_data = dataset[:, 6200:6241]
 
     output_data = dataset[:, 6240 + SPAN[0]].astype(int)
     output_data = num_to_one_hot(output_data, 3)
 
-    return input_data, output_data
+    return input_data, para_data, output_data
 
 
 def prepare_dataset(dir, file, SPAN):
@@ -173,8 +175,8 @@ def prepare_dataset(dir, file, SPAN):
 
     output = cases[model]
     """
-    X_data, y_data = reshape_dataset(dataset.values, SPAN)
-    return X_data, y_data
+    X_data, para_data, y_data = reshape_dataset(dataset.values, SPAN)
+    return X_data, para_data, y_data
 
 
 ###########################################################
@@ -266,9 +268,9 @@ def score_layer(input_layer, label_size):
 
 
 # get the y_pred
-def inference(input_layer, train_phase, keep_prob):
+def inference(input_layer, para_data, train_phase, keep_prob):
     with tf.variable_scope("inference"):
-        # input (N,32,104,3)
+        # input (N,32,104,2)
         bn_input = batch_norm_layer(input_layer, train_phase, "bn_input")
 
         # conv1 (N,16,52,64)
@@ -283,13 +285,19 @@ def inference(input_layer, train_phase, keep_prob):
         # flat
         flat_conv3 = tf.reshape(conv3, [-1, 4 * 13 * 256])
 
-        # fc layer
-        fc1, fc_weight = fc_bn_drop_layer(flat_conv3, 1024, train_phase, keep_prob, "fc1")
+        # fc layer1(N, 512)
+        fc1, fc_weight1 = fc_bn_drop_layer(flat_conv3, 512, train_phase, keep_prob, "fc1")
+
+        #link the para_data
+        fc1_link = tf.concat([fc1, para_data], axis=1)
+
+        #fc layer2(N,256)
+        fc2, fc_weight2 = fc_bn_drop_layer(fc1_link, 256, train_phase, keep_prob, "fc2")
 
         # score layer
-        y_pred, score_weight = score_layer(fc1, 3)
+        y_pred, score_weight = score_layer(fc2, 3)
 
-        parameters = (filter1, filter2, filter3, fc_weight, score_weight)
+        parameters = (filter1, filter2, filter3, fc_weight1, fc_weight2, score_weight)
 
     return y_pred, parameters
 
@@ -318,10 +326,10 @@ def loss(labels, logits, reg=None, parameters=None):
 
 # to do the evaluation part for the whole data
 # not use all data together, but many batchs
-def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged=None, test_writer=None,
+def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, placeholders, merged=None, test_writer=None,
             global_step=None):
     # get the placeholders
-    input_x, input_y, train_phase, keep_prob = placeholders
+    input_x, para_pl, input_y, train_phase, keep_prob = placeholders
     # calculate the epoch and rest data
     num_epoch = X_dataset.shape[0] // batch_size
     rest_data_size = X_dataset.shape[0] % batch_size
@@ -333,7 +341,7 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
     for step in xrange(num_epoch):
         index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, batch_size)
 
-        feed_dict = {input_x: data['X'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
+        feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
 
         if step != num_epoch - 1 or merged == None:
             num = sess.run(correct_num, feed_dict=feed_dict)
@@ -347,7 +355,7 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
         # the rest data
         index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
 
-        feed_dict = {input_x: data['X'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
+        feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
 
         num = sess.run(correct_num, feed_dict=feed_dict)
 
@@ -356,9 +364,9 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
 
 
 def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v):
-    input_x, input_y, train_phase, keep_prob, train_step, loss_value, accuracy = placeholders
+    input_x, para_pl, input_y, train_phase, keep_prob, train_step, loss_value, accuracy = placeholders
 
-    X_train, y_train = prepare_dataset(dir, train_file, SPAN)
+    X_train, para_train, y_train = prepare_dataset(dir, train_file, SPAN)
 
     indexs = get_random_seq_indexs(X_train)
     out_of_dataset = False
@@ -380,7 +388,7 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
         last_index, data, out_of_dataset = sequence_get_data(X_train, y_train, indexs, last_index,
                                                              batch_size)
 
-        feed_dict = {input_x: data['X'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
+        feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
         _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
 
         loop_loss_v += loss_v
