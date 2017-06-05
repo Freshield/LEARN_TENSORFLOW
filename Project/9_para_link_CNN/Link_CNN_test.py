@@ -13,6 +13,9 @@ file_size = 1000
 
 loops = data_size // file_size
 
+#how many loops do an evaluation
+last_loop_num = 50
+
 batch_size = 100
 
 train_file_size = 800
@@ -104,16 +107,9 @@ with tf.Graph().as_default():
 
                 #each 50 loop, do evaluation
                 #!!!!!!!!!!!!!!!caution, loop from 0-49, but % 50 == 0, maybe have problem
-                if (loop != 0 and loop % 50 == 0) or loop == loops - 1:
+                if (loop != 0 and loop % last_loop_num == 0) or loop == loops - 1:
                     #show the time
-                    last_time = time.time()
-                    span_time = last_time - before_time
-                    print ('last 50 loop use %f minutes' % (span_time * 50 / 60))
-                    print ('rest loop need %.3f minutes' % (span_time * (loops - loop) / 60))
-                    print ('rest epoch need %.3f hours' % (span_time * (loops - loop) * (epochs - epoch) / 3600))
-                    log += ('last 50 loop use %f minutes\n' % (span_time * 50 / 60))
-                    log += ('rest loop need %.3f minutes\n' % (span_time * (loops - loop) / 60))
-                    log += ('rest epoch need %.3f hours\n' % (span_time * (loops - loop) * (epochs - epoch) / 3600))
+                    time_show(before_time, last_loop_num, loop, loops, epoch, epochs, log)
 
                     #do the evaluation for the last 10 files
                     #last 100 files are too slow

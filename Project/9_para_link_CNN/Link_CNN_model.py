@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import os
 import pandas as pd
+import time
 
 
 ############################################################
@@ -397,3 +398,15 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
     loop_loss_v /= max_step
     loop_acc /= max_step
     return loop_loss_v, loop_acc
+
+def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total_epoch, log):
+    last_time = time.time()
+    span_time = last_time - before_time
+    rest_loop = total_loop - loop_now
+    rest_epoch = total_epoch - epoch_now
+    print ('last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60))
+    print ('rest loop need %.3f minutes' % (span_time * rest_loop / 60))
+    print ('rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600))
+    log += ('last %d loop use %f minutes\n' % (last_loop_num, span_time * last_loop_num / 60))
+    log += ('rest loop need %.3f minutes\n' % (span_time * rest_loop / 60))
+    log += ('rest epoch need %.3f hours\n' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600))
