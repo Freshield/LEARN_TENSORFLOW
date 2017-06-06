@@ -159,7 +159,7 @@ with tf.Graph().as_default():
             print ('----------epoch %d test accuracy is %f----------' % (epoch,test_acc))
             log += ('----------epoch %d test accuracy is %f----------\n' % (epoch,test_acc))
 
-            filename = log_dir + 'epoch%d' % epoch
+            filename = log_dir + '%.4f_epoch%d' % (test_acc, epoch)
             f = file(filename, 'w+')
             f.write(log)
             f.close()
