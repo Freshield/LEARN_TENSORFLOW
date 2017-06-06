@@ -340,7 +340,7 @@ def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, p
     indexs = np.arange(X_dataset.shape[0])
 
     for step in xrange(num_epoch):
-        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, batch_size)
+        index, data, _ = sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, index, batch_size)
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
 
@@ -386,7 +386,7 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
             last_index = 0
             out_of_dataset = False
 
-        last_index, data, out_of_dataset = sequence_get_data(X_train, y_train, indexs, last_index,
+        last_index, data, out_of_dataset = sequence_get_data(X_train, para_train, y_train, indexs, last_index,
                                                              batch_size)
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
@@ -409,4 +409,5 @@ def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total
     print ('rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600))
     log += ('last %d loop use %f minutes\n' % (last_loop_num, span_time * last_loop_num / 60))
     log += ('rest loop need %.3f minutes\n' % (span_time * rest_loop / 60))
-    log += ('rest epoch need %.3f hours\n' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600))
+    log += ('rest epoch need %.3f hours\n' % ((span_time * rest_loop / 3600) + (span_time * total_loop * rest_epoch /
+                                               3600)))

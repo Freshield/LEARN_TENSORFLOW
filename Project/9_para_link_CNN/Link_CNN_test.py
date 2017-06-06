@@ -3,7 +3,7 @@ from Link_CNN_model import *
 
 SPAN=[10]
 
-dir = '/media/freshield/LINUX/Ciena/CIENA/raw/norm/'
+dir = '/media/freshield/DATA_W/Ciena_data/raw/norm/'
 
 epochs = 100
 
@@ -54,7 +54,7 @@ del_and_create_dir(log_dir)
 with tf.Graph().as_default():
     with tf.Session() as sess:
         #inputs
-        input_x = tf.placeholder(tf.float32, [None, 32, 104, 3], name='input_x')
+        input_x = tf.placeholder(tf.float32, [None, 32, 104, 2], name='input_x')
         para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
         input_y = tf.placeholder(tf.float32, [None, 3], name='input_y')
         train_phase = tf.placeholder(tf.bool, name='train_phase')
@@ -139,8 +139,10 @@ with tf.Graph().as_default():
                     print ('----------valid acc in loop %d is %.4f----------' % (loop, valid_acc))
                     log += ('----------valid acc in loop %d is %.4f----------\n' % (loop, valid_acc))
 
+
             #each epoch decay the lr_rate
             lr_rate *= lr_decay
+
 
 
             #each epoch do a test evaluation
@@ -161,5 +163,6 @@ with tf.Graph().as_default():
             f = file(filename, 'w+')
             f.write(log)
             f.close()
+
 
 
