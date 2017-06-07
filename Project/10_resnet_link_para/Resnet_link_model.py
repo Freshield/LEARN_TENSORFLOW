@@ -67,25 +67,26 @@ def get_file_random_seq_indexs(num):
     return indexs
 
 
-#use the indexs together,
-#so that we can sequence batch whole dataset
-def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
+# use the indexs together,
+# so that we can sequence batch whole dataset
+def sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, last_index, batch_size):
     next_index = last_index + batch_size
     out_of_dataset = False
 
     if next_index > X_dataset.shape[0]:
 
         next_index -= X_dataset.shape[0]
-        last_part = np.arange(last_index,indexs.shape[0])
+        last_part = np.arange(last_index, indexs.shape[0])
         before_part = np.arange(next_index)
-        span_index = indexs[np.concatenate((last_part, before_part))]#link two parts together
+        span_index = indexs[np.concatenate((last_part, before_part))]  # link two parts together
         out_of_dataset = True
     else:
         span_index = indexs[last_index:next_index]
 
     X_data = X_dataset[span_index]
+    para_data = para_dataset[span_index]
     y_data = y_dataset[span_index]
-    return (next_index, {'X':X_data,'y':y_data}, out_of_dataset)
+    return (next_index, {'X': X_data, 'p':para_data, 'y': y_data}, out_of_dataset)
 
 #normalize the dataset in different parts
 def normalize_dataset(dataset, min_values=None, max_values=None):
