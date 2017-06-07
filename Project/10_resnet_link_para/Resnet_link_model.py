@@ -88,44 +88,6 @@ def sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, last_index, ba
     y_data = y_dataset[span_index]
     return (next_index, {'X': X_data, 'p':para_data, 'y': y_data}, out_of_dataset)
 
-#normalize the dataset in different parts
-def normalize_dataset(dataset, min_values=None, max_values=None):
-    norm_dataset = np.zeros((dataset.shape))
-    norm_dataset[:, :] = dataset[:, :]
-
-    if min_values == None:
-        CMr_min = np.min(norm_dataset[:,0:3100])
-        CMi_min = np.min(norm_dataset[:,3100:6200])
-        CD_min = np.min(norm_dataset[:,6200:6201])
-        length_min = np.min(norm_dataset[:,6201:6221])
-        power_min = np.min(norm_dataset[:,6221:6241])
-    else:
-        CMr_min, CMi_min, CD_min, length_min, power_min = min_values
-
-
-    if max_values == None:
-        CMr_max = np.max(norm_dataset[:,0:3100])
-        CMi_max = np.max(norm_dataset[:,3100:6200])
-        CD_max = np.max(norm_dataset[:,6200:6201])
-        length_max = np.max(norm_dataset[:,6201:6221])
-        power_max = np.max(norm_dataset[:,6221:6241])
-    else:
-        CMr_max, CMi_max, CD_max, length_max, power_max = max_values
-
-    def calcul_norm(dataset, min, max):
-        return (dataset - min) / (max - min)
-
-    norm_dataset[:, 0:3100] = calcul_norm(norm_dataset[:, 0:3100], CMr_min, CMr_max)
-    norm_dataset[:, 3100:6200] = calcul_norm(norm_dataset[:, 3100:6200], CMi_min, CMi_max)
-    norm_dataset[:, 6200:6201] = calcul_norm(norm_dataset[:, 6200:6201], CD_min, CD_max)
-    norm_dataset[:, 6201:6221] = calcul_norm(norm_dataset[:, 6201:6221], length_min, length_max)
-    norm_dataset[:, 6221:6241] = calcul_norm(norm_dataset[:, 6221:6241], power_min, power_max)
-
-    min_values = (CMr_min, CMi_min, CD_min, length_min, power_min)
-    max_values = (CMr_max, CMi_max, CD_max, length_max, power_max)
-
-    return norm_dataset, min_values, max_values
-
 #reshape the dataset into 32x100x3
 def reshape_dataset(dataset, SPAN):
     input_data = np.zeros((dataset.shape[0], 32, 100, 3))
