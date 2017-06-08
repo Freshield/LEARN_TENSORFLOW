@@ -59,6 +59,14 @@ def get_random_seq_indexs(data_set):
     np.random.shuffle(indexs)
     return indexs
 
+# get a random indexs for file,
+# so that we can shuffle the data every epoch
+def get_file_random_seq_indexs(num):
+    indexs = np.arange(num)
+    np.random.shuffle(indexs)
+    return indexs
+
+
 #use the indexs together,
 #so that we can sequence batch whole dataset
 def sequence_get_data(X_dataset, y_dataset, indexs, last_index, batch_size):
