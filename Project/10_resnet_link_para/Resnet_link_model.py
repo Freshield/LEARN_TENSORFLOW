@@ -46,9 +46,9 @@ def get_batch_data(X_dataset, para_dataset, y_dataset, batch_size):
     y_data = y_dataset[random_index]
     return {'X': X_data, 'p':para_data, 'y': y_data}
 
-#directly get whole dataset(only for small dataset)
-def get_whole_data(X_dataset, y_dataset):
-    return {'X': X_dataset, 'y': y_dataset}
+# directly get whole dataset(only for small dataset)
+def get_whole_data(X_dataset, para_dataset, y_dataset):
+    return {'X': X_dataset, 'p':para_dataset, 'y': y_dataset}
 
 #get a random indexs for dataset,
 #so that we can shuffle the data every epoch
