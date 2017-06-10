@@ -37,14 +37,14 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
     return train_set, validation_set, test_set
 
-#get a random data(maybe have same value)
-def get_batch_data(X_dataset, y_dataset, batch_size):
+# get a random data(maybe have same value)
+def get_batch_data(X_dataset, para_dataset, y_dataset, batch_size):
     lines_num = X_dataset.shape[0]
     random_index = np.random.randint(lines_num, size=[batch_size])
-
     X_data = X_dataset[random_index]
+    para_data = para_dataset[random_index]
     y_data = y_dataset[random_index]
-    return {'X': X_data, 'y': y_data}
+    return {'X': X_data, 'p':para_data, 'y': y_data}
 
 #directly get whole dataset(only for small dataset)
 def get_whole_data(X_dataset, y_dataset):
