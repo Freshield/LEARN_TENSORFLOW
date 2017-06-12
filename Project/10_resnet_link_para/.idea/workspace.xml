@@ -15,8 +15,8 @@
       <file leaf-file-name="Resnet_link_model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="29">
-              <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+            <state relative-caret-position="-348">
+              <caret line="287" column="31" lean-forward="false" selection-start-line="287" selection-start-column="31" selection-end-line="287" selection-end-column="31" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -27,8 +27,20 @@
       <file leaf-file-name="Link_CNN_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4843">
-              <caret line="171" column="14" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+            <state relative-caret-position="177">
+              <caret line="215" column="11" lean-forward="true" selection-start-line="215" selection-start-column="11" selection-end-line="215" selection-end-column="11" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="resnet_model.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../06_resnet/resnet_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="116">
+              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -79,7 +91,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_model.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../06_resnet/resnet_model.py" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -300,15 +312,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../06_resnet/resnet_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="9" column="23" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="369" selection-end-column="0" />
+        <state relative-caret-position="116">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4843">
-          <caret line="171" column="14" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+        <state relative-caret-position="177">
+          <caret line="215" column="11" lean-forward="true" selection-start-line="215" selection-start-column="11" selection-end-line="215" selection-end-column="11" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -317,8 +332,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
-          <caret line="127" column="0" lean-forward="false" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+        <state relative-caret-position="-348">
+          <caret line="287" column="31" lean-forward="false" selection-start-line="287" selection-start-column="31" selection-end-line="287" selection-end-column="31" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>

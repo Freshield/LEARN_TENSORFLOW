@@ -9,6 +9,7 @@ import time
 ############################################################
 
 #to copy files from source dir to target dir
+#ver 1.0
 def copyFiles(sourceDir,  targetDir):
     if sourceDir.find(".csv") > 0:
         print 'error'
@@ -27,6 +28,7 @@ def copyFiles(sourceDir,  targetDir):
 
 #split the dataset into three part:
 #training, validation, test
+#ver 1.0
 def split_dataset(dataset, test_dataset_size=None, radio=None):
     if radio != None:
         test_dataset_size = int(radio * len(dataset))
@@ -38,6 +40,7 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     return train_set, validation_set, test_set
 
 # get a random data(maybe have same value)
+#ver 1.0
 def get_batch_data(X_dataset, para_dataset, y_dataset, batch_size):
     lines_num = X_dataset.shape[0]
     random_index = np.random.randint(lines_num, size=[batch_size])
@@ -47,11 +50,13 @@ def get_batch_data(X_dataset, para_dataset, y_dataset, batch_size):
     return {'X': X_data, 'p':para_data, 'y': y_data}
 
 # directly get whole dataset(only for small dataset)
+#ver 1.0
 def get_whole_data(X_dataset, para_dataset, y_dataset):
     return {'X': X_dataset, 'p':para_dataset, 'y': y_dataset}
 
 #get a random indexs for dataset,
 #so that we can shuffle the data every epoch
+#ver 1.0
 def get_random_seq_indexs(data_set):
     data_size = data_set.shape[0]
     #index = tf.random_shuffle(tf.range(0, data_size))#maybe can do it on tensorflow later
@@ -61,6 +66,7 @@ def get_random_seq_indexs(data_set):
 
 # get a random indexs for file,
 # so that we can shuffle the data every epoch
+#ver 1.0
 def get_file_random_seq_indexs(num):
     indexs = np.arange(num)
     np.random.shuffle(indexs)
@@ -69,6 +75,7 @@ def get_file_random_seq_indexs(num):
 
 # use the indexs together,
 # so that we can sequence batch whole dataset
+#ver 1.0
 def sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, last_index, batch_size):
     next_index = last_index + batch_size
     out_of_dataset = False
@@ -88,12 +95,16 @@ def sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, last_index, ba
     y_data = y_dataset[span_index]
     return (next_index, {'X': X_data, 'p':para_data, 'y': y_data}, out_of_dataset)
 
+#set num to one hot array
+#ver 1.0
 def num_to_one_hot(dataset, category_num):
     lines = dataset.shape[0]
     one_hot_dataset = np.zeros([lines, category_num], dtype=np.float32)
     one_hot_dataset[np.arange(lines), dataset] = 1
     return one_hot_dataset
 
+#reshape the dataset for CNN
+#ver 1.0
 def reshape_dataset(dataset, SPAN):
     input_data = np.zeros((dataset.shape[0], 32, 104, 2))
     temp_data = np.reshape(dataset[:, :6200], (-1, 31, 100, 2))
@@ -106,7 +117,8 @@ def reshape_dataset(dataset, SPAN):
 
     return input_data, para_data, output_data
 
-
+#read the dataset from file
+#ver 1.0
 def prepare_dataset(dir, file, SPAN):
     filename = dir + file
 
@@ -131,6 +143,7 @@ def prepare_dataset(dir, file, SPAN):
 ###########################################################
 
 #create weights
+#ver 1.0
 def weight_variable(shape, name):
   """weight_variable generates a weight variable of a given shape."""
   weight = tf.get_variable(name, shape=shape, initializer=tf.contrib.layers.xavier_initializer())
@@ -139,23 +152,27 @@ def weight_variable(shape, name):
 
 
 #create biases
+#ver 1.0
 def bias_variable(shape):
   """bias_variable generates a bias variable of a given shape."""
   initial = tf.constant(0.01, shape=shape)
   return tf.Variable(initial)
 
 #for create convolution kernel
+#ver 1.0
 def conv2d(x, W, stride, padding):
   """conv2d returns a 2d convolution layer with full stride."""
   return tf.nn.conv2d(x, W, strides=[1, stride, stride, 1], padding=padding)
 
 
+# for create batch norm layer
+#ver 1.0
 def batch_norm_layer(x, train_phase, scope_bn):
     with tf.variable_scope(scope_bn):
         beta = tf.Variable(tf.constant(0.0, shape=[x.shape[-1]]), name='beta', trainable=True)
         gamma = tf.Variable(tf.constant(1.0, shape=[x.shape[-1]]), name='gamma', trainable=True)
         axises = np.arange(len(x.shape) - 1)
-        batch_mean, batch_var = tf                          .nn.moments(x, axises, name='moments')
+        batch_mean, batch_var = tf.nn.moments(x, axises, name='moments')
         ema = tf.train.ExponentialMovingAverage(decay=0.5)
 
         def mean_var_with_update():
@@ -168,6 +185,9 @@ def batch_norm_layer(x, train_phase, scope_bn):
         normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
     return normed
 
+#bn->relu->conv
+#the size is same
+#ver 1.0
 def bn_relu_conv_same_layer(input_layer, filter_size, filter_depth, train_phase, name):
     with tf.variable_scope(name):
         with tf.variable_scope('brc_s'):
@@ -179,6 +199,10 @@ def bn_relu_conv_same_layer(input_layer, filter_size, filter_depth, train_phase,
             conv_layer = conv2d(relu_layer, filter, 1, 'SAME') + biases
     return conv_layer, filter
 
+#bn->relu->conv
+#size is half, namely, stride is 2
+#care for the filter size, 1 or 2
+#ver 1.0
 def bn_relu_conv_half_layer(input_layer, filter_size, filter_depth, train_phase, name):
     #filter size check
     if filter_size != 1 and filter_size != 2:
@@ -193,6 +217,22 @@ def bn_relu_conv_half_layer(input_layer, filter_size, filter_depth, train_phase,
             conv_layer = conv2d(relu_layer, filter, 2, 'VALID') + biases
     return conv_layer, filter
 
+#resnet basic block
+#input and output same depth and same size
+#architecture:
+#
+#input
+#|    \
+#|    1*1*input_depth*small_depth
+#|     |
+#|    3*3*small_depth*small_depth
+#|     |
+#|    1*1*small_depth*input_depth
+#|     |
+#+-----
+#|
+#output
+#ver 1.0
 def resnet_same_block(input_layer, train_phase):
     input_depth = input_layer.shape[-1]
     #check
@@ -207,7 +247,22 @@ def resnet_same_block(input_layer, train_phase):
         parameters = (f1, f2, f3)
     return add_layer, parameters
 
-
+#resnet basic block
+#input and output different depth and same size
+#architecture:
+#
+#                  input
+#                  |    \
+#                  |    1*1*input_depth*small_depth
+#1*1*input_depth*block_depth |
+#                 |    3*3*small_depth*small_depth
+#                 |     |
+#                 |    1*1*small_depth*block_depth
+#                 |     |
+#                 +-----
+#                 |
+#               output
+#ver 1.0
 def resnet_diffD_sameS_block(input_layer, block_depth, train_phase):
     input_depth = input_layer.shape[-1]
     #check
@@ -224,6 +279,22 @@ def resnet_diffD_sameS_block(input_layer, block_depth, train_phase):
     return add_layer, parameters
 
 
+#resnet basic block
+#input and output different depth and half size
+#architecture:
+#
+#                      input
+#                      |    \
+#                      |    2*2*input_depth*small_depth(stride=2)
+#2*2*input_depth*block_depth(stride=2) |
+#                      |    3*3*small_depth*small_depth
+#                      |     |
+#                      |    1*1*small_depth*block_depth
+#                      |     |
+#                      +-----
+#                      |
+#                     output
+#ver 1.0
 def resnet_diffD_halfS_block(input_layer, block_depth, train_phase):
     input_depth = input_layer.shape[-1]
     #check
@@ -231,10 +302,10 @@ def resnet_diffD_halfS_block(input_layer, block_depth, train_phase):
         raise TypeError('input depth is too small')
     small_depth = block_depth // 4
     with tf.variable_scope('res_dhb'):
-        block_layer1, f1 = bn_relu_conv_half_layer(input_layer, 1, small_depth, train_phase, 'bl_1')
+        block_layer1, f1 = bn_relu_conv_half_layer(input_layer, 2, small_depth, train_phase, 'bl_1')
         block_layer2, f2 = bn_relu_conv_same_layer(block_layer1, 3, small_depth, train_phase, 'bl_2')
         block_layer3, f3 = bn_relu_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
-        block_layer4, f4 = bn_relu_conv_half_layer(input_layer, 1, block_depth, train_phase, 'bl_4')
+        block_layer4, f4 = bn_relu_conv_half_layer(input_layer, 2, block_depth, train_phase, 'bl_4')
         add_layer = block_layer4 + block_layer3
         parameters = (f1, f2, f3, f4)
     return add_layer, parameters
