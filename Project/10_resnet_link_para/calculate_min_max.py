@@ -107,7 +107,7 @@ filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
 reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
 
 loop = True
-chunkSize = 1000
+chunkSize = 10000
 i = 0
 count = 0
 

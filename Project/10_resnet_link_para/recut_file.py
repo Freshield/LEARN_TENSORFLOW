@@ -70,17 +70,21 @@ def get_values_from_array(array, num):
 ############## Main function ##########################
 #######################################################
 
-filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
+log_dir = '/media/freshield/LINUX/Ciena/CIENA/raw/'
+
+filename = log_dir + 'FiberID_Data_noPCA.csv'
 
 
 reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
 
 loop = True
+#to do
+#think about chunkSize 10000
 chunkSize = 1000
 i = 0
 count = 0
 
-array_file = '/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv'
+array_file = log_dir + 'min_max.csv'
 array = pd.read_csv(array_file, header=None, dtype=np.float32).values
 
 # get min and max
