@@ -3,7 +3,7 @@ from Resnet_link_model import *
 
 SPAN=[10]
 
-dir = '/media/freshield/DATA_W/Ciena_data/raw/norm/'
+dir = '/media/freshield/SOFTWARE3/Ciena/raw/norm/'
 
 epochs = 100
 
