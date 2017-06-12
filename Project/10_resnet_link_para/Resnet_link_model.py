@@ -26,6 +26,15 @@ def copyFiles(sourceDir,  targetDir):
             First_Directory = False
             copyFiles(sourceFile, targetFile)
 
+# ensure the path exist
+#will reset the dir
+#ver 1.0
+def del_and_create_dir(dir_path):
+    if tf.gfile.Exists(dir_path):
+        tf.gfile.DeleteRecursively(dir_path)
+    tf.gfile.MakeDirs(dir_path)
+
+
 #split the dataset into three part:
 #training, validation, test
 #ver 1.0
