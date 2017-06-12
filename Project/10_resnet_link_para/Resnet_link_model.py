@@ -185,6 +185,36 @@ def batch_norm_layer(x, train_phase, scope_bn):
         normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
     return normed
 
+#bn->conv
+#the size is same
+#ver 1.0
+def bn_conv_same_layer(input_layer, filter_size, filter_depth, train_phase, name):
+    with tf.variable_scope(name):
+        with tf.variable_scope('brc_s'):
+            input_depth = input_layer.shape[-1]
+            bn_layer = batch_norm_layer(input_layer, train_phase, 'bn')
+            filter = weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
+            biases = bias_variable([filter_depth])
+            conv_layer = conv2d(bn_layer, filter, 1, 'SAME') + biases
+    return conv_layer, filter
+
+#bn->conv
+#size is half, namely, stride is 2
+#care for the filter size, 1 or 2
+#ver 1.0
+def bn_conv_half_layer(input_layer, filter_size, filter_depth, train_phase, name):
+    #filter size check
+    if filter_size != 1 and filter_size != 2:
+        raise ValueError('filter size should be 1 or 2')
+    with tf.variable_scope(name):
+        with tf.variable_scope('brc_h'):
+            input_depth = input_layer.shape[-1]
+            bn_layer = batch_norm_layer(input_layer, train_phase, 'bn')
+            filter = weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
+            biases = bias_variable([filter_depth])
+            conv_layer = conv2d(bn_layer, filter, 2, 'VALID') + biases
+    return conv_layer, filter
+
 #bn->relu->conv
 #the size is same
 #ver 1.0
@@ -242,7 +272,7 @@ def resnet_same_block(input_layer, train_phase):
     with tf.variable_scope('res_sb'):
         block_layer1, f1 = bn_relu_conv_same_layer(input_layer, 1, small_depth, train_phase, 'bl_1')
         block_layer2, f2 = bn_relu_conv_same_layer(block_layer1, 3, small_depth, train_phase, 'bl_2')
-        block_layer3, f3 = bn_relu_conv_same_layer(block_layer2, 1, input_depth, train_phase, 'bl_3')
+        block_layer3, f3 = bn_conv_same_layer(block_layer2, 1, input_depth, train_phase, 'bl_3')
         add_layer = input_layer + block_layer3
         parameters = (f1, f2, f3)
     return add_layer, parameters
@@ -272,8 +302,8 @@ def resnet_diffD_sameS_block(input_layer, block_depth, train_phase):
     with tf.variable_scope('res_dsb'):
         block_layer1, f1 = bn_relu_conv_same_layer(input_layer, 1, small_depth, train_phase, 'bl_1')
         block_layer2, f2 = bn_relu_conv_same_layer(block_layer1, 3, small_depth, train_phase, 'bl_2')
-        block_layer3, f3 = bn_relu_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
-        block_layer4, f4 = bn_relu_conv_same_layer(input_layer, 1, block_depth, train_phase, 'bl_4')
+        block_layer3, f3 = bn_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
+        block_layer4, f4 = bn_conv_same_layer(input_layer, 1, block_depth, train_phase, 'bl_4')
         add_layer = block_layer4 + block_layer3
         parameters = (f1, f2, f3, f4)
     return add_layer, parameters
@@ -304,12 +334,15 @@ def resnet_diffD_halfS_block(input_layer, block_depth, train_phase):
     with tf.variable_scope('res_dhb'):
         block_layer1, f1 = bn_relu_conv_half_layer(input_layer, 2, small_depth, train_phase, 'bl_1')
         block_layer2, f2 = bn_relu_conv_same_layer(block_layer1, 3, small_depth, train_phase, 'bl_2')
-        block_layer3, f3 = bn_relu_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
-        block_layer4, f4 = bn_relu_conv_half_layer(input_layer, 2, block_depth, train_phase, 'bl_4')
+        block_layer3, f3 = bn_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
+        block_layer4, f4 = bn_conv_half_layer(input_layer, 2, block_depth, train_phase, 'bl_4')
         add_layer = block_layer4 + block_layer3
         parameters = (f1, f2, f3, f4)
     return add_layer, parameters
 
+#resnet first layer
+#change the depth
+#ver 1.0
 def resnet_first_layer(input_layer, layer_depth, train_phase, name):
     parameters = []
     with tf.variable_scope(name):
@@ -320,6 +353,10 @@ def resnet_first_layer(input_layer, layer_depth, train_phase, name):
     parameters[0:0] = p2
     return layer2, parameters
 
+#resnet normal layer
+#a half block with a same block
+#output is half size and layer depth
+#ver 1.0
 def resnet_layer(input_layer, layer_depth, train_phase, name):
     parameters = []
     with tf.variable_scope(name):
@@ -330,6 +367,8 @@ def resnet_layer(input_layer, layer_depth, train_phase, name):
     parameters[0:0] = p2
     return layer2, parameters
 
+#the fully connect layer
+#ver 1.0
 def fc_layer(input_layer, label_size):
     with tf.variable_scope('fc'):
         input_size = input_layer.shape[-1]
