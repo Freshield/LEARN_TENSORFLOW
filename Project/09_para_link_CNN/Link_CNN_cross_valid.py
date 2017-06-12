@@ -2,7 +2,7 @@ from Link_CNN_model import *
 
 SPAN=[10]
 
-dir = '/media/freshield/DATA_W/Ciena_data/raw/norm/'
+dir = '/media/freshield/DATA_U/CIENA/raw/norm/'
 
 epochs = 3
 
@@ -43,9 +43,9 @@ epoch_dir = {
 
 #hypers
 lr_decay = 0.99
-regs = random_uniform_array(13, -5, -1)
-lr_rates = random_uniform_array(13, -7, -2)
-keeps = random_uniform_array(5, -0.3, 0)
+regs = random_uniform_array(7, -5, -1)
+lr_rates = random_uniform_array(7, -7, -2)
+keeps = random_uniform_array(4, -0.3, 0)
 
 log = ''
 
@@ -60,6 +60,7 @@ for reg in regs:
         for keep_prob_v in keeps:
             with tf.Graph().as_default():
                 with tf.Session() as sess:
+
                     #reset the log dir
                     log_dir = 'logs/Link_CNN_cross_valid/'
                     # inputs
@@ -87,11 +88,20 @@ for reg in regs:
 
                     sess.run(tf.global_variables_initializer())
 
+                    #show hyper info
+                    words = '\nhyper\n'
+                    words += 'reg is %f\n' % reg
+                    words += 'lr_rate is %f\n' % lr_rate
+                    words += 'keep_prob_v is %f\n' % keep_prob_v
+                    print words
+                    log += words + '\n'
+
                     for epoch in xrange(epochs):
+
 
                         # show the epoch num
                         words = "\nepoch "
-                        words += epoch_dir[epoch // (epochs / 10)]
+                        words += epoch_dir[int(10 * (float(epoch) / float(epochs)))]
                         words += "[%d/%d]\n" % (epoch, epochs)
                         print words
                         log += words + "\n"
@@ -171,6 +181,15 @@ for reg in regs:
                         if epoch == 0:
                             log_dir += '%.4f_count%d/' % (test_acc, count)
                             del_and_create_dir(log_dir)
+
+                            filename = log_dir + 'hypers'
+                            hyper_info = '\nhyper\n'
+                            hyper_info += 'reg is %f\n' % reg
+                            hyper_info += 'lr_rate is %f\n' % lr_rate
+                            hyper_info += 'keep_prob_v is %f\n' % keep_prob_v
+                            f = file(filename, 'w+')
+                            f.write(hyper_info)
+                            f.close()
 
                         filename = log_dir + '%.4f_epoch%d' % (test_acc, epoch)
                         f = file(filename, 'w+')
