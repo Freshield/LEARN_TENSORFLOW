@@ -347,6 +347,29 @@ def fc_layer(input_layer, label_size):
         output = tf.matmul(input_layer, W) + b
     return output, [W]
 
+
+# fully connected layer
+# fc-bn-relu-drop
+def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
+    with tf.variable_scope(name):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, output_size], 'fc_weight')
+        b = bias_variable([output_size])
+        fc_out = tf.matmul(input_layer, W) + b
+        bn_out = batch_norm_layer(fc_out, train_phase, "fc_bn")
+        act_out = tf.nn.relu(bn_out)
+        output = tf.nn.dropout(act_out, keep_prob)
+    return output, [W]
+
+# score layer
+def score_layer(input_layer, label_size):
+    with tf.variable_scope("score"):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, label_size], 'score_weight')
+        b = bias_variable([label_size])
+        output = tf.matmul(input_layer, W) + b
+    return output, [W]
+
 #get the y_pred, define the whole net
 #architecture:
 #
@@ -370,9 +393,15 @@ def fc_layer(input_layer, label_size):
 #       |
 #       fc
 #       |
-#       3
+#       512 + 41
+#           |
+#          556
+#           |
+#          256
+#           |
+#           3
 #ver 1.0
-def inference(input_layer, train_phase):
+def inference(input_layer, para_data, train_phase, keep_prob):
     parameters = []
     #input shape should be (N,32,104,2)
     input_depth = input_layer.shape[-1]
@@ -412,24 +441,55 @@ def inference(input_layer, train_phase):
     avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 2 * 5 * 1024])
 
     #fc layer
-    #input[N,4*9*1024],output[N,3]
-    y_pred, p_fc = fc_layer(avg_pool_flat, 3)
+    #input[N,4*9*1024],output[N,512]
+    fc1, p_fc = fc_layer(avg_pool_flat, 512)
     parameters[0:0] = p_fc
+
+    # link the para_data(N,556)
+    fc1_link = tf.concat([fc1, para_data], axis=1)
+
+    # fc layer2(N,256)
+    fc2, fc_weight2 = fc_bn_drop_layer(fc1_link, 256, train_phase, keep_prob, "fc2")
+    parameters[0:0] = fc_weight2
+
+    # score layer
+    y_pred, score_weight = score_layer(fc2, 3)
+    parameters[0:0] = score_weight
 
     return y_pred, parameters
 
+#get the correct number and accuracy
+#ver 1.0
 def corr_num_acc(labels, logits):
     correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(labels, 1))
     correct_num = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     return correct_num, accuracy
 
-#to do the evaluation part for the whole data
-#not use all data together, but many batchs
-def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, merged=None, test_writer=None,
-            global_step=None):
+#get the loss
+#ver 1.0
+def loss(labels, logits, reg=None, parameters=None):
+    with tf.variable_scope("loss"):
+        cross_entropy = tf.reduce_mean(
+            tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits, name='xentropy'))
 
-    input_x, input_y, train_phase = placeholders
+        if parameters == None:
+            cost = cross_entropy
+        else:
+            reg_loss = 0.0
+            for para in parameters:
+                reg_loss += reg * 0.5 * tf.nn.l2_loss(para)
+            cost = cross_entropy + reg_loss
+    return cost
+
+# to do the evaluation part for the whole data
+# not use all data together, but many batchs
+#ver 1.0
+def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, placeholders, merged=None, test_writer=None,
+            global_step=None):
+    # get the placeholders
+    input_x, para_pl, input_y, train_phase, keep_prob = placeholders
+    # calculate the epoch and rest data
     num_epoch = X_dataset.shape[0] // batch_size
     rest_data_size = X_dataset.shape[0] % batch_size
 
@@ -438,38 +498,98 @@ def do_eval(sess, X_dataset, y_dataset, batch_size, correct_num, placeholders, m
     indexs = np.arange(X_dataset.shape[0])
 
     for step in xrange(num_epoch):
-        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, batch_size)
+        index, data, _ = sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, index, batch_size)
 
-        if step == num_epoch - 1:
-            if merged != None :
-                summary, num = sess.run([merged, correct_num], feed_dict={input_x:data['X'], input_y:data['y'],
-                                                                          train_phase:False})
-                #add summary
-                #test_writer.add_summary(summary, global_step)
-            else:
-                num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'], train_phase:False})
+        feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
 
+        if step != num_epoch - 1 or merged == None:
+            num = sess.run(correct_num, feed_dict=feed_dict)
         else:
-            num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'],train_phase:False})
+            summary, num = sess.run([merged, correct_num], feed_dict=feed_dict)
+            # test_writer.add_summary(summary, global_step)
 
         count += num
 
     if rest_data_size != 0:
-        #the rest data
+        # the rest data
         index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
-        num = sess.run(correct_num, feed_dict={input_x:data['X'], input_y:data['y'], train_phase:False})
+
+        feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
+
+        num = sess.run(correct_num, feed_dict=feed_dict)
 
         count += num
     return count / X_dataset.shape[0]
 
-def loss(labels, logits, reg=None, parameters=None):
-    cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=logits,name='xentropy'))
+#train loop in one file
+#ver 1.0
+def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v):
+    input_x, para_pl, input_y, train_phase, keep_prob, train_step, loss_value, accuracy = placeholders
 
-    if parameters == None:
-        cost = cross_entropy
-    else:
-        reg_loss = 0.0
-        for para in parameters:
-            reg_loss += reg * 0.5 * tf.nn.l2_loss(para)
-        cost = cross_entropy + reg_loss
-    return cost
+    X_train, para_train, y_train = prepare_dataset(dir, train_file, SPAN)
+
+    indexs = get_random_seq_indexs(X_train)
+    out_of_dataset = False
+    last_index = 0
+
+    loop_loss_v = 0.0
+    loop_acc = 0.0
+
+    # one loop, namely, one file
+    for step in xrange(max_step):
+
+        # should not happen
+        if out_of_dataset == True:
+            print "out of dataset"
+            indexs = get_random_seq_indexs(X_train)
+            last_index = 0
+            out_of_dataset = False
+
+        last_index, data, out_of_dataset = sequence_get_data(X_train, para_train, y_train, indexs, last_index,
+                                                             batch_size)
+
+        feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
+        _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
+
+        loop_loss_v += loss_v
+        loop_acc += acc
+
+    loop_loss_v /= max_step
+    loop_acc /= max_step
+    return loop_loss_v, loop_acc
+
+#to show the time
+#ver 1.0
+def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total_epoch, log, count = None, count_total = None):
+    last_time = time.time()
+    span_time = last_time - before_time
+    rest_loop = total_loop - loop_now
+    rest_epoch = total_epoch - epoch_now
+
+    print ('last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60))
+    print ('rest loop need %.3f minutes' % (span_time * rest_loop / 60))
+    print ('rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600))
+    #for show cross valid total time
+    if count != None:
+        rest_count = count_total - count
+        print ('rest total time need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600))
+
+    log += ('last %d loop use %f minutes\n' % (last_loop_num, span_time * last_loop_num / 60))
+    log += ('rest loop need %.3f minutes\n' % (span_time * rest_loop / 60))
+    log += ('rest epoch need %.3f hours\n' % ((span_time * rest_loop / 3600) + (span_time * total_loop * rest_epoch /3600)))
+    # for show cross valid total time
+    if count != None:
+        rest_count = count_total - count
+        log += ('rest total time need %.3f hours\n' % (
+        span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600))
+
+#to get the random hypers for cross valid
+#ver 1.0
+def random_uniform_array(number, start, end):
+    array = np.zeros(number)
+    for i in np.arange(number - 2):
+        array[i] = 10 ** np.random.uniform(start, end)
+    array[-2] = 10 ** start
+    array[-1] = 10 ** end
+
+    return array
