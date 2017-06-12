@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
-import time
 
 #split the dataset into three part:
 #training, validation, test
+#ver 1.0
 def split_dataset(dataset, test_dataset_size=None, radio=None):
     if radio != None:
         test_dataset_size = int(radio * len(dataset))
@@ -14,6 +14,8 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
     return train_set, validation_set, test_set
 
+#normalize the dataset, push data between -1 to 1
+#ver 1.0
 def normalize_dataset(dataset, min_values=None, max_values=None):
     norm_dataset = np.zeros((dataset.shape))
     norm_dataset[:, :] = dataset[:, :]
@@ -38,7 +40,7 @@ def normalize_dataset(dataset, min_values=None, max_values=None):
         CMr_max, CMi_max, CD_max, length_max, power_max = max_values
 
     def calcul_norm(dataset, min, max):
-        return (dataset - min) / (max - min)
+        return (2 * dataset - max - min) / (max - min)
 
     norm_dataset[:, 0:3100] = calcul_norm(norm_dataset[:, 0:3100], CMr_min, CMr_max)
     norm_dataset[:, 3100:6200] = calcul_norm(norm_dataset[:, 3100:6200], CMi_min, CMi_max)
@@ -51,8 +53,9 @@ def normalize_dataset(dataset, min_values=None, max_values=None):
 
     return norm_dataset, min_values, max_values
 
+#get the values from array read from csv file
+#ver 1.0
 def get_values_from_array(array, num):
-
     CMr = array[num,0]
     CMi = array[num,1]
     CD = array[num,2]
@@ -62,6 +65,10 @@ def get_values_from_array(array, num):
     values = CMr, CMi, CD, length, power
 
     return values
+
+#######################################################
+############## Main function ##########################
+#######################################################
 
 filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
 
