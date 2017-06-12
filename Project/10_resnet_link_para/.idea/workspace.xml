@@ -15,10 +15,34 @@
       <file leaf-file-name="Resnet_link_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="725">
+            <state relative-caret-position="-348">
               <caret line="29" column="19" lean-forward="false" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_calculate_min_max.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../08_simple_CNN_for_span/test_calculate_min_max.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="377">
+              <caret line="157" column="20" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="calculate_min_max.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/calculate_min_max.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1714">
+              <caret line="130" column="27" lean-forward="true" selection-start-line="130" selection-start-column="27" selection-end-line="130" selection-end-column="27" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -36,7 +60,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Resnet_link_cross_valid.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Resnet_link_cross_valid.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Resnet_link_cross_valid.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1856">
@@ -100,6 +124,7 @@
         <option value="$PROJECT_DIR$/Resnet_link_model.py" />
         <option value="$PROJECT_DIR$/Resnet_link_test.py" />
         <option value="$PROJECT_DIR$/Resnet_link_cross_valid.py" />
+        <option value="$PROJECT_DIR$/calculate_min_max.py" />
       </list>
     </option>
   </component>
@@ -143,7 +168,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_cross_valid.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../08_simple_CNN_for_span/test_calculate_min_max.py" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -444,16 +469,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="725">
-          <caret line="29" column="19" lean-forward="false" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_cross_valid.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
@@ -477,6 +492,36 @@
         <state relative-caret-position="1856">
           <caret line="64" column="60" lean-forward="false" selection-start-line="64" selection-start-column="60" selection-end-line="64" selection-end-column="60" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-348">
+          <caret line="29" column="19" lean-forward="false" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../08_simple_CNN_for_span/test_calculate_min_max.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="157" column="20" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculate_min_max.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1714">
+          <caret line="130" column="27" lean-forward="true" selection-start-line="130" selection-start-column="27" selection-end-line="130" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
