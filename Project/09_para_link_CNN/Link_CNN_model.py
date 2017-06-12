@@ -399,15 +399,35 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
     loop_acc /= max_step
     return loop_loss_v, loop_acc
 
-def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total_epoch, log):
+def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total_epoch, log, count = None, count_total = None):
     last_time = time.time()
     span_time = last_time - before_time
     rest_loop = total_loop - loop_now
     rest_epoch = total_epoch - epoch_now
+
     print ('last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60))
     print ('rest loop need %.3f minutes' % (span_time * rest_loop / 60))
     print ('rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600))
+    #for show cross valid total time
+    if count != None:
+        rest_count = count_total - count
+        print ('rest total time need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600))
+
     log += ('last %d loop use %f minutes\n' % (last_loop_num, span_time * last_loop_num / 60))
     log += ('rest loop need %.3f minutes\n' % (span_time * rest_loop / 60))
-    log += ('rest epoch need %.3f hours\n' % ((span_time * rest_loop / 3600) + (span_time * total_loop * rest_epoch /
-                                               3600)))
+    log += ('rest epoch need %.3f hours\n' % ((span_time * rest_loop / 3600) + (span_time * total_loop * rest_epoch /3600)))
+    # for show cross valid total time
+    if count != None:
+        rest_count = count_total - count
+        log += ('rest total time need %.3f hours\n' % (
+        span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600))
+
+
+def random_uniform_array(number, start, end):
+    array = np.zeros(number)
+    for i in np.arange(number - 2):
+        array[i] = 10 ** np.random.uniform(start, end)
+    array[-2] = 10 ** start
+    array[-1] = 10 ** end
+
+    return array

@@ -296,13 +296,13 @@ def inference(input_layer, train_phase):
     parameters[0:0] = p3
 
     #pad for avg pool
-    #input[N,8,25,1024],output[N,10,27,1024]
-    resnet_l3_pad = tf.pad(resnet_l3, [[0,0],[2,2],[2,2],[0,0]], 'CONSTANT', 'l3_pad')
-    #input[N,10,27,1024],output[N,4,9,1024]
+    #input[N,8,25,1024],output[N,12,27,1024]
+    resnet_l3_pad = tf.pad(resnet_l3, [[0,0],[2,2],[1,1],[0,0]], 'CONSTANT', 'l3_pad')
+    #input[N,12,27,1024],output[N,4,9,1024]
     avg_pool_layer = tf.nn.avg_pool(resnet_l3_pad, [1,3,3,1], [1,3,3,1], 'VALID')
 
     #platten for fc
-    #input[N,10,27,1024],output[N,4*9*1024]
+    #input[N,12,27,1024],output[N,4*9*1024]
     avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 4 * 9 * 1024])
 
     #fc layer
