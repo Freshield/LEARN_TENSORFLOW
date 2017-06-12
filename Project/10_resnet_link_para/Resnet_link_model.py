@@ -185,36 +185,6 @@ def batch_norm_layer(x, train_phase, scope_bn):
         normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
     return normed
 
-#bn->conv
-#the size is same
-#ver 1.0
-def bn_conv_same_layer(input_layer, filter_size, filter_depth, train_phase, name):
-    with tf.variable_scope(name):
-        with tf.variable_scope('brc_s'):
-            input_depth = input_layer.shape[-1]
-            bn_layer = batch_norm_layer(input_layer, train_phase, 'bn')
-            filter = weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
-            biases = bias_variable([filter_depth])
-            conv_layer = conv2d(bn_layer, filter, 1, 'SAME') + biases
-    return conv_layer, filter
-
-#bn->conv
-#size is half, namely, stride is 2
-#care for the filter size, 1 or 2
-#ver 1.0
-def bn_conv_half_layer(input_layer, filter_size, filter_depth, train_phase, name):
-    #filter size check
-    if filter_size != 1 and filter_size != 2:
-        raise ValueError('filter size should be 1 or 2')
-    with tf.variable_scope(name):
-        with tf.variable_scope('brc_h'):
-            input_depth = input_layer.shape[-1]
-            bn_layer = batch_norm_layer(input_layer, train_phase, 'bn')
-            filter = weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
-            biases = bias_variable([filter_depth])
-            conv_layer = conv2d(bn_layer, filter, 2, 'VALID') + biases
-    return conv_layer, filter
-
 #bn->relu->conv
 #the size is same
 #ver 1.0
@@ -272,7 +242,7 @@ def resnet_same_block(input_layer, train_phase):
     with tf.variable_scope('res_sb'):
         block_layer1, f1 = bn_relu_conv_same_layer(input_layer, 1, small_depth, train_phase, 'bl_1')
         block_layer2, f2 = bn_relu_conv_same_layer(block_layer1, 3, small_depth, train_phase, 'bl_2')
-        block_layer3, f3 = bn_conv_same_layer(block_layer2, 1, input_depth, train_phase, 'bl_3')
+        block_layer3, f3 = bn_relu_conv_same_layer(block_layer2, 1, input_depth, train_phase, 'bl_3')
         add_layer = input_layer + block_layer3
         parameters = (f1, f2, f3)
     return add_layer, parameters
@@ -302,8 +272,8 @@ def resnet_diffD_sameS_block(input_layer, block_depth, train_phase):
     with tf.variable_scope('res_dsb'):
         block_layer1, f1 = bn_relu_conv_same_layer(input_layer, 1, small_depth, train_phase, 'bl_1')
         block_layer2, f2 = bn_relu_conv_same_layer(block_layer1, 3, small_depth, train_phase, 'bl_2')
-        block_layer3, f3 = bn_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
-        block_layer4, f4 = bn_conv_same_layer(input_layer, 1, block_depth, train_phase, 'bl_4')
+        block_layer3, f3 = bn_relu_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
+        block_layer4, f4 = bn_relu_conv_same_layer(input_layer, 1, block_depth, train_phase, 'bl_4')
         add_layer = block_layer4 + block_layer3
         parameters = (f1, f2, f3, f4)
     return add_layer, parameters
@@ -334,8 +304,8 @@ def resnet_diffD_halfS_block(input_layer, block_depth, train_phase):
     with tf.variable_scope('res_dhb'):
         block_layer1, f1 = bn_relu_conv_half_layer(input_layer, 2, small_depth, train_phase, 'bl_1')
         block_layer2, f2 = bn_relu_conv_same_layer(block_layer1, 3, small_depth, train_phase, 'bl_2')
-        block_layer3, f3 = bn_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
-        block_layer4, f4 = bn_conv_half_layer(input_layer, 2, block_depth, train_phase, 'bl_4')
+        block_layer3, f3 = bn_relu_conv_same_layer(block_layer2, 1, block_depth, train_phase, 'bl_3')
+        block_layer4, f4 = bn_relu_conv_half_layer(input_layer, 2, block_depth, train_phase, 'bl_4')
         add_layer = block_layer4 + block_layer3
         parameters = (f1, f2, f3, f4)
     return add_layer, parameters
@@ -377,40 +347,69 @@ def fc_layer(input_layer, label_size):
         output = tf.matmul(input_layer, W) + b
     return output, [W]
 
+#get the y_pred, define the whole net
+#architecture:
+#
+#   32*104*2
+#       |
+#   32*104*64
+#       |
+#   32*104*128
+#       |
+#   16*52*256
+#       |
+#   8*26*512
+#       |
+#   4*13*1024
+#       |
+#   avg pooling
+#       |
+#   2*5*1024
+#       |
+#     flat
+#       |
+#       fc
+#       |
+#       3
+#ver 1.0
 def inference(input_layer, train_phase):
     parameters = []
-    #input shape should be (N,32,100,3)
+    #input shape should be (N,32,104,2)
     input_depth = input_layer.shape[-1]
 
-    #input[N,32,100,3],output[N,32,100,64]
+    #input[N,32,100,3],output[N,32,104,64]
     with tf.variable_scope('preprocess'):
         bn_input = batch_norm_layer(input_layer, train_phase, 'bn_input')
         filter = weight_variable([3,3,input_depth,64], 'filter_input')
         biases = bias_variable([64])
         conv_input = conv2d(bn_input, filter, 1, 'SAME') + biases
 
-    #input[N,32,100,64],output[N,32,100,256]
+    #input[N,32,104,64],output[N,32,104,128]
     #first layer not change the depth
-    resnet_l1, p1 = resnet_first_layer(conv_input, 256, train_phase, 'resnet_l1')
+    resnet_l1, p1 = resnet_first_layer(conv_input, 128, train_phase, 'resnet_l1')
     parameters[0:0] = p1
 
-    #input[N,32,100,256],output[N,16,50,512]
-    resnet_l2, p2 = resnet_layer(resnet_l1, 512, train_phase, 'resnet_l2')
+    #input[N,32,104,128],output[N,16,52,256]
+    resnet_l2, p2 = resnet_layer(resnet_l1, 256, train_phase, 'resnet_l2')
     parameters[0:0] = p2
 
-    #input[N,16,50,512],output[N,8,25,1024]
-    resnet_l3, p3 = resnet_layer(resnet_l2, 1024, train_phase, 'resnet_l3')
+    #input[N,16,52,256],output[N,8,26,512]
+    resnet_l3, p3 = resnet_layer(resnet_l2, 512, train_phase, 'resnet_l3')
     parameters[0:0] = p3
 
+    #input[N,8,26,512],output[N,4,13,1024]
+    resnet_l4, p4 = resnet_layer(resnet_l3, 1024, train_phase, 'resnet_l4')
+    parameters[0:0] = p4
+
     #pad for avg pool
-    #input[N,8,25,1024],output[N,12,27,1024]
-    resnet_l3_pad = tf.pad(resnet_l3, [[0,0],[2,2],[1,1],[0,0]], 'CONSTANT', 'l3_pad')
-    #input[N,12,27,1024],output[N,4,9,1024]
-    avg_pool_layer = tf.nn.avg_pool(resnet_l3_pad, [1,3,3,1], [1,3,3,1], 'VALID')
+    #input[N,4,13,1024],output[N,6,15,1024]
+    resnet_l4_pad = tf.pad(resnet_l4, [[0,0],[1,1],[1,1],[0,0]], 'CONSTANT', 'l4_pad')
+    #input[N,6,15,1024],output[N,2,5,1024]
+    avg_pool_layer = tf.nn.avg_pool(resnet_l4_pad, [1,3,3,1], [1,3,3,1], 'VALID')
 
     #platten for fc
-    #input[N,12,27,1024],output[N,4*9*1024]
-    avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 4 * 9 * 1024])
+    #input[N,2,5,1024],output[N,2*5*1024]
+    avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 2 * 5 * 1024])
 
     #fc layer
     #input[N,4*9*1024],output[N,3]
