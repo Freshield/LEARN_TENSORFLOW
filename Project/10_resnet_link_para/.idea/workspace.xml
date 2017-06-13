@@ -15,7 +15,7 @@
       <file leaf-file-name="Resnet_link_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-348">
+            <state relative-caret-position="725">
               <caret line="29" column="19" lean-forward="false" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -27,7 +27,7 @@
       <file leaf-file-name="calculate_min_max.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/calculate_min_max.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
+            <state relative-caret-position="3132">
               <caret line="109" column="17" lean-forward="false" selection-start-line="109" selection-start-column="17" selection-end-line="109" selection-end-column="17" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -39,8 +39,8 @@
       <file leaf-file-name="test_recut_file.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../08_simple_CNN_for_span/test_recut_file.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="95" column="122" lean-forward="true" selection-start-line="95" selection-start-column="122" selection-end-line="95" selection-end-column="122" />
+            <state relative-caret-position="2697">
+              <caret line="95" column="122" lean-forward="false" selection-start-line="95" selection-start-column="122" selection-end-line="95" selection-end-column="122" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -63,8 +63,8 @@
       <file leaf-file-name="Resnet_link_test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Resnet_link_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="757">
-              <caret line="62" column="15" lean-forward="true" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
+            <state relative-caret-position="1769">
+              <caret line="62" column="15" lean-forward="false" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -85,7 +85,7 @@
       <file leaf-file-name="Link_CNN_cross_valid.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_cross_valid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
+            <state relative-caret-position="3016">
               <caret line="104" column="49" lean-forward="false" selection-start-line="104" selection-start-column="49" selection-end-line="104" selection-end-column="49" />
               <folding />
             </state>
@@ -162,8 +162,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -178,6 +176,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -276,6 +276,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="97" y="1" width="1824" height="1080" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24972558" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -312,6 +313,92 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="725">
+          <caret line="29" column="19" lean-forward="false" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/calculate_min_max.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3132">
+          <caret line="109" column="17" lean-forward="false" selection-start-line="109" selection-start-column="17" selection-end-line="109" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../08_simple_CNN_for_span/test_recut_file.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2697">
+          <caret line="95" column="122" lean-forward="true" selection-start-line="95" selection-start-column="122" selection-end-line="95" selection-end-column="122" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resnet_link_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1769">
+          <caret line="62" column="15" lean-forward="true" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resnet_link_cross_valid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1856">
+          <caret line="64" column="60" lean-forward="false" selection-start-line="64" selection-start-column="60" selection-end-line="64" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_cross_valid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3016">
+          <caret line="104" column="49" lean-forward="false" selection-start-line="104" selection-start-column="49" selection-end-line="104" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="116">
+          <caret line="4" column="0" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="899">
+          <caret line="35" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/recut_file.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2465">
+          <caret line="86" column="24" lean-forward="false" selection-start-line="86" selection-start-column="24" selection-end-line="86" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="841">
@@ -483,7 +570,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../09_para_link_CNN/Link_CNN_cross_valid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
+        <state relative-caret-position="3016">
           <caret line="104" column="49" lean-forward="false" selection-start-line="104" selection-start-column="49" selection-end-line="104" selection-end-column="49" />
           <folding />
         </state>
@@ -491,8 +578,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Resnet_link_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="757">
-          <caret line="62" column="15" lean-forward="true" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
+        <state relative-caret-position="1769">
+          <caret line="62" column="15" lean-forward="false" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -511,15 +598,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
           <caret line="152" column="18" lean-forward="true" selection-start-line="152" selection-start-column="18" selection-end-line="152" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-348">
+        <state relative-caret-position="725">
           <caret line="29" column="19" lean-forward="false" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
@@ -529,8 +613,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../08_simple_CNN_for_span/test_recut_file.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="95" column="122" lean-forward="true" selection-start-line="95" selection-start-column="122" selection-end-line="95" selection-end-column="122" />
+        <state relative-caret-position="2697">
+          <caret line="95" column="122" lean-forward="false" selection-start-line="95" selection-start-column="122" selection-end-line="95" selection-end-column="122" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -539,7 +623,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/calculate_min_max.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
+        <state relative-caret-position="3132">
           <caret line="109" column="17" lean-forward="false" selection-start-line="109" selection-start-column="17" selection-end-line="109" selection-end-column="17" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
