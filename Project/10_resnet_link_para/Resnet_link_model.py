@@ -88,18 +88,43 @@ def sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, last_index, ba
     y_data = y_dataset[span_index]
     return (next_index, {'X': X_data, 'p':para_data, 'y': y_data}, out_of_dataset)
 
-#reshape the dataset into 32x100x3
+def num_to_one_hot(dataset, category_num):
+    lines = dataset.shape[0]
+    one_hot_dataset = np.zeros([lines, category_num], dtype=np.float32)
+    one_hot_dataset[np.arange(lines), dataset] = 1
+    return one_hot_dataset
+
 def reshape_dataset(dataset, SPAN):
-    input_data = np.zeros((dataset.shape[0], 32, 100, 3))
-    temp_data = np.reshape(dataset[:, :6200], (dataset.shape[0], 31, 100, 2))
-    input_data[:, :31, :, 0] = temp_data[:, :, :, 0]
-    input_data[:, :31, :, 1] = temp_data[:, :, :, 1]
-    input_data[:, :, :, 2] = np.reshape(np.tile(dataset[:, 6200:6241], 79)[:, :3200], (dataset.shape[0], 32, 100))
+    input_data = np.zeros((dataset.shape[0], 32, 104, 2))
+    temp_data = np.reshape(dataset[:, :6200], (-1, 31, 100, 2))
+    input_data[:, :31, 2:102, 0] = temp_data[:, :, :, 0]  # cause input size is 32 not 31
+    input_data[:, :31, 2:102, 1] = temp_data[:, :, :, 1]
+    para_data = dataset[:, 6200:6241]
 
-    output_data = dataset[:, 6240 + SPAN[0]]
-    output_data = np_utils.to_categorical(output_data)
+    output_data = dataset[:, 6240 + SPAN[0]].astype(int)
+    output_data = num_to_one_hot(output_data, 3)
 
-    return input_data, output_data
+    return input_data, para_data, output_data
+
+
+def prepare_dataset(dir, file, SPAN):
+    filename = dir + file
+
+    dataset = pd.read_csv(filename, header=None)
+    """
+    #needn't the split cause the data file was splited
+    test_dataset_size = int(radio * dataset.shape[0])
+
+    cases = {
+        'train':dataset.values[0:-test_dataset_size * 2],
+        'validation':dataset.values[-test_dataset_size * 2:-test_dataset_size],
+        'test':dataset.values[-test_dataset_size:len(dataset)]
+    }
+
+    output = cases[model]
+    """
+    X_data, para_data, y_data = reshape_dataset(dataset.values, SPAN)
+    return X_data, para_data, y_data
 
 ###########################################################
 ################# graph helper ############################
