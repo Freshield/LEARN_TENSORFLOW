@@ -41,10 +41,10 @@ epoch_dir = {
 }
 
 #hypers
-reg = 0.000067
-lr_rate = 0.002
+reg = 0.00001
+lr_rate = 0.001261
 lr_decay = 0.99
-keep_prob_v = 0.9569
+keep_prob_v = 1.00
 
 log = ''
 
