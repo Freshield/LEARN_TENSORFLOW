@@ -82,7 +82,7 @@ with tf.Graph().as_default():
 
             #show the epoch num
             words = "\nepoch "
-            words += epoch_dir[epoch // (epochs / 10)]
+            words += epoch_dir[int(10 * (float(epoch) / float(epochs)))]
             words += "[%d/%d]\n" % (epoch, epochs)
             print words
             log += words + "\n"
