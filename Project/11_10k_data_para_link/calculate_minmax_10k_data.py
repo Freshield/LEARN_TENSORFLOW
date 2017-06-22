@@ -118,7 +118,7 @@ def div_values(values, div_num):
     return output
 
 
-filename = '/home/freshield/Ciena_data/ciena10000.csv'
+filename = '/home/freshield/Ciena_data/dataset_10k/ciena10000.csv'
 
 reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
 
@@ -167,5 +167,5 @@ print total_min
 array = np.zeros([2,5], dtype=np.float32)
 add_values_to_array(total_min, array, 0)
 add_values_to_array(total_max, array, 1)
-np.savetxt("/home/freshield/Ciena_data/min_max_10k.csv", array, delimiter=",")
+np.savetxt("/home/freshield/Ciena_data/dataset_10k/min_max_10k.csv", array, delimiter=",")
 
