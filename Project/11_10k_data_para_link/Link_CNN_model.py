@@ -411,7 +411,7 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
             words = "step "
             words += epoch_dir[int(10 * (float(step) / float(max_step)))]
             words += "[%d/%d] " % (step, max_step)
-            words += 'loss in loop %d is %f, acc is %.3f' % (step, loop_loss_v, loop_acc)
+            words += 'loss in loop %d is %f, acc is %.3f' % (step, loss_v, acc)
             print words
             log += words + "\n"
 

@@ -27,7 +27,7 @@
       <file leaf-file-name="Link_CNN_10k_data_test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Link_CNN_10k_data_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
+            <state relative-caret-position="812">
               <caret line="84" column="72" lean-forward="true" selection-start-line="84" selection-start-column="21" selection-end-line="84" selection-end-column="72" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -39,8 +39,8 @@
       <file leaf-file-name="Link_CNN_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Link_CNN_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="411" column="69" lean-forward="false" selection-start-line="411" selection-start-column="69" selection-end-line="411" selection-end-column="69" />
+            <state relative-caret-position="150">
+              <caret line="410" column="27" lean-forward="true" selection-start-line="410" selection-start-column="27" selection-end-line="410" selection-end-column="27" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -222,6 +222,24 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
+    <configuration default="false" name="Link_CNN_model" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="11_10k_data_para_link" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Link_CNN_model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -287,16 +305,18 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Python.calculate_minmax_10k_data" />
       <item index="1" class="java.lang.String" itemvalue="Python.preprocess_dataset" />
       <item index="2" class="java.lang.String" itemvalue="Python.Link_CNN_10k_data_test" />
+      <item index="3" class="java.lang.String" itemvalue="Python.Link_CNN_model" />
     </list>
     <recent_temporary>
-      <list size="3">
+      <list size="4">
         <item index="0" class="java.lang.String" itemvalue="Python.Link_CNN_10k_data_test" />
-        <item index="1" class="java.lang.String" itemvalue="Python.preprocess_dataset" />
-        <item index="2" class="java.lang.String" itemvalue="Python.calculate_minmax_10k_data" />
+        <item index="1" class="java.lang.String" itemvalue="Python.Link_CNN_model" />
+        <item index="2" class="java.lang.String" itemvalue="Python.preprocess_dataset" />
+        <item index="3" class="java.lang.String" itemvalue="Python.calculate_minmax_10k_data" />
       </list>
     </recent_temporary>
   </component>
@@ -320,7 +340,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24959394" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39205155" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39205155" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -387,8 +407,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Link_CNN_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="411" column="69" lean-forward="false" selection-start-line="411" selection-start-column="69" selection-end-line="411" selection-end-column="69" />
+        <state relative-caret-position="150">
+          <caret line="410" column="27" lean-forward="true" selection-start-line="410" selection-start-column="27" selection-end-line="410" selection-end-column="27" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -397,7 +417,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Link_CNN_10k_data_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
+        <state relative-caret-position="812">
           <caret line="84" column="72" lean-forward="true" selection-start-line="84" selection-start-column="21" selection-end-line="84" selection-end-column="72" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
