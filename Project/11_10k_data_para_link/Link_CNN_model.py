@@ -9,6 +9,20 @@ import time
 ############# helpers ######################################
 ############################################################
 
+epoch_dir = {
+    10:"[==========>]",
+    9: "[=========> ]",
+    8: "[========>  ]",
+    7: "[=======>   ]",
+    6: "[======>    ]",
+    5: "[=====>     ]",
+    4: "[====>      ]",
+    3: "[===>       ]",
+    2: "[==>        ]",
+    1: "[=>         ]",
+    0: "[>          ]"
+}
+
 # to copy files from source dir to target dir
 def copyFiles(sourceDir, targetDir):
     if sourceDir.find(".csv") > 0:
@@ -364,7 +378,7 @@ def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, p
     return count / X_dataset.shape[0]
 
 
-def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v):
+def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v, log=None):
     input_x, para_pl, input_y, train_phase, keep_prob, train_step, loss_value, accuracy = placeholders
 
     X_train, para_train, y_train = prepare_dataset(dir, train_file, SPAN)
@@ -391,6 +405,15 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
         _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
+
+        if log != None:
+
+            words = "step "
+            words += epoch_dir[int(10 * (float(step) / float(max_step)))]
+            words += "[%d/%d] " % (step, max_step)
+            words += 'loss in loop %d is %f, acc is %.3f' % (step, loop_loss_v, loop_acc)
+            print words
+            log += words + "\n"
 
         loop_loss_v += loss_v
         loop_acc += acc
@@ -421,6 +444,25 @@ def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total
         rest_count = count_total - count
         log += ('rest total time need %.3f hours\n' % (
         span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600))
+
+
+def time_show_10k(before_time, epoch_now, total_epoch, log, count = None, count_total = None):
+    last_time = time.time()
+    span_time = last_time - before_time
+    rest_epoch = total_epoch - epoch_now
+
+    print ('rest epoch need %.3f hours' % (span_time / 3600 + span_time * rest_epoch / 3600))
+    #for show cross valid total time
+    if count != None:
+        rest_count = count_total - count
+        print ('rest total time need %.3f hours' % (span_time / 3600 + span_time * rest_epoch / 3600 + span_time * total_epoch * rest_count / 3600))
+
+    log += ('rest epoch need %.3f hours\n' % ((span_time / 3600) + (span_time * rest_epoch /3600)))
+    # for show cross valid total time
+    if count != None:
+        rest_count = count_total - count
+        log += ('rest total time need %.3f hours\n' % (
+        span_time / 3600 + span_time * rest_epoch / 3600 + span_time * total_epoch * rest_count / 3600))
 
 
 def random_uniform_array(number, start, end):
