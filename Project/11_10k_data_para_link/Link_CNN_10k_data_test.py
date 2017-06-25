@@ -3,7 +3,7 @@ from Link_CNN_model import *
 
 SPAN=[20]
 
-dir = '/home/freshield/Ciena_data/dataset_10k/'
+dir = 'dataset_10k/'
 
 epochs = 20
 
