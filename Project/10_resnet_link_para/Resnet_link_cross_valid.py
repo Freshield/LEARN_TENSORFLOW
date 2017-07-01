@@ -2,7 +2,7 @@ from Resnet_link_model import *
 
 SPAN=[10]
 
-dir = '/media/freshield/DATA_U/CIENA/raw/norm/'
+dir = '/media/freshield/DATA_W/Ciena_data/raw/norm/'
 
 epochs = 3
 
@@ -60,6 +60,8 @@ for reg in regs:
         for keep_prob_v in keeps:
             with tf.Graph().as_default():
                 with tf.Session() as sess:
+                    #log should update
+                    log = ''
 
                     #reset the log dir
                     log_dir = 'logs/Restnet_link_cross_valid/'
