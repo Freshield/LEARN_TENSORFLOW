@@ -278,3 +278,11 @@ def store_log(log_dir, test_acc, epoch, log):
     f = file(filename, 'w+')
     f.write(log)
     f.close()
+
+#store the module
+#ver 1.0
+def store_module(module_dir, test_acc, epoch, sess):
+    saver = tf.train.Saver()
+    module_path = module_dir + "%.4f_epoch%d/model.ckpt" % (test_acc, epoch)
+    saver.restore(sess, module_path)
+    print "Model restored."

@@ -22,7 +22,8 @@ reg = 0.000067
 lr_rate = 0.002
 lr_decay = 0.99
 keep_prob_v = 0.9569
-log_dir = 'logs/Resnet_link_test/'
+log_dir = 'logs/*********/'
+module_dir = 'modules/*********/'
 ########################################################
 
 max_step = train_file_size // batch_size
@@ -86,11 +87,17 @@ with tf.Graph().as_default():
                     #here only evaluate last 10 files
                     evaluate_last_x_files(10, eval_parameters)
 
+
+
             #each epoch decay the lr_rate
             lr_rate *= lr_decay
-
+            
             #store the parameter first
             test_parameter = loops, epoch, SPAN, sess, batch_size, correct_num, placeholders, log
+            #do the test evaluate
             test_acc = evaluate_test(test_parameter)
 
+            #store log file every epoch
             store_log(log_dir, test_acc, epoch, log)
+            #store module every epoch
+            store_module(module_dir, test_acc, epoch, sess)
