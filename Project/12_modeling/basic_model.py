@@ -173,23 +173,24 @@ def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total
     rest_loop = total_loop - loop_now
     rest_epoch = total_epoch - epoch_now
 
-    print ('last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60))
-    print ('rest loop need %.3f minutes' % (span_time * rest_loop / 60))
-    print ('rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600))
+    #show the last loop time
+    words = 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
+    words_log_print(words, log)
 
-    #for show cross valid total time
+    #show the rest loop time
+    words = 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
+    words_log_print(words, log)
+
+    #show the rest epoch time
+    words = 'rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600)
+    words_log_print(words, log)
+
+    # show the cross valid total time
     if count != None:
         rest_count = count_total - count
-        print ('rest total time need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600))
+        words = 'rest total time need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600)
+        words_log_print(words, log)
 
-    log += ('last %d loop use %f minutes\n' % (last_loop_num, span_time * last_loop_num / 60))
-    log += ('rest loop need %.3f minutes\n' % (span_time * rest_loop / 60))
-    log += ('rest epoch need %.3f hours\n' % ((span_time * rest_loop / 3600) + (span_time * total_loop * rest_epoch /3600)))
-    # for show cross valid total time
-    if count != None:
-        rest_count = count_total - count
-        log += ('rest total time need %.3f hours\n' % (
-        span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600))
 
 #to get the random hypers for cross valid
 #ver 1.0
