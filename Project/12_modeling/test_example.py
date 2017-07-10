@@ -1,6 +1,6 @@
 import time
 from basic_model import *
-from data_process import *
+from data_process_model import *
 from file_system_model import *
 
 #the parameter need fill
@@ -33,6 +33,7 @@ loops = data_size // file_size
 log = ''
 
 del_and_create_dir(log_dir)
+del_and_create_dir(module_dir)
 
 with tf.Graph().as_default():
     with tf.Session() as sess:
@@ -91,7 +92,7 @@ with tf.Graph().as_default():
 
             #each epoch decay the lr_rate
             lr_rate *= lr_decay
-            
+
             #store the parameter first
             test_parameter = loops, epoch, SPAN, sess, batch_size, correct_num, placeholders, log
             #do the test evaluate
@@ -100,4 +101,4 @@ with tf.Graph().as_default():
             #store log file every epoch
             store_log(log_dir, test_acc, epoch, log)
             #store module every epoch
-            store_module(module_dir, test_acc, epoch, sess)
+            store_module(module_dir, test_acc, epoch, sess, log)

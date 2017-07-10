@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 
-from data_process import *
+from data_process_model import *
 from basic_model import *
 
 

@@ -3,7 +3,8 @@ import numpy as np
 import time
 
 
-from data_process import *
+from data_process_model import *
+from file_system_model import *
 
 #show the processing
 #ver 1.0
@@ -201,14 +202,19 @@ def random_uniform_array(number, start, end):
 
     return array
 
+#log add word and print it
+#ver 1.0
+def words_log_print(words, log):
+    print words
+    log += words + "\n"
+
 #show the words and add to log for epoch
 #ver 1.0
 def words_log_print_epoch(epoch, epochs, log ):
     words = "\nepoch "
     words += process_line[int(10 * (float(epoch) / float(epochs)))]
     words += "[%d/%d]\n" % (epoch, epochs)
-    print words
-    log += words + "\n"
+    words_log_print(words, log)
 
 #show the words and add to log for loop
 #ver 1.0
@@ -217,8 +223,7 @@ def words_log_print_loop(loop, loops, loop_loss_v, loop_acc, log ):
     words += process_line[int(10 * (float(loop) / float(loops)))]
     words += "[%d/%d] " % (loop, loops)
     words += 'loss in loop %d is %f, acc is %.3f' % (loop, loop_loss_v, loop_acc)
-    print words
-    log += words + "\n"
+    words_log_print(words, log)
 
 # do the evaluation for the last x files
 #ver 1.0
@@ -246,11 +251,11 @@ def evaluate_last_x_files(number, eval_parameters):
 
     train_acc /= 10
     valid_acc /= 10
-    print "\n",
-    print ('----------train acc in loop %d is %.4f----------' % (loop, train_acc))
-    log += ('----------train acc in loop %d is %.4f----------\n' % (loop, train_acc))
-    print ('----------valid acc in loop %d is %.4f----------' % (loop, valid_acc))
-    log += ('----------valid acc in loop %d is %.4f----------\n' % (loop, valid_acc))
+    print ""
+    words = '----------train acc in loop %d is %.4f----------' % (loop, train_acc)
+    words_log_print(words, log)
+    words = '----------valid acc in loop %d is %.4f----------' % (loop, valid_acc)
+    words_log_print(words, log)
 
 #do the evalute for all of the test files
 #ver 1.0
@@ -267,8 +272,8 @@ def evaluate_test(test_parameter):
         test_acc += loop_test_acc
     test_acc /= loops
     print ""
-    print ('----------epoch %d test accuracy is %f----------' % (epoch, test_acc))
-    log += ('----------epoch %d test accuracy is %f----------\n' % (epoch, test_acc))
+    words = '----------epoch %d test accuracy is %f----------' % (epoch, test_acc)
+    words_log_print(words, log)
     return test_acc
 
 #store the log file
@@ -281,8 +286,11 @@ def store_log(log_dir, test_acc, epoch, log):
 
 #store the module
 #ver 1.0
-def store_module(module_dir, test_acc, epoch, sess):
+def store_module(module_dir, test_acc, epoch, sess, log):
     saver = tf.train.Saver()
-    module_path = module_dir + "%.4f_epoch%d/model.ckpt" % (test_acc, epoch)
-    saver.restore(sess, module_path)
-    print "Model restored."
+    module_path = module_dir + "%.4f_epoch%d/" % (test_acc, epoch)
+    module_name = module_path + "module.ckpt"
+    del_and_create_dir(module_path)
+    save_path = saver.save(sess, module_name)
+    words = "Model saved in file: %s" % save_path
+    words_log_print(words, log)
