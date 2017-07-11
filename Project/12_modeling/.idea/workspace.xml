@@ -25,8 +25,8 @@
       <file leaf-file-name="basic_model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/basic_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3451">
-              <caret line="187" column="15" lean-forward="false" selection-start-line="187" selection-start-column="15" selection-end-line="187" selection-end-column="15" />
+            <state relative-caret-position="422">
+              <caret line="75" column="21" lean-forward="false" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -37,7 +37,7 @@
       <file leaf-file-name="test_example.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_example.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2593">
+            <state relative-caret-position="2709">
               <caret line="103" column="63" lean-forward="false" selection-start-line="103" selection-start-column="63" selection-end-line="103" selection-end-column="63" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
@@ -49,9 +49,11 @@
       <file leaf-file-name="Resnet_link_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-377">
-              <caret line="9" column="8" lean-forward="false" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
-              <folding />
+            <state relative-caret-position="1102">
+              <caret line="202" column="0" lean-forward="false" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -88,7 +90,6 @@
       <list>
         <option value="$PROJECT_DIR$/file_system_model.py" />
         <option value="$PROJECT_DIR$/data_process.py" />
-        <option value="$PROJECT_DIR$/Resnet_link_model.py" />
         <option value="$PROJECT_DIR$/network_model.py" />
         <option value="$PROJECT_DIR$/calculate_min_max_model.py" />
         <option value="$PROJECT_DIR$/recut_file_model.py" />
@@ -96,6 +97,7 @@
         <option value="$PROJECT_DIR$/network_example.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/test_example.py" />
+        <option value="$PROJECT_DIR$/Resnet_link_model.py" />
         <option value="$PROJECT_DIR$/basic_model.py" />
       </list>
     </option>
@@ -364,7 +366,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="145">
           <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
-          <folding />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -416,7 +420,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -484,17 +488,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-377">
-          <caret line="9" column="8" lean-forward="false" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test_example.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2593">
+        <state relative-caret-position="2709">
           <caret line="103" column="63" lean-forward="false" selection-start-line="103" selection-start-column="63" selection-end-line="103" selection-end-column="63" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
@@ -502,10 +498,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1102">
+          <caret line="202" column="0" lean-forward="false" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/basic_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3451">
-          <caret line="187" column="15" lean-forward="false" selection-start-line="187" selection-start-column="15" selection-end-line="187" selection-end-column="15" />
+        <state relative-caret-position="422">
+          <caret line="75" column="21" lean-forward="false" selection-start-line="75" selection-start-column="21" selection-end-line="75" selection-end-column="21" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>

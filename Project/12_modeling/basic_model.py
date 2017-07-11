@@ -65,6 +65,26 @@ def batch_norm_layer(x, train_phase, scope_bn):
         normed = tf.nn.batch_normalization(x, mean, var, beta, gamma, 1e-3)
     return normed
 
+#dense layer
+#ver 1.0
+def dense_layer(input_layer, output_size, name, act=tf.nn.relu):
+    with tf.variable_scope(name):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, output_size], 'dense_weight')
+        b = bias_variable([output_size])
+        output = act(tf.matmul(input_layer, W) + b)
+    return output, [W]
+
+# score layer
+#ver 1.0
+def score_layer(input_layer, label_size):
+    with tf.variable_scope("score"):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, label_size], 'score_weight')
+        b = bias_variable([label_size])
+        output = tf.matmul(input_layer, W) + b
+    return output, [W]
+
 #get the correct number and accuracy
 #ver 1.0
 def corr_num_acc(labels, logits):
@@ -152,8 +172,7 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
             last_index = 0
             out_of_dataset = False
 
-        last_index, data, out_of_dataset = sequence_get_data(X_train, para_train, y_train, indexs, last_index,
-                                                             batch_size)
+        last_index, data, out_of_dataset = sequence_get_data(X_train, para_train, y_train, indexs, last_index,batch_size)
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
         _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)

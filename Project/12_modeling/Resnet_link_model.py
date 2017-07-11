@@ -201,15 +201,6 @@ def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
         output = tf.nn.dropout(act_out, keep_prob)
     return output, [W]
 
-# score layer
-def score_layer(input_layer, label_size):
-    with tf.variable_scope("score"):
-        input_size = input_layer.shape[-1]
-        W = weight_variable([input_size, label_size], 'score_weight')
-        b = bias_variable([label_size])
-        output = tf.matmul(input_layer, W) + b
-    return output, [W]
-
 #get the y_pred, define the whole net
 #architecture:
 #
