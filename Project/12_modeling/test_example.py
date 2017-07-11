@@ -25,13 +25,9 @@ keep_prob_v = 0.9569
 log_dir = 'logs/*********/'
 module_dir = 'modules/*********/'
 ########################################################
-
 max_step = train_file_size // batch_size
-
 loops = data_size // file_size
-
 log = ''
-
 del_and_create_dir(log_dir)
 del_and_create_dir(module_dir)
 
