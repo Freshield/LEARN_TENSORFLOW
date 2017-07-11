@@ -5,22 +5,7 @@ import time
 
 from data_process_model import *
 from file_system_model import *
-
-#show the processing
-#ver 1.0
-process_line = {
-    10:"[==========>]",
-    9: "[=========> ]",
-    8: "[========>  ]",
-    7: "[=======>   ]",
-    6: "[======>    ]",
-    5: "[=====>     ]",
-    4: "[====>      ]",
-    3: "[===>       ]",
-    2: "[==>        ]",
-    1: "[=>         ]",
-    0: "[>          ]"
-}
+from image_model import *
 
 #create weights
 #ver 1.0
