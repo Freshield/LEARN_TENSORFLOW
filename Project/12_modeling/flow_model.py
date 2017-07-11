@@ -18,6 +18,7 @@ def main_flow():
             print "Error number, please re-input"
             continue
         else:
+            #clear screen
             t = os.system('clear')
             main_flow_dic.get(flow_number)()
 
