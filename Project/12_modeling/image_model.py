@@ -35,4 +35,9 @@ deep_fish_logo = \
     "    #  //           =======       =======    //    //       ver 1.0#    \n" \
     "    ################################################################    \n"
 
-print deep_fish_logo
+#main screen
+#ver 1.0
+main_screen = \
+    "                         1. Train the Network                           \n" \
+    "                         2. Restore the Network                         \n" \
+    "                         3. Exit                                        \n"

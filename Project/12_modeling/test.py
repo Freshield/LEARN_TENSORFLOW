@@ -8,7 +8,7 @@ def interrupted(signum, frame):
 
 
 
-def wait_input(time, words='Please input your name:'):
+def timer_input(time, words='Please input your name:'):
     signal.signal(signal.SIGALRM, interrupted)
     signal.alarm(time)
 
@@ -22,7 +22,11 @@ def wait_input(time, words='Please input your name:'):
     print('Your name is:%s' % name)
     return name
 
-str = wait_input(5)
+def wait_input(words='Please input number to choose:'):
+    return raw_input(words)
+
+str = timer_input(5)
 print 'Received : ' + str
-exit()
+value = wait_input()
+print value
 print 'here'
