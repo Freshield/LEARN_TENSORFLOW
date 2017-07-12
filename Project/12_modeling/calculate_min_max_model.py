@@ -136,13 +136,14 @@ def cal_min_max(filename, savename, datasize, chunkSize):
                 total_min = mininum_values(total_min, min_values)
                 total_max = maxium_values(total_max, max_values)
 
-            # i += chunk.shape[0]
-            count += 1
-
-            if count % 10 == 0 and count != 0:
+            if count % 10 == 0:
                 span_time = time.time() - before_time
                 print "use %.2f second in 10 loop" % (span_time * 10)
                 print "need %.2f minutes for all loop" % (((total_loop - count) * span_time) / 60)
+                
+            # i += chunk.shape[0]
+            count += 1
+
 
         except StopIteration:
             print "stop"

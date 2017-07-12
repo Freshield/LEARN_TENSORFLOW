@@ -111,14 +111,15 @@ def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize):
                        delimiter=",")
             np.savetxt(savePath + "test_set_%d.csv" % count, test_set, delimiter=",")
 
+            if count % 10 == 0:
+                span_time = time.time() - before_time
+                print "use %.2f second in 10 loop" % (span_time * 10)
+                print "need %.2f minutes for all loop" % (((total_loop - count) * span_time) / 60)
+
             # i += chunk.shape[0]
             count += 1
             print count
 
-            if count % 10 == 0 and count != 0:
-                span_time = time.time() - before_time
-                print "use %.2f second in 10 loop" % (span_time * 10)
-                print "need %.2f minutes for all loop" % (((total_loop - count) * span_time) / 60)
 
 
         except StopIteration:

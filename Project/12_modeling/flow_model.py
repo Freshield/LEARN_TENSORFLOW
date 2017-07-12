@@ -2,6 +2,7 @@ import os
 
 from image_model import *
 from calculate_min_max_model import *
+from recut_file_model import *
 
 #################################################
 #parameter you should refill
@@ -153,27 +154,28 @@ def cal_min_max_flow():
                 return 'Back'
             else:
                 datasize = wait_input('Input the datasize or input e to exit:')
-                datasize = int(datasize)
-                if file_path == 'e':
+                if datasize == 'e':
                     return 'Back'
                 else:
+                    datasize = int(datasize)
                     chunksize = wait_input('Input the chunksize or input e to exit:')
-                    chunksize = int(chunksize)
-                    if file_path == 'e':
+                    if chunksize == 'e':
                         return 'Back'
                     else:
+                        chunksize = int(chunksize)
+                        print ''
                         print 'The file path is %s' % file_path
                         print 'The savename is %s' % savename
                         print 'The datasize is %s' % datasize
                         print 'The chunksize is %s' % chunksize
                         answer = wait_input('Input y to start calcualte or input e to exit:')
 
-                        if file_path == 'e':
+                        if answer == 'e':
                             return 'Back'
                         else:
                             cal_min_max(file_path, savename, datasize, chunksize)
 
-                            return 'Done and Save the min max at \n%s' % savename
+                            return 'Done and Save the min max at \n%s\n' % savename
     return 'Done'
 
 
@@ -190,33 +192,46 @@ def norm_recut_file_flow():
             print 'Error, file path do not exist'
             continue
         else:
-            savename = wait_input('Input the savename or input e to exit:')
+            savePath = wait_input('Input the savePath or input e to exit:')
 
-            if file_path == 'e':
+            if savePath == 'e':
                 return 'Back'
+            elif os.path.exists(savePath) != True:
+                print 'Error, save path do not exist'
+                continue
             else:
-                datasize = wait_input('Input the datasize or input e to exit:')
-                datasize = int(datasize)
-                if file_path == 'e':
+                minmax_name = wait_input('Input the minmax name or input e to exit:')
+
+                if minmax_name == 'e':
                     return 'Back'
+                elif os.path.exists(minmax_name) != True:
+                    print 'Error, minmax path do not exist'
+                    continue
                 else:
-                    chunksize = wait_input('Input the chunksize or input e to exit:')
-                    chunksize = int(chunksize)
-                    if file_path == 'e':
+                    datasize = wait_input('Input the datasize or input e to exit:')
+                    if datasize == 'e':
                         return 'Back'
                     else:
-                        print 'The file path is %s' % file_path
-                        print 'The savename is %s' % savename
-                        print 'The datasize is %s' % datasize
-                        print 'The chunksize is %s' % chunksize
-                        answer = wait_input('Input y to start calcualte or input e to exit:')
-
-                        if file_path == 'e':
+                        datasize = int(datasize)
+                        chunksize = wait_input('Input the chunksize or input e to exit:')
+                        if chunksize == 'e':
                             return 'Back'
                         else:
-                            cal_min_max(file_path, savename, datasize, chunksize)
+                            chunksize = int(chunksize)
+                            print ''
+                            print 'The filename is %s' % filename
+                            print 'The savePath is %s' % savePath
+                            print 'The minmax name is %s' % minmax_name
+                            print 'The datasize is %s' % datasize
+                            print 'The chunksize is %s' % chunksize
+                            answer = wait_input('Input y to start norm and recut or input e to exit:')
 
-                            return 'Done and Save the min max at \n%s' % savename
+                            if answer == 'e':
+                                return 'Back'
+                            else:
+                                norm_recut_dataset(filename,savePath,minmax_name,datasize,chunksize)
+
+                                return 'Done and Save the files at \n%s\n' % savePath
 
 
 
@@ -229,7 +244,7 @@ main_flow_dic = {
     1: train_flow,
     2: restore_flow,
     3: cal_min_max_flow,
-    4: exit,
+    4: norm_recut_file_flow,
     5: exit
 }
 
