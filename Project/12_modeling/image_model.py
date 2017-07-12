@@ -41,3 +41,11 @@ main_screen = \
     "                         1. Train the Network                           \n" \
     "                         2. Restore the Network                         \n" \
     "                         3. Exit                                        \n"
+
+#train screen
+#ver 1.0
+train_screen = \
+    "                         1. Show the Parameters                         \n" \
+    "                         2. Change the Parameters                       \n" \
+    "                         3. Train the Network                           \n" \
+    "                         4. Back                                        \n"
