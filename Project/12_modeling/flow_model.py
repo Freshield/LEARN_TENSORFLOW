@@ -149,7 +149,7 @@ def cal_min_max_flow():
         else:
             savename = wait_input('Input the savename or input e to exit:')
 
-            if file_path == 'e':
+            if savename == 'e':
                 return 'Back'
             else:
                 datasize = wait_input('Input the datasize or input e to exit:')
@@ -179,14 +179,14 @@ def cal_min_max_flow():
 
 #to norm and recut the file
 #ver 1.0
-def cal_min_max_flow():
+def norm_recut_file_flow():
     print deep_fish_logo
     while True:
-        file_path = wait_input('Input the file path or input e to exit:')
+        filename = wait_input('Input the filename or input e to exit:')
 
-        if file_path == 'e':
+        if filename == 'e':
             return 'Back'
-        elif os.path.exists(file_path) != True:
+        elif os.path.exists(filename) != True:
             print 'Error, file path do not exist'
             continue
         else:
