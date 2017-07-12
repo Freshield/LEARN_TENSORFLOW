@@ -5,7 +5,7 @@ from file_system_model import *
 
 #the parameter need fill
 #######################################################
-from network_example import *
+from network_model_example import *
 SPAN=[10]
 dir = '/media/freshield/SOFTWARE3/Ciena/raw/norm/'
 epochs = 100

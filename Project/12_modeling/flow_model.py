@@ -4,7 +4,7 @@ from image_model import *
 
 #################################################
 #parameter you should refill
-from test_example import *
+from train_model_example import *
 #################################################
 
 #wait the input and get the input number
