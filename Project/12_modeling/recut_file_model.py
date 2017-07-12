@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import time
 
 #split the dataset into three part:
 #training, validation, test
@@ -66,58 +67,62 @@ def get_values_from_array(array, num):
 
     return values
 
-#######################################################
-############## Main function ##########################
-#######################################################
+#recut the normalize and split the dataset
+#ver 1.0
+def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize):
+    #filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
+    #chunkSize = 1000
+    #savePath = '/media/freshield/LINUX/Ciena/CIENA/raw/norm/'
+    #minmax_name = '/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv'
 
-log_dir = '/media/freshield/LINUX/Ciena/CIENA/raw/'
+    reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
 
-filename = log_dir + 'FiberID_Data_noPCA.csv'
+    loop = True
+    # to do
+    # think about chunkSize 10000
+
+    total_loop = dataSize // chunkSize
+
+    i = 0
+    count = 0
+
+    minmax_array = pd.read_csv(minmax_name, header=None, dtype=np.float32).values
+
+    # get min and max
+    min_values = get_values_from_array(minmax_array, 0)
+    max_values = get_values_from_array(minmax_array, 1)
+
+    print 'begin to norm and recut the file'
+
+    while loop:
+        before_time = time.time()
+        try:
+            chunk = reader.get_chunk(chunkSize)
+
+            train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
+
+            # normalize dataset
+            train_set, _, _ = normalize_dataset(train_set, min_values, max_values)
+            validation_set, _, _ = normalize_dataset(validation_set, min_values, max_values)
+            test_set, _, _ = normalize_dataset(test_set, min_values, max_values)
+
+            np.savetxt(savePath + "train_set_%d.csv" % count, train_set, delimiter=",")
+            np.savetxt(savePath + "validation_set_%d.csv" % count, validation_set,
+                       delimiter=",")
+            np.savetxt(savePath + "test_set_%d.csv" % count, test_set, delimiter=",")
+
+            # i += chunk.shape[0]
+            count += 1
+            print count
+
+            if count % 10 == 0 and count != 0:
+                span_time = time.time() - before_time
+                print "use %.2f second in 10 loop" % (span_time * 10)
+                print "need %.2f minutes for all loop" % (((total_loop - count) * span_time) / 60)
 
 
-reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
+        except StopIteration:
+            print "stop"
+            break
 
-loop = True
-#to do
-#think about chunkSize 10000
-chunkSize = 1000
-i = 0
-count = 0
-
-array_file = log_dir + 'min_max.csv'
-array = pd.read_csv(array_file, header=None, dtype=np.float32).values
-
-# get min and max
-min_values = get_values_from_array(array, 0)
-max_values = get_values_from_array(array, 1)
-
-#before_time = time.time()
-while loop:
-    try:
-        chunk = reader.get_chunk(chunkSize)
-
-        train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
-
-        # normalize dataset
-        train_set, _, _ = normalize_dataset(train_set, min_values, max_values)
-        validation_set, _, _ = normalize_dataset(validation_set, min_values, max_values)
-        test_set, _, _ = normalize_dataset(test_set, min_values, max_values)
-
-        np.savetxt("/media/freshield/LINUX/Ciena/CIENA/raw/norm/train_set_%d.csv" % count, train_set, delimiter=",")
-        np.savetxt("/media/freshield/LINUX/Ciena/CIENA/raw/norm/validation_set_%d.csv" % count, validation_set, delimiter=",")
-        np.savetxt("/media/freshield/LINUX/Ciena/CIENA/raw/norm/test_set_%d.csv" % count, test_set, delimiter=",")
-
-
-        #i += chunk.shape[0]
-        count += 1
-        print count
-
-
-    except StopIteration:
-        print "stop"
-        break
-#span_time = time.time() - before_time
-#print "use %.2f second in 10 loop" % span_time
-#print "need %.2f minutes for all 600 loop" % (span_time * 60 / 60)
-#print train_total_min
-#print train_total_max
+#norm_recut_dataset('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000,100)

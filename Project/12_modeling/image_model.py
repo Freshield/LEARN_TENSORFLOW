@@ -40,7 +40,9 @@ deep_fish_logo = \
 main_screen = \
     "                         1. Train the Network                           \n" \
     "                         2. Restore the Network                         \n" \
-    "                         3. Exit                                        \n"
+    "                         3. Calculate the min and max                   \n" \
+    "                         4. Recut the files                             \n" \
+    "                         5. Exit                                        \n"
 
 #train screen
 #ver 1.0

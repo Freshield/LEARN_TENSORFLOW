@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import time
 
 
 # split the dataset into three part:
@@ -98,57 +99,62 @@ def maxium_values(values1, values2):
 
     return output
 
-######################################################################
-######################### Main function ##############################
-######################################################################
+#calculate and restore min and max
+#ver 1.0
+def cal_min_max(filename, savename, datasize, chunkSize):
+    #filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
+    #savename = "/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv"
 
-filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
+    reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
 
-reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
+    loop = True
+    #chunkSize = 10000
+    count = 0
 
-loop = True
-chunkSize = 10000
-i = 0
-count = 0
+    total_loop = datasize / chunkSize
 
-total_min, total_max = create_min_max()
+    total_min, total_max = create_min_max()
 
-while loop:
-    try:
+    print 'begin to calculate the min max value'
+    while loop:
+        before_time = time.time()
+        try:
 
-        print count
-        chunk = reader.get_chunk(chunkSize)
+            print count
+            chunk = reader.get_chunk(chunkSize)
 
-        train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
+            train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
 
-        # get min and max
-        min_values, max_values = get_min_max_values(train_set)
+            # get min and max
+            min_values, max_values = get_min_max_values(train_set)
 
-        if count == 0:
-            total_min = min_values
-            total_max = max_values
-        else:
-            #compare values
-            total_min = mininum_values(total_min, min_values)
-            total_max = maxium_values(total_max, max_values)
+            if count == 0:
+                total_min = min_values
+                total_max = max_values
+            else:
+                # compare values
+                total_min = mininum_values(total_min, min_values)
+                total_max = maxium_values(total_max, max_values)
 
-        #i += chunk.shape[0]
-        count += 1
-        #if count == 10:
-        #    break
+            # i += chunk.shape[0]
+            count += 1
 
-    except StopIteration:
-        print "stop"
-        break
-#span_time = time.time() - before_time
-#print "use %.2f second in 10 loop" % span_time
-#print "need %.2f minutes for all 600 loop" % (span_time * 60 / 60)
-#print i
-print total_max
-print total_min
+            if count % 10 == 0 and count != 0:
+                span_time = time.time() - before_time
+                print "use %.2f second in 10 loop" % (span_time * 10)
+                print "need %.2f minutes for all loop" % (((total_loop - count) * span_time) / 60)
 
-array = np.zeros([2,5], dtype=np.float32)
-add_values_to_array(total_min, array, 0)
-add_values_to_array(total_max, array, 1)
-np.savetxt("/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv", array, delimiter=",")
+        except StopIteration:
+            print "stop"
+            break
+
+    print total_max
+    print total_min
+
+    array = np.zeros([2, 5], dtype=np.float32)
+    add_values_to_array(total_min, array, 0)
+    add_values_to_array(total_max, array, 1)
+    np.savetxt(savename, array, delimiter=",")
+
+#cal_min_max('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000, 100)
 

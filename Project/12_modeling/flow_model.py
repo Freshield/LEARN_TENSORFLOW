@@ -1,6 +1,7 @@
 import os
 
 from image_model import *
+from calculate_min_max_model import *
 
 #################################################
 #parameter you should refill
@@ -29,7 +30,7 @@ def main_flow():
     while True:
         flow_number = wait_input()
         flow_number = int(flow_number)
-        if flow_number < 1 or flow_number > 3:
+        if flow_number < 1 or flow_number > 5:
             print "Error number, please re-input"
             continue
         else:
@@ -38,9 +39,14 @@ def main_flow():
             back_value = main_flow_dic.get(flow_number)()
             if back_value == 'OK':
                 break
+            elif back_value == 'Back' or back_value == "Done":
+                t = os.system('clear')
+                print deep_fish_logo + main_screen
+                continue
             else:
                 t = os.system('clear')
                 print deep_fish_logo + main_screen
+                print back_value
                 continue
 
 
@@ -118,7 +124,7 @@ def change_parameters(para_dic):
                     continue
                 else:
                     para_dic[para_name] = para_value
-                    return 'Changed'
+                    return 'Changed the parameters'
 
 
 
@@ -128,12 +134,103 @@ def change_parameters(para_dic):
 def restore_flow():
     print deep_fish_logo + "restore flow"
 
+#to calculate the min and max value
+#ver 1.0
+def cal_min_max_flow():
+    print deep_fish_logo
+    while True:
+        file_path = wait_input('Input the file path or input e to exit:')
+
+        if file_path == 'e':
+            return 'Back'
+        elif os.path.exists(file_path) != True:
+            print 'Error, file path do not exist'
+            continue
+        else:
+            savename = wait_input('Input the savename or input e to exit:')
+
+            if file_path == 'e':
+                return 'Back'
+            else:
+                datasize = wait_input('Input the datasize or input e to exit:')
+                datasize = int(datasize)
+                if file_path == 'e':
+                    return 'Back'
+                else:
+                    chunksize = wait_input('Input the chunksize or input e to exit:')
+                    chunksize = int(chunksize)
+                    if file_path == 'e':
+                        return 'Back'
+                    else:
+                        print 'The file path is %s' % file_path
+                        print 'The savename is %s' % savename
+                        print 'The datasize is %s' % datasize
+                        print 'The chunksize is %s' % chunksize
+                        answer = wait_input('Input y to start calcualte or input e to exit:')
+
+                        if file_path == 'e':
+                            return 'Back'
+                        else:
+                            cal_min_max(file_path, savename, datasize, chunksize)
+
+                            return 'Done and Save the min max at \n%s' % savename
+    return 'Done'
+
+
+#to norm and recut the file
+#ver 1.0
+def cal_min_max_flow():
+    print deep_fish_logo
+    while True:
+        file_path = wait_input('Input the file path or input e to exit:')
+
+        if file_path == 'e':
+            return 'Back'
+        elif os.path.exists(file_path) != True:
+            print 'Error, file path do not exist'
+            continue
+        else:
+            savename = wait_input('Input the savename or input e to exit:')
+
+            if file_path == 'e':
+                return 'Back'
+            else:
+                datasize = wait_input('Input the datasize or input e to exit:')
+                datasize = int(datasize)
+                if file_path == 'e':
+                    return 'Back'
+                else:
+                    chunksize = wait_input('Input the chunksize or input e to exit:')
+                    chunksize = int(chunksize)
+                    if file_path == 'e':
+                        return 'Back'
+                    else:
+                        print 'The file path is %s' % file_path
+                        print 'The savename is %s' % savename
+                        print 'The datasize is %s' % datasize
+                        print 'The chunksize is %s' % chunksize
+                        answer = wait_input('Input y to start calcualte or input e to exit:')
+
+                        if file_path == 'e':
+                            return 'Back'
+                        else:
+                            cal_min_max(file_path, savename, datasize, chunksize)
+
+                            return 'Done and Save the min max at \n%s' % savename
+
+
+
+
+
+
 #The main flow dictionary
 #ver 1.0
 main_flow_dic = {
     1: train_flow,
     2: restore_flow,
-    3: exit
+    3: cal_min_max_flow,
+    4: exit,
+    5: exit
 }
 
 #The train flow dictionary
