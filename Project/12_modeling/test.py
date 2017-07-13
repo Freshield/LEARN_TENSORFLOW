@@ -25,8 +25,12 @@ def timer_input(time, words='Please input your name:'):
 def wait_input(words='Please input number to choose:'):
     return raw_input(words)
 
-str = timer_input(5)
+str = timer_input(2)
 print 'Received : ' + str
 value = wait_input()
 print value
 print 'here'
+
+def f1():
+    print 'hello'
+    return 0

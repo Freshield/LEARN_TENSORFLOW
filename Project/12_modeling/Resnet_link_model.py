@@ -288,3 +288,26 @@ def inference(input_layer, para_data, train_phase, keep_prob):
     parameters[0:0] = score_weight
 
     return y_pred, parameters
+
+
+#read the dataset from file
+#needn't changed, just reply on reshape_dataset
+#ver 1.0
+def prepare_dataset(dir, file, SPAN):
+    filename = dir + file
+
+    dataset = pd.read_csv(filename, header=None)
+    """
+    #needn't the split cause the data file was splited
+    test_dataset_size = int(radio * dataset.shape[0])
+
+    cases = {
+        'train':dataset.values[0:-test_dataset_size * 2],
+        'validation':dataset.values[-test_dataset_size * 2:-test_dataset_size],
+        'test':dataset.values[-test_dataset_size:len(dataset)]
+    }
+
+    output = cases[model]
+    """
+    X_data, para_data, y_data = reshape_dataset(dataset.values, SPAN)
+    return X_data, para_data, y_data

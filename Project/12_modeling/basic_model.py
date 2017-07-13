@@ -7,6 +7,8 @@ from data_process_model import *
 from file_system_model import *
 from image_model import *
 
+import Link_CNN_model as lc
+
 #create weights
 #ver 1.0
 def weight_variable(shape, name):
@@ -29,6 +31,13 @@ def conv2d(x, W, stride, padding):
   """conv2d returns a 2d convolution layer with full stride."""
   return tf.nn.conv2d(x, W, strides=[1, stride, stride, 1], padding=padding)
 
+
+# for create the pooling
+#ver 1.0
+def max_pool_2x2(x):
+    """max_pool_2x2 downsamples a feature map by 2X."""
+    return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
+                          strides=[1, 2, 2, 1], padding='SAME')
 
 # for create batch norm layer
 #ver 1.0
@@ -59,6 +68,34 @@ def dense_layer(input_layer, output_size, name, act=tf.nn.relu):
         b = bias_variable([output_size])
         output = act(tf.matmul(input_layer, W) + b)
     return output, [W]
+
+
+# conv-bn-relu-maxpooling
+#ver 1.0
+def conv_bn_pool_layer(input_layer, filter_depth, train_phase, name, filter_size=3):
+    input_depth = input_layer.shape[-1]
+    with tf.variable_scope(name):
+        filter = weight_variable([filter_size, filter_size, input_depth, filter_depth], "filter")
+        biases = bias_variable([filter_depth])
+        conv_output = conv2d(input_layer, filter, 1, "SAME") + biases
+        bn_output = batch_norm_layer(conv_output, train_phase, "conv_bn")
+        act_output = tf.nn.relu(bn_output)
+        output = max_pool_2x2(act_output)
+    return output, filter
+
+# fully connected layer
+# fc-bn-relu-drop
+#ver 1.0
+def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
+    with tf.variable_scope(name):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, output_size], 'fc_weight')
+        b = bias_variable([output_size])
+        fc_out = tf.matmul(input_layer, W) + b
+        bn_out = batch_norm_layer(fc_out, train_phase, "fc_bn")
+        act_out = tf.nn.relu(bn_out)
+        output = tf.nn.dropout(act_out, keep_prob)
+    return output, W
 
 # score layer
 #ver 1.0
@@ -135,10 +172,10 @@ def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, p
 
 #train loop in one file
 #ver 1.0
-def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v):
+def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v, log=None):
     input_x, para_pl, input_y, train_phase, keep_prob, train_step, loss_value, accuracy = placeholders
 
-    X_train, para_train, y_train = prepare_dataset(dir, train_file, SPAN)
+    X_train, para_train, y_train = lc.prepare_dataset(dir, train_file, SPAN)
 
     indexs = get_random_seq_indexs(X_train)
     out_of_dataset = False
@@ -161,6 +198,14 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
         _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
+
+        #to show the step
+        if log != None:
+            words = 'step '
+            words += process_line[int(10 * (float(step) / float(max_step)))]
+            words += '[%d/%d] ' % (step, max_step)
+            words += 'loss in step %d is %f, acc is %.3f' % (step, loss_v, acc)
+            words_log_print(words, log)
 
         loop_loss_v += loss_v
         loop_acc += acc
@@ -232,7 +277,7 @@ def words_log_print_loop(loop, loops, loop_loss_v, loop_acc, log ):
 
 # do the evaluation for the last x files
 #ver 1.0
-def evaluate_last_x_files(number, eval_parameters):
+def evaluate_last_x_files(number, eval_parameters, dir):
 
     loop, loop_indexs, SPAN, sess, batch_size, correct_num, placeholders, log = eval_parameters
 
@@ -245,8 +290,8 @@ def evaluate_last_x_files(number, eval_parameters):
         train_file = "train_set_%d.csv" % loop_indexs[loop - 10 + step]
         validation_file = "validation_set_%d.csv" % loop_indexs[loop - 10 + step]
 
-        X_train, para_train, y_train = prepare_dataset(dir, train_file, SPAN)
-        X_valid, para_valid, y_valid = prepare_dataset(dir, validation_file, SPAN)
+        X_train, para_train, y_train = lc.prepare_dataset(dir, train_file, SPAN)
+        X_valid, para_valid, y_valid = lc.prepare_dataset(dir, validation_file, SPAN)
 
         step_train_acc = do_eval(sess, X_train, para_train, y_train, batch_size, correct_num, placeholders)
         train_acc += step_train_acc
@@ -265,14 +310,14 @@ def evaluate_last_x_files(number, eval_parameters):
 #do the evalute for all of the test files
 #ver 1.0
 def evaluate_test(test_parameter):
-    loops, epoch, SPAN, sess, batch_size, correct_num, placeholders, log = test_parameter
+    loops, epoch, SPAN, sess, batch_size, correct_num, placeholders, log, dir = test_parameter
     # each epoch do a test evaluation
     test_acc = 0.0
     print "step",
     for test_loop in xrange(loops):
         print test_loop,
         test_file = "test_set_%d.csv" % test_loop
-        X_test, para_test, y_test = prepare_dataset(dir, test_file, SPAN)
+        X_test, para_test, y_test = lc.prepare_dataset(dir, test_file, SPAN)
         loop_test_acc = do_eval(sess, X_test, para_test, y_test, batch_size, correct_num, placeholders)
         test_acc += loop_test_acc
     test_acc /= loops

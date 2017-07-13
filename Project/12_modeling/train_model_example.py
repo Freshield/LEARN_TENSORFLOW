@@ -1,18 +1,20 @@
 import time
-from basic_model import *
+#from basic_model import *
 from data_process_model import *
 from file_system_model import *
 
 #the parameter need fill
 #######################################################
-from network_model_example import *
+#from network_model_example import *
 SPAN=[10]
-dir = '/media/freshield/SOFTWARE3/Ciena/raw/norm/'
-epochs = 100
-data_size = 600000
+dir = '/home/freshield/Ciena_data/dataset_10k/model/'
+epochs = 20
+data_size = 10000
 file_size = 1000
 #how many loops do an evaluation
-loop_eval_num = 50
+loop_eval_num = 5
+#how many file do the valid
+eval_last_num = 10
 batch_size = 100
 train_file_size = 800
 valid_file_size = 100
@@ -22,8 +24,8 @@ reg = 0.000067
 lr_rate = 0.002
 lr_decay = 0.99
 keep_prob_v = 0.9569
-log_dir = 'logs/*********/'
-module_dir = 'modules/*********/'
+log_dir = 'logs/Link_CNN/'
+module_dir = 'modules/Link_CNN/'
 ########################################################
 
 para_whole_dataset_dic = {
@@ -42,7 +44,8 @@ para_whole_dataset_dic = {
     'lr_decay' : lr_decay,
     'keep_prob_v' : keep_prob_v,
     'log_dir' : log_dir,
-    'module_dir' : module_dir
+    'module_dir' : module_dir,
+    'eval_last_num' : eval_last_num
 }
 
 #retrive the para from dic
@@ -63,13 +66,24 @@ def get_whole_dataset_para(para_dic):
     keep_prob_v = para_dic['keep_prob_v']
     log_dir = para_dic['log_dir']
     module_dir = para_dic['module_dir']
-    return SPAN,dir,epochs,data_size,file_size,loop_eval_num,batch_size,train_file_size,valid_file_size,test_file_size,reg,lr_rate,keep_prob_v,log_dir,module_dir
+    eval_last_num = para_dic['eval_last_num']
+    return SPAN,dir,epochs,data_size,file_size,loop_eval_num,batch_size,train_file_size,valid_file_size,test_file_size,reg,lr_rate,keep_prob_v,log_dir,module_dir,eval_last_num
 
 #train the model
 #ver 1.0
-def train_whole_dataset_begin(para_dic):
+def train_whole_dataset_begin(para_dic, model_name):
+
+    #choose model
+    if model_name == 'resnet_link':
+        from Resnet_link_model import *
+    elif model_name == 'link_cnn':
+        from Link_CNN_model import *
+    else:
+        print "Error model name"
+        return 'error'
+
     #get all para first
-    SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir = get_whole_dataset_para(para_dic)
+    SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir, eval_last_num = get_whole_dataset_para(para_dic)
 
     max_step = train_file_size // batch_size
     loops = data_size // file_size
@@ -122,20 +136,20 @@ def train_whole_dataset_begin(para_dic):
 
                     words_log_print_loop(loop, loops, loop_loss_v, loop_acc, log)
 
-                    # each 50 loop, do evaluation
+                    # each loop_eval_num, do evaluation
                     if (loop != 0 and loop % loop_eval_num == 0) or loop == loops - 1:
                         # show the time
                         time_show(before_time, loop_eval_num, loop, loops, epoch, epochs, log)
                         # store the parameter first
                         eval_parameters = (loop, loop_indexs, SPAN, sess, batch_size, correct_num, placeholders, log)
-                        # here only evaluate last 10 files
-                        evaluate_last_x_files(10, eval_parameters)
+                        # here only evaluate last eval_last_num files
+                        evaluate_last_x_files(eval_last_num, eval_parameters, dir)
 
                 # each epoch decay the lr_rate
                 lr_rate *= lr_decay
 
                 # store the parameter first
-                test_parameter = loops, epoch, SPAN, sess, batch_size, correct_num, placeholders, log
+                test_parameter = loops, epoch, SPAN, sess, batch_size, correct_num, placeholders, log, dir
                 # do the test evaluate
                 test_acc = evaluate_test(test_parameter)
 

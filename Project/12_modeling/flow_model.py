@@ -257,4 +257,4 @@ train_flow_dic = {
     4: return_Back
 }
 
-main_flow()
+train_whole_dataset_begin(para_whole_dataset_dic, 'link_cnn')

@@ -21,3 +21,8 @@ def test():
             return 0
 
 test()
+
+def f2():
+    print f1()
+
+f2()

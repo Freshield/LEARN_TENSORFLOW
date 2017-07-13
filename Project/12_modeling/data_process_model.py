@@ -2,8 +2,6 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 
-from network_model_example import *
-
 #split the dataset into three part:
 #training, validation, test
 #ver 1.0
@@ -80,24 +78,3 @@ def num_to_one_hot(dataset, category_num):
     one_hot_dataset = np.zeros([lines, category_num], dtype=np.float32)
     one_hot_dataset[np.arange(lines), dataset] = 1
     return one_hot_dataset
-
-#read the dataset from file
-#ver 1.0
-def prepare_dataset(dir, file, SPAN):
-    filename = dir + file
-
-    dataset = pd.read_csv(filename, header=None)
-    """
-    #needn't the split cause the data file was splited
-    test_dataset_size = int(radio * dataset.shape[0])
-
-    cases = {
-        'train':dataset.values[0:-test_dataset_size * 2],
-        'validation':dataset.values[-test_dataset_size * 2:-test_dataset_size],
-        'test':dataset.values[-test_dataset_size:len(dataset)]
-    }
-
-    output = cases[model]
-    """
-    X_data, para_data, y_data = reshape_dataset(dataset.values, SPAN)
-    return X_data, para_data, y_data
