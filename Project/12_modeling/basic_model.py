@@ -201,7 +201,7 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
         if log != None:
             words = 'step '
             words += process_line[int(10 * (float(step) / float(max_step)))]
-            words += '[%d/%d] ' % (step, max_step)
+            words += '[%d/%d] ' % (step, max_step-1)
             words += 'loss in step %d is %f, acc is %.3f' % (step, loss_v, acc)
             words_log_print(words, log)
 
@@ -261,7 +261,7 @@ def words_log_print(words, log):
 def words_log_print_epoch(epoch, epochs, log ):
     words = "\nepoch "
     words += process_line[int(10 * (float(epoch) / float(epochs)))]
-    words += "[%d/%d]\n" % (epoch, epochs)
+    words += "[%d/%d]\n" % (epoch, epochs-1)
     words_log_print(words, log)
 
 #show the words and add to log for loop
@@ -269,7 +269,7 @@ def words_log_print_epoch(epoch, epochs, log ):
 def words_log_print_loop(loop, loops, loop_loss_v, loop_acc, log ):
     words = "loop "
     words += process_line[int(10 * (float(loop) / float(loops)))]
-    words += "[%d/%d] " % (loop, loops)
+    words += "[%d/%d] " % (loop, loops-1)
     words += 'loss in loop %d is %f, acc is %.3f' % (loop, loop_loss_v, loop_acc)
     words_log_print(words, log)
 

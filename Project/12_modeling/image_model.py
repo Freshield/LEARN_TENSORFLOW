@@ -2,17 +2,16 @@
 #show the processing
 #ver 1.0
 process_line = {
-    10:"[==========>]",
-    9: "[=========> ]",
-    8: "[========>  ]",
-    7: "[=======>   ]",
-    6: "[======>    ]",
-    5: "[=====>     ]",
-    4: "[====>      ]",
-    3: "[===>       ]",
-    2: "[==>        ]",
-    1: "[=>         ]",
-    0: "[>          ]"
+    9: "[=========>]",
+    8: "[========> ]",
+    7: "[=======>  ]",
+    6: "[======>   ]",
+    5: "[=====>    ]",
+    4: "[====>     ]",
+    3: "[===>      ]",
+    2: "[==>       ]",
+    1: "[=>        ]",
+    0: "[>         ]"
 }
 
 #The logo
@@ -51,3 +50,10 @@ train_screen = \
     "                         2. Change the Parameters                       \n" \
     "                         3. Train the Network                           \n" \
     "                         4. Back                                        \n"
+
+#train start screen
+#ver 1.0
+train_start_screen = \
+    "                         1. Use Link Parameter CNN model                \n" \
+    "                         2. Use Resnet Link Parameter model             \n" \
+    "                         3. Back                                        \n"

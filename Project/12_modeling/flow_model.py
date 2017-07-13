@@ -62,9 +62,8 @@ def train_flow():
             t = os.system('clear')
             if flow_number == 1:
                 back_value = train_flow_dic.get(flow_number)(para_whole_dataset_dic)
+                wait_input('Input c to continue:')
             elif flow_number == 2:
-                back_value = train_flow_dic.get(flow_number)(para_whole_dataset_dic)
-            elif flow_number == 3:
                 back_value = train_flow_dic.get(flow_number)(para_whole_dataset_dic)
             else:
                 back_value = train_flow_dic.get(flow_number)()
@@ -82,7 +81,6 @@ def train_flow():
 def show_parameters(para_dic):
     for (k, v) in para_dic.items():
         print '%s : %s' % (k, v)
-    wait_input('Input c to continue:')
     return 'Done'
 
 #change parameters
@@ -123,6 +121,39 @@ def change_parameters(para_dic):
                     para_dic[para_name] = para_value
                     return 'Changed the parameters'
 
+#train start flow
+#ver 1.0
+def train_start_flow():
+    print deep_fish_logo + train_start_screen
+    while True:
+        flow_number = wait_input("Please input the Model number:")
+        flow_number = int(flow_number)
+        if flow_number < 1 or flow_number > 3:
+            print "Error number, please re-input"
+            continue
+        else:
+            # clear screen
+            t = os.system('clear')
+            back_value = model_dic[flow_number]
+            if back_value == 'OK':
+                return 'OK'
+            elif back_value == 'Back':
+                return 'Back'
+            else:
+                t = os.system('clear')
+                print deep_fish_logo
+                print "The model you choose is %s" % back_value
+                show_parameters(para_whole_dataset_dic)
+                print
+                while True:
+                    answer = wait_input('Input y to start train or input e to go back:')
+                    if answer == 'e':
+                        return 'Back to train flow'
+                    elif answer == 'y':
+                        train_whole_dataset_begin(para_whole_dataset_dic, back_value)
+                        return 'OK'
+                    else:
+                        print 'Error input, please re-input'
 
 
 
@@ -249,6 +280,16 @@ main_flow_dic = {
 train_flow_dic = {
     1: show_parameters,
     2: change_parameters,
-    3: train_whole_dataset_begin,
+    3: train_start_flow,
     4: return_Back
 }
+
+#The model dic
+#ver 1.0
+model_dic = {
+    1 : 'link_cnn',
+    2 : 'resnet_link',
+    3 : 'Back'
+}
+
+main_flow()
