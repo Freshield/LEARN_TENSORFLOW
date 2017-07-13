@@ -79,7 +79,7 @@ def conv_bn_pool_layer(input_layer, filter_depth, train_phase, name, filter_size
         bn_output = batch_norm_layer(conv_output, train_phase, "conv_bn")
         act_output = tf.nn.relu(bn_output)
         output = max_pool_2x2(act_output)
-    return output, filter
+    return output, [filter]
 
 
 #the fully connect layer
@@ -104,7 +104,7 @@ def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
         bn_out = batch_norm_layer(fc_out, train_phase, "fc_bn")
         act_out = tf.nn.relu(bn_out)
         output = tf.nn.dropout(act_out, keep_prob)
-    return output, W
+    return output, [W]
 
 # score layer
 #ver 1.0

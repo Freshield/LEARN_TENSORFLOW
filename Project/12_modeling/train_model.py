@@ -104,7 +104,7 @@ def train_whole_dataset_begin(para_dic, model_name):
             keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
             # logits
-            y_pred, parameters = lc.inference(input_x, para_pl, train_phase, keep_prob)
+            y_pred, parameters = model.inference(input_x, para_pl, train_phase, keep_prob)
 
             # loss
             loss_value = loss(input_y, y_pred, reg, parameters)
