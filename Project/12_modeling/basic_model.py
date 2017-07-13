@@ -1,13 +1,11 @@
-import tensorflow as tf
-import numpy as np
 import time
+import numpy as np
 
 
-from data_process_model import *
 from file_system_model import *
 from image_model import *
+import data_process_model as dpm
 
-import Link_CNN_model as lc
 
 #create weights
 #ver 1.0
@@ -147,7 +145,7 @@ def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, p
     indexs = np.arange(X_dataset.shape[0])
 
     for step in xrange(num_epoch):
-        index, data, _ = sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, index, batch_size)
+        index, data, _ = dpm.sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, index, batch_size)
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
 
@@ -161,7 +159,7 @@ def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, p
 
     if rest_data_size != 0:
         # the rest data
-        index, data, _ = sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
+        index, data, _ = dpm.sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
 
@@ -175,9 +173,9 @@ def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, p
 def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_size, keep_prob_v, log=None):
     input_x, para_pl, input_y, train_phase, keep_prob, train_step, loss_value, accuracy = placeholders
 
-    X_train, para_train, y_train = lc.prepare_dataset(dir, train_file, SPAN)
+    X_train, para_train, y_train = dpm.prepare_dataset(dir, train_file, SPAN)
 
-    indexs = get_random_seq_indexs(X_train)
+    indexs = dpm.get_random_seq_indexs(X_train)
     out_of_dataset = False
     last_index = 0
 
@@ -190,11 +188,11 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
         # should not happen
         if out_of_dataset == True:
             print "out of dataset"
-            indexs = get_random_seq_indexs(X_train)
+            indexs = dpm.get_random_seq_indexs(X_train)
             last_index = 0
             out_of_dataset = False
 
-        last_index, data, out_of_dataset = sequence_get_data(X_train, para_train, y_train, indexs, last_index,batch_size)
+        last_index, data, out_of_dataset = dpm.sequence_get_data(X_train, para_train, y_train, indexs, last_index,batch_size)
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: True, keep_prob: keep_prob_v}
         _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
@@ -290,8 +288,8 @@ def evaluate_last_x_files(number, eval_parameters, dir):
         train_file = "train_set_%d.csv" % loop_indexs[loop - 10 + step]
         validation_file = "validation_set_%d.csv" % loop_indexs[loop - 10 + step]
 
-        X_train, para_train, y_train = lc.prepare_dataset(dir, train_file, SPAN)
-        X_valid, para_valid, y_valid = lc.prepare_dataset(dir, validation_file, SPAN)
+        X_train, para_train, y_train = dpm.prepare_dataset(dir, train_file, SPAN)
+        X_valid, para_valid, y_valid = dpm.prepare_dataset(dir, validation_file, SPAN)
 
         step_train_acc = do_eval(sess, X_train, para_train, y_train, batch_size, correct_num, placeholders)
         train_acc += step_train_acc
@@ -317,7 +315,7 @@ def evaluate_test(test_parameter):
     for test_loop in xrange(loops):
         print test_loop,
         test_file = "test_set_%d.csv" % test_loop
-        X_test, para_test, y_test = lc.prepare_dataset(dir, test_file, SPAN)
+        X_test, para_test, y_test = dpm.prepare_dataset(dir, test_file, SPAN)
         loop_test_acc = do_eval(sess, X_test, para_test, y_test, batch_size, correct_num, placeholders)
         test_acc += loop_test_acc
     test_acc /= loops

@@ -22,7 +22,10 @@ def test():
 
 test()
 
+from test import *
+
 def f2():
     print f1()
+    print model
 
 f2()

@@ -1,7 +1,5 @@
-import time
-#from basic_model import *
-from data_process_model import *
 from file_system_model import *
+from basic_model import *
 
 #the parameter need fill
 #######################################################
@@ -75,12 +73,17 @@ def train_whole_dataset_begin(para_dic, model_name):
 
     #choose model
     if model_name == 'resnet_link':
-        from Resnet_link_model import *
+        import Resnet_link_model as rl
+        model = rl
     elif model_name == 'link_cnn':
-        from Link_CNN_model import *
+        import Link_CNN_model as lc
+        model = lc
     else:
         print "Error model name"
         return 'error'
+
+
+    dpm.model = model
 
     #get all para first
     SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir, eval_last_num = get_whole_dataset_para(para_dic)
@@ -101,7 +104,7 @@ def train_whole_dataset_begin(para_dic, model_name):
             keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
             # logits
-            y_pred, parameters = inference(input_x, para_pl, train_phase, keep_prob)
+            y_pred, parameters = lc.inference(input_x, para_pl, train_phase, keep_prob)
 
             # loss
             loss_value = loss(input_y, y_pred, reg, parameters)
@@ -123,7 +126,7 @@ def train_whole_dataset_begin(para_dic, model_name):
                 # show the epoch num
                 words_log_print_epoch(epoch, epochs, log)
 
-                loop_indexs = get_file_random_seq_indexs(loops)
+                loop_indexs = dpm.get_file_random_seq_indexs(loops)
 
                 # caution loop is not in sequence
                 for loop in xrange(loops):

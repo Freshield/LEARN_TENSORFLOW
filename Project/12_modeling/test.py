@@ -34,3 +34,5 @@ print 'here'
 def f1():
     print 'hello'
     return 0
+
+model = 233
