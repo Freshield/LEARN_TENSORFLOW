@@ -81,6 +81,17 @@ def conv_bn_pool_layer(input_layer, filter_depth, train_phase, name, filter_size
         output = max_pool_2x2(act_output)
     return output, filter
 
+
+#the fully connect layer
+#ver 1.0
+def fc_layer(input_layer, label_size):
+    with tf.variable_scope('fc'):
+        input_size = input_layer.shape[-1]
+        W = weight_variable([input_size, label_size], 'fc_weight')
+        b = bias_variable([label_size])
+        output = tf.matmul(input_layer, W) + b
+    return output, [W]
+
 # fully connected layer
 # fc-bn-relu-drop
 #ver 1.0

@@ -1,8 +1,7 @@
-import tensorflow as tf
+import basic_model as bm
+import data_process_model as dpm
 import numpy as np
-
-from data_process_model import *
-from basic_model import *
+import tensorflow as tf
 
 
 #reshape the dataset for CNN
@@ -19,7 +18,7 @@ def reshape_dataset(dataset, SPAN):
     para_data = dataset[:, 6200:6241]
 
     output_data = dataset[:, 6240 + SPAN[0]].astype(int)
-    output_data = num_to_one_hot(output_data, 3)
+    output_data = dpm.num_to_one_hot(output_data, 3)
 
     return input_data, para_data, output_data
 
@@ -32,11 +31,11 @@ def bn_relu_conv_same_layer(input_layer, filter_size, filter_depth, train_phase,
     with tf.variable_scope(name):
         with tf.variable_scope('brc_s'):
             input_depth = input_layer.shape[-1]
-            bn_layer = batch_norm_layer(input_layer, train_phase, 'bn')
+            bn_layer = bm.batch_norm_layer(input_layer, train_phase, 'bn')
             relu_layer = tf.nn.relu(bn_layer, 'relu')
-            filter = weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
-            biases = bias_variable([filter_depth])
-            conv_layer = conv2d(relu_layer, filter, 1, 'SAME') + biases
+            filter = bm.weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
+            biases = bm.bias_variable([filter_depth])
+            conv_layer = bm.conv2d(relu_layer, filter, 1, 'SAME') + biases
     return conv_layer, filter
 
 #bn->relu->conv
@@ -50,11 +49,11 @@ def bn_relu_conv_half_layer(input_layer, filter_size, filter_depth, train_phase,
     with tf.variable_scope(name):
         with tf.variable_scope('brc_h'):
             input_depth = input_layer.shape[-1]
-            bn_layer = batch_norm_layer(input_layer, train_phase, 'bn')
+            bn_layer = bm.batch_norm_layer(input_layer, train_phase, 'bn')
             relu_layer = tf.nn.relu(bn_layer, 'relu')
-            filter = weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
-            biases = bias_variable([filter_depth])
-            conv_layer = conv2d(relu_layer, filter, 2, 'VALID') + biases
+            filter = bm.weight_variable([filter_size, filter_size, input_depth, filter_depth], 'filter')
+            biases = bm.bias_variable([filter_depth])
+            conv_layer = bm.conv2d(relu_layer, filter, 2, 'VALID') + biases
     return conv_layer, filter
 
 #resnet basic block
@@ -177,30 +176,6 @@ def resnet_layer(input_layer, layer_depth, train_phase, name):
     parameters[0:0] = p2
     return layer2, parameters
 
-#the fully connect layer
-#ver 1.0
-def fc_layer(input_layer, label_size):
-    with tf.variable_scope('fc'):
-        input_size = input_layer.shape[-1]
-        W = weight_variable([input_size, label_size], 'fc_weight')
-        b = bias_variable([label_size])
-        output = tf.matmul(input_layer, W) + b
-    return output, [W]
-
-
-# fully connected layer
-# fc-bn-relu-drop
-def fc_bn_drop_layer(input_layer, output_size, train_phase, keep_prob, name):
-    with tf.variable_scope(name):
-        input_size = input_layer.shape[-1]
-        W = weight_variable([input_size, output_size], 'fc_weight')
-        b = bias_variable([output_size])
-        fc_out = tf.matmul(input_layer, W) + b
-        bn_out = batch_norm_layer(fc_out, train_phase, "fc_bn")
-        act_out = tf.nn.relu(bn_out)
-        output = tf.nn.dropout(act_out, keep_prob)
-    return output, [W]
-
 #get the y_pred, define the whole net
 #architecture:
 #
@@ -239,10 +214,10 @@ def inference(input_layer, para_data, train_phase, keep_prob):
 
     #input[N,32,100,3],output[N,32,104,64]
     with tf.variable_scope('preprocess'):
-        bn_input = batch_norm_layer(input_layer, train_phase, 'bn_input')
-        filter = weight_variable([3,3,input_depth,64], 'filter_input')
-        biases = bias_variable([64])
-        conv_input = conv2d(bn_input, filter, 1, 'SAME') + biases
+        bn_input = bm.batch_norm_layer(input_layer, train_phase, 'bn_input')
+        filter = bm.weight_variable([3,3,input_depth,64], 'filter_input')
+        biases = bm.bias_variable([64])
+        conv_input = bm.conv2d(bn_input, filter, 1, 'SAME') + biases
 
     #input[N,32,104,64],output[N,32,104,128]
     #first layer not change the depth
@@ -273,41 +248,18 @@ def inference(input_layer, para_data, train_phase, keep_prob):
 
     #fc layer
     #input[N,4*9*1024],output[N,512]
-    fc1, p_fc = fc_layer(avg_pool_flat, 512)
+    fc1, p_fc = bm.fc_layer(avg_pool_flat, 512)
     parameters[0:0] = p_fc
 
     # link the para_data(N,556)
     fc1_link = tf.concat([fc1, para_data], axis=1)
 
     # fc layer2(N,256)
-    fc2, fc_weight2 = fc_bn_drop_layer(fc1_link, 256, train_phase, keep_prob, "fc2")
+    fc2, fc_weight2 = bm.fc_bn_drop_layer(fc1_link, 256, train_phase, keep_prob, "fc2")
     parameters[0:0] = fc_weight2
 
     # score layer
-    y_pred, score_weight = score_layer(fc2, 3)
+    y_pred, score_weight = bm.score_layer(fc2, 3)
     parameters[0:0] = score_weight
 
     return y_pred, parameters
-
-
-#read the dataset from file
-#needn't changed, just reply on reshape_dataset
-#ver 1.0
-def prepare_dataset(dir, file, SPAN):
-    filename = dir + file
-
-    dataset = pd.read_csv(filename, header=None)
-    """
-    #needn't the split cause the data file was splited
-    test_dataset_size = int(radio * dataset.shape[0])
-
-    cases = {
-        'train':dataset.values[0:-test_dataset_size * 2],
-        'validation':dataset.values[-test_dataset_size * 2:-test_dataset_size],
-        'test':dataset.values[-test_dataset_size:len(dataset)]
-    }
-
-    output = cases[model]
-    """
-    X_data, para_data, y_data = reshape_dataset(dataset.values, SPAN)
-    return X_data, para_data, y_data

@@ -1,8 +1,7 @@
-import tensorflow as tf
+import basic_model as bm
+import data_process_model as dpm
 import numpy as np
-
-from data_process_model import *
-from basic_model import *
+import tensorflow as tf
 
 
 #reshape the dataset for CNN
