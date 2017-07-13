@@ -3,11 +3,7 @@ import os
 from image_model import *
 from calculate_min_max_model import *
 from recut_file_model import *
-
-#################################################
-#parameter you should refill
-from train_model_example import *
-#################################################
+from train_model import *
 
 #wait the input and get the input number
 #ver 1.0
@@ -256,5 +252,3 @@ train_flow_dic = {
     3: train_whole_dataset_begin,
     4: return_Back
 }
-
-train_whole_dataset_begin(para_whole_dataset_dic, 'link_cnn')
