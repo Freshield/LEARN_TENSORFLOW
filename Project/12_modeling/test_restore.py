@@ -2,58 +2,9 @@ from file_system_model import *
 from basic_model import *
 import flow_model as fm
 
-#the parameter need fill
-#######################################################
-#from network_model_example import *
-SPAN=[10]
-dir = '/home/freshield/Ciena_data/dataset_10k/model/'
-epochs = 20
-data_size = 10000
-file_size = 1000
-#how many loops do an evaluation
-loop_eval_num = 5
-#how many file do the valid
-eval_last_num = 10
-batch_size = 100
-train_file_size = 800
-valid_file_size = 100
-test_file_size = 100
-#hypers
-reg = 0.000067
-lr_rate = 0.002
-lr_decay = 0.99
-keep_prob_v = 0.9569
-log_dir = 'logs/Link_CNN/'
-module_dir = 'modules/Link_CNN/'
-epoch = 0
-loop = 0
-########################################################
-
-para_whole_dataset_dic = {
-    'SPAN' : SPAN,
-    'dir' : dir,
-    'epochs' : epochs,
-    'data_size' : data_size,
-    'file_size' : file_size,
-    'loop_eval_num' : loop_eval_num,
-    'batch_size' : batch_size,
-    'train_file_size' : train_file_size,
-    'valid_file_size' : valid_file_size,
-    'test_file_size' : test_file_size,
-    'reg' : reg,
-    'lr_rate' : lr_rate,
-    'lr_decay' : lr_decay,
-    'keep_prob_v' : keep_prob_v,
-    'log_dir' : log_dir,
-    'module_dir' : module_dir,
-    'eval_last_num' : eval_last_num,
-    'epoch' : epoch,
-    'loop' : loop
-}
-
 #train the model
 #ver 1.0
-def train_whole_dataset_begin(para_dic, model_name):
+def restore_whole_dataset_begin(para_dic, model_name, model_path):
 
     #choose model
     if model_name == 'resnet_link':
@@ -103,7 +54,9 @@ def train_whole_dataset_begin(para_dic, model_name):
             placeholders = (input_x, para_pl, input_y, train_phase, keep_prob)
             train_pl = input_x, para_pl, input_y, train_phase, keep_prob, train_step, loss_value, accuracy
 
-            sess.run(tf.global_variables_initializer())
+            saver = tf.train.Saver()
+
+            saver.restore(sess, model_path)
 
             while epoch < epochs:
 
@@ -155,7 +108,7 @@ def train_whole_dataset_begin(para_dic, model_name):
                 test_acc = evaluate_test(test_parameter)
 
                 # store module every epoch
-                store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
+                store_module(module_dir, test_acc, epoch, sess, log)
                 # store log file every epoch
                 store_log(log_dir, test_acc, epoch, log)
 

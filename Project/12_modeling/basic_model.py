@@ -352,9 +352,16 @@ def store_interrupt_log(log_dir, log):
     f.write(log.content)
     f.close()
 
+#read loop_indexs from file
+#ver 1.0
+def read_loop_indexs(module_dir):
+    filename = module_dir + 'loop_indexs'
+    loop_indexs_dic = read_json_to_dic(filename)
+    return loop_indexs_dic['loop_indexs']
+
 #store the module
 #ver 1.0
-def store_module(module_dir, test_acc, epoch, sess, log):
+def store_module(module_dir, test_acc, epoch, sess, log, loop_indexs):
     saver = tf.train.Saver()
     module_path = module_dir + "%.4f_epoch%d/" % (test_acc, epoch)
     module_name = module_path + "module.ckpt"
@@ -362,6 +369,9 @@ def store_module(module_dir, test_acc, epoch, sess, log):
     save_path = saver.save(sess, module_name)
     words = "Model saved in file: %s" % save_path
     words_log_print(words, log)
+    filename = module_dir + 'loop_indexs'
+    loop_indexs_dic = {'loop_indexs' : loop_indexs}
+    save_dic_to_json(loop_indexs_dic, filename)
 
 #store the interrupt module
 #ver 1.0
