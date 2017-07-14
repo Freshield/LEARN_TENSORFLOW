@@ -1,5 +1,6 @@
 from file_system_model import *
 from basic_model import *
+import flow_model as fm
 
 #the parameter need fill
 #######################################################
@@ -45,6 +46,33 @@ para_whole_dataset_dic = {
     'module_dir' : module_dir,
     'eval_last_num' : eval_last_num
 }
+
+#make para into dic
+#ver 1.0
+def store_para_to_dic(para):
+    SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir, eval_last_num = para
+
+    para_dic = {
+        'SPAN' : SPAN,
+        'dir' : dir,
+        'epochs' : epochs,
+        'data_size' : data_size,
+        'file_size' : file_size,
+        'loop_eval_num' : loop_eval_num,
+        'batch_size' : batch_size,
+        'train_file_size' : train_file_size,
+        'valid_file_size' : valid_file_size,
+        'test_file_size' : test_file_size,
+        'reg' : reg,
+        'lr_rate' : lr_rate,
+        'lr_decay' : lr_decay,
+        'keep_prob_v' : keep_prob_v,
+        'log_dir' : log_dir,
+        'module_dir' : module_dir,
+        'eval_last_num' : eval_last_num
+    }
+    return para_dic
+
 
 #retrive the para from dic
 #ver 1.0
@@ -134,8 +162,7 @@ def train_whole_dataset_begin(para_dic, model_name):
 
                     train_file = "train_set_%d.csv" % loop_indexs[loop]
 
-                    loop_loss_v, loop_acc = do_train_file(sess, train_pl, dir, train_file, SPAN, max_step, batch_size,
-                                                          keep_prob_v)
+                    loop_loss_v, loop_acc = do_train_file(sess, train_pl, dir, train_file, SPAN, max_step, batch_size,keep_prob_v)
 
                     words_log_print_loop(loop, loops, loop_loss_v, loop_acc, log)
 
@@ -148,6 +175,38 @@ def train_whole_dataset_begin(para_dic, model_name):
                         # here only evaluate last eval_last_num files
                         evaluate_last_x_files(eval_last_num, eval_parameters, dir)
 
+                        #ask for if want to interrupt
+                        #press i to interrupt
+                        print '\n'
+                        answer = timer_input(5)
+                        while True:
+                            if answer != 'i':
+                                break
+                            else:
+                                print '\n\n\n'
+                                print interrupt_screen
+                                temp_para = SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir, eval_last_num
+                                temp_para_dic = store_para_to_dic(temp_para)
+                                flow_number = fm.wait_input()
+                                flow_number = int(flow_number)
+                                if flow_number == 1:
+                                    fm.show_parameters(temp_para_dic)
+                                    continue
+                                elif flow_number == 2:
+                                    path = fm.wait_input('Please input the interrupt files you want to store:')
+                                    del_and_create_dir(path)
+                                    save_dic_to_json(temp_para_dic, path+'parameters.json')
+
+                                    store_interrupt_module(path, sess, log)
+                                    store_interrupt_log(path, log)
+                                    return 'Done'
+                                elif flow_number == 3:
+                                    break
+                                else:
+                                    print 'Error number, please re-input'
+                                    continue
+
+
                 # each epoch decay the lr_rate
                 lr_rate *= lr_decay
 
@@ -156,7 +215,7 @@ def train_whole_dataset_begin(para_dic, model_name):
                 # do the test evaluate
                 test_acc = evaluate_test(test_parameter)
 
-                # store log file every epoch
-                store_log(log_dir, test_acc, epoch, log)
                 # store module every epoch
                 store_module(module_dir, test_acc, epoch, sess, log)
+                # store log file every epoch
+                store_log(log_dir, test_acc, epoch, log)

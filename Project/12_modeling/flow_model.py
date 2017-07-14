@@ -150,8 +150,8 @@ def train_start_flow():
                     if answer == 'e':
                         return 'Back to train flow'
                     elif answer == 'y':
-                        train_whole_dataset_begin(para_whole_dataset_dic, back_value)
-                        return 'OK'
+                        value = train_whole_dataset_begin(para_whole_dataset_dic, back_value)
+                        return value
                     else:
                         print 'Error input, please re-input'
 
@@ -292,4 +292,6 @@ model_dic = {
     3 : 'Back'
 }
 
-main_flow()
+
+if __name__ == "__main__":
+    main_flow()

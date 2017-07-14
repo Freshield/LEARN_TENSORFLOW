@@ -57,3 +57,10 @@ train_start_screen = \
     "                         1. Use Link Parameter CNN model                \n" \
     "                         2. Use Resnet Link Parameter model             \n" \
     "                         3. Back                                        \n"
+
+#interrupt screen
+#ver 1.0
+interrupt_screen = \
+    "                         1. Check the Paramters                         \n" \
+    "                         2. Save model and Paramters, Exit              \n" \
+    "                         3. Continue                                    \n"

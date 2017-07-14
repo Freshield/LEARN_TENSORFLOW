@@ -6,14 +6,12 @@ class InputTimeoutError(Exception):
 def interrupted(signum, frame):
     raise InputTimeoutError
 
-
-
-def timer_input(time, words='Please input your name:'):
+def timer_input(time, words='Please input your name '):
     signal.signal(signal.SIGALRM, interrupted)
     signal.alarm(time)
 
     try:
-        name = raw_input(words)
+        name = raw_input(words+'in %s seconds:' % time)
     except InputTimeoutError:
         print('\ntimeout')
         name = 'None'
@@ -25,14 +23,5 @@ def timer_input(time, words='Please input your name:'):
 def wait_input(words='Please input number to choose:'):
     return raw_input(words)
 
-str = timer_input(2)
+str = timer_input(5)
 print 'Received : ' + str
-value = wait_input()
-print value
-print 'here'
-
-def f1():
-    print 'hello'
-    return 0
-
-model = 233

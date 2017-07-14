@@ -1,5 +1,6 @@
 import tensorflow as tf
 import os
+import json
 
 #to copy files from source dir to target dir
 #ver 1.0
@@ -26,3 +27,16 @@ def del_and_create_dir(dir_path):
     if tf.gfile.Exists(dir_path):
         tf.gfile.DeleteRecursively(dir_path)
     tf.gfile.MakeDirs(dir_path)
+
+#to save the dictionary to json file
+#ver 1.0
+def save_dic_to_json(dic, filename):
+    with open(filename, 'w') as f:
+        json.dump(dic, f)
+
+#to read json file and save to a dic
+#ver 1.0
+def read_json_to_dic(filename):
+    with open(filename, 'r') as f:
+        contents = json.load(f)
+    return contents
