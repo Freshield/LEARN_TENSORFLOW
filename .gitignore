@@ -7,5 +7,7 @@ facebook_file
 tmp
 modules
 *.json
+*.meta
+module
 
 *.asv
