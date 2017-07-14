@@ -118,7 +118,7 @@ def train_whole_dataset_begin(para_dic, model_name):
 
     max_step = train_file_size // batch_size
     loops = data_size // file_size
-    log = ''
+    log = Log()
     del_and_create_dir(log_dir)
     del_and_create_dir(module_dir)
 

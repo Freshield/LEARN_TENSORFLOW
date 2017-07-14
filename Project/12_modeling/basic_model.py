@@ -215,7 +215,7 @@ def do_train_file(sess, placeholders, dir, train_file, SPAN, max_step, batch_siz
             words += process_line[int(10 * (float(step) / float(max_step)))]
             words += '[%d/%d] ' % (step, max_step-1)
             words += 'loss in step %d is %f, acc is %.3f' % (step, loss_v, acc)
-            log = words_log_print(words, log)
+            words_log_print(words, log)
 
         loop_loss_v += loss_v
         loop_acc += acc
@@ -234,21 +234,21 @@ def time_show(before_time, last_loop_num, loop_now, total_loop, epoch_now, total
 
     #show the last loop time
     words = 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
-    log = words_log_print(words, log)
+    words_log_print(words, log)
 
     #show the rest loop time
     words = 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
-    log = words_log_print(words, log)
+    words_log_print(words, log)
 
     #show the rest epoch time
     words = 'rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600)
-    log = words_log_print(words, log)
+    words_log_print(words, log)
 
     # show the cross valid total time
     if count != None:
         rest_count = count_total - count
         words = 'rest total time need %.3f hours' % (span_time * rest_loop / 3600 + span_time * total_loop * rest_epoch / 3600 + span_time * total_loop * total_epoch * rest_count / 3600)
-        log = words_log_print(words, log)
+        words_log_print(words, log)
 
 
 #to get the random hypers for cross valid
@@ -266,8 +266,7 @@ def random_uniform_array(number, start, end):
 #ver 1.0
 def words_log_print(words, log):
     print words
-    log += words + "\n"
-    return log
+    log.add_content(words + "\n")
 
 #show the words and add to log for epoch
 #ver 1.0
@@ -275,8 +274,7 @@ def words_log_print_epoch(epoch, epochs, log ):
     words = "\nepoch "
     words += process_line[int(10 * (float(epoch) / float(epochs)))]
     words += "[%d/%d]\n" % (epoch, epochs-1)
-    log = words_log_print(words, log)
-    return log
+    words_log_print(words, log)
 
 #show the words and add to log for loop
 #ver 1.0
@@ -285,8 +283,7 @@ def words_log_print_loop(loop, loops, loop_loss_v, loop_acc, log ):
     words += process_line[int(10 * (float(loop) / float(loops)))]
     words += "[%d/%d] " % (loop, loops-1)
     words += 'loss in loop %d is %f, acc is %.3f' % (loop, loop_loss_v, loop_acc)
-    log = words_log_print(words, log)
-    return log
+    words_log_print(words, log)
 
 # do the evaluation for the last x files
 #ver 1.0
@@ -316,9 +313,9 @@ def evaluate_last_x_files(number, eval_parameters, dir):
     valid_acc /= 10
     print ""
     words = '----------train acc in loop %d is %.4f----------' % (loop, train_acc)
-    log = words_log_print(words, log)
+    words_log_print(words, log)
     words = '----------valid acc in loop %d is %.4f----------' % (loop, valid_acc)
-    log = words_log_print(words, log)
+    words_log_print(words, log)
 
 #do the evalute for all of the test files
 #ver 1.0
@@ -336,7 +333,7 @@ def evaluate_test(test_parameter):
     test_acc /= loops
     print ""
     words = '----------epoch %d test accuracy is %f----------' % (epoch, test_acc)
-    log = words_log_print(words, log)
+    words_log_print(words, log)
     return test_acc
 
 #store the log file
@@ -344,7 +341,7 @@ def evaluate_test(test_parameter):
 def store_log(log_dir, test_acc, epoch, log):
     filename = log_dir + '%.4f_epoch%d' % (test_acc, epoch)
     f = file(filename, 'w+')
-    f.write(log)
+    f.write(log.content)
     f.close()
 
 #store interrupt log file
@@ -352,7 +349,7 @@ def store_log(log_dir, test_acc, epoch, log):
 def store_interrupt_log(log_dir, log):
     filename = log_dir + 'interrupt'
     f = file(filename, 'w+')
-    f.write(log)
+    f.write(log.content)
     f.close()
 
 #store the module
@@ -364,7 +361,7 @@ def store_module(module_dir, test_acc, epoch, sess, log):
     del_and_create_dir(module_path)
     save_path = saver.save(sess, module_name)
     words = "Model saved in file: %s" % save_path
-    log = words_log_print(words, log)
+    words_log_print(words, log)
 
 #store the interrupt module
 #ver 1.0
@@ -375,7 +372,7 @@ def store_interrupt_module(module_dir, sess, log):
     del_and_create_dir(module_path)
     save_path = saver.save(sess, module_name)
     words = "Model saved in file: %s" % save_path
-    log = words_log_print(words, log)
+    words_log_print(words, log)
 
 #to process the input time out
 #ver 1.0
@@ -401,3 +398,13 @@ def timer_input(time, words='Input i to interrupt '):
 
     signal.alarm(0)
     return value
+
+class Log():
+    def __init__(self):
+        self.content = ''
+
+    def add_content(self, content):
+        self.content += content
+
+    def clear_content(self):
+        self.content = ''
