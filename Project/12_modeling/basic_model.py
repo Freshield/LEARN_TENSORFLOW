@@ -399,6 +399,8 @@ def timer_input(time, words='Input i to interrupt '):
     signal.alarm(0)
     return value
 
+#The log class to store logs
+#ver 1.0
 class Log():
     def __init__(self):
         self.content = ''
@@ -408,3 +410,69 @@ class Log():
 
     def clear_content(self):
         self.content = ''
+
+
+#make para into dic
+#ver 1.0
+def store_para_to_dic(para):
+    [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop] = para
+
+    para_dic = {
+        'SPAN' : SPAN,
+        'dir' : dir,
+        'epochs' : epochs,
+        'data_size' : data_size,
+        'file_size' : file_size,
+        'loop_eval_num' : loop_eval_num,
+        'batch_size' : batch_size,
+        'train_file_size' : train_file_size,
+        'valid_file_size' : valid_file_size,
+        'test_file_size' : test_file_size,
+        'reg' : reg,
+        'lr_rate' : lr_rate,
+        'lr_decay' : lr_decay,
+        'keep_prob_v' : keep_prob_v,
+        'log_dir' : log_dir,
+        'module_dir' : module_dir,
+        'eval_last_num' : eval_last_num,
+        'epoch' : epoch,
+        'loop' : loop
+    }
+    return para_dic
+
+#retrive the para from dic
+#ver 1.0
+def get_para_from_dic(para_dic):
+    SPAN = para_dic['SPAN']
+    dir = para_dic['dir']
+    epochs = para_dic['epochs']
+    data_size = para_dic['data_size']
+    file_size = para_dic['file_size']
+    loop_eval_num = para_dic['loop_eval_num']
+    batch_size = para_dic['batch_size']
+    train_file_size = para_dic['train_file_size']
+    valid_file_size = para_dic['valid_file_size']
+    test_file_size = para_dic['test_file_size']
+    reg = para_dic['reg']
+    lr_rate = para_dic['lr_rate']
+    lr_decay = para_dic['lr_decay']
+    keep_prob_v = para_dic['keep_prob_v']
+    log_dir = para_dic['log_dir']
+    module_dir = para_dic['module_dir']
+    eval_last_num = para_dic['eval_last_num']
+    epoch = para_dic['epoch']
+    loop = para_dic['loop']
+    return [SPAN,dir,epochs,data_size,file_size,loop_eval_num,batch_size,train_file_size,valid_file_size,test_file_size,reg,lr_rate,lr_decay,keep_prob_v,log_dir,module_dir,eval_last_num, epoch, loop]
+
+#change parameters from other dictionary
+#ver 1.0
+def change_para_from_dic(saved_dic, data_dic):
+    for (k, v) in saved_dic.items():
+        saved_dic[k] = data_dic[k]
+
+
+#change parameters from other array
+#ver 1.0
+def change_para_from_array(saved_array, data_array):
+    for i in range(len(saved_array)):
+        saved_array[i] = data_array[i]

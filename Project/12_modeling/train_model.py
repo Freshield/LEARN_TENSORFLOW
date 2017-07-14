@@ -25,6 +25,8 @@ lr_decay = 0.99
 keep_prob_v = 0.9569
 log_dir = 'logs/Link_CNN/'
 module_dir = 'modules/Link_CNN/'
+epoch = 0
+loop = 0
 ########################################################
 
 para_whole_dataset_dic = {
@@ -44,56 +46,10 @@ para_whole_dataset_dic = {
     'keep_prob_v' : keep_prob_v,
     'log_dir' : log_dir,
     'module_dir' : module_dir,
-    'eval_last_num' : eval_last_num
+    'eval_last_num' : eval_last_num,
+    'epoch' : epoch,
+    'loop' : loop
 }
-
-#make para into dic
-#ver 1.0
-def store_para_to_dic(para):
-    SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir, eval_last_num = para
-
-    para_dic = {
-        'SPAN' : SPAN,
-        'dir' : dir,
-        'epochs' : epochs,
-        'data_size' : data_size,
-        'file_size' : file_size,
-        'loop_eval_num' : loop_eval_num,
-        'batch_size' : batch_size,
-        'train_file_size' : train_file_size,
-        'valid_file_size' : valid_file_size,
-        'test_file_size' : test_file_size,
-        'reg' : reg,
-        'lr_rate' : lr_rate,
-        'lr_decay' : lr_decay,
-        'keep_prob_v' : keep_prob_v,
-        'log_dir' : log_dir,
-        'module_dir' : module_dir,
-        'eval_last_num' : eval_last_num
-    }
-    return para_dic
-
-
-#retrive the para from dic
-#ver 1.0
-def get_whole_dataset_para(para_dic):
-    SPAN = para_dic['SPAN']
-    dir = para_dic['dir']
-    epochs = para_dic['epochs']
-    data_size = para_dic['data_size']
-    file_size = para_dic['file_size']
-    loop_eval_num = para_dic['loop_eval_num']
-    batch_size = para_dic['batch_size']
-    train_file_size = para_dic['train_file_size']
-    valid_file_size = para_dic['valid_file_size']
-    test_file_size = para_dic['test_file_size']
-    reg = para_dic['reg']
-    lr_rate = para_dic['lr_rate']
-    keep_prob_v = para_dic['keep_prob_v']
-    log_dir = para_dic['log_dir']
-    module_dir = para_dic['module_dir']
-    eval_last_num = para_dic['eval_last_num']
-    return SPAN,dir,epochs,data_size,file_size,loop_eval_num,batch_size,train_file_size,valid_file_size,test_file_size,reg,lr_rate,keep_prob_v,log_dir,module_dir,eval_last_num
 
 #train the model
 #ver 1.0
@@ -114,7 +70,7 @@ def train_whole_dataset_begin(para_dic, model_name):
     dpm.model = model
 
     #get all para first
-    SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir, eval_last_num = get_whole_dataset_para(para_dic)
+    [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop] = get_para_from_dic(para_dic)
 
     max_step = train_file_size // batch_size
     loops = data_size // file_size
@@ -149,7 +105,7 @@ def train_whole_dataset_begin(para_dic, model_name):
 
             sess.run(tf.global_variables_initializer())
 
-            for epoch in xrange(epochs):
+            while epoch < epochs:
 
                 # show the epoch num
                 words_log_print_epoch(epoch, epochs, log)
@@ -157,7 +113,8 @@ def train_whole_dataset_begin(para_dic, model_name):
                 loop_indexs = dpm.get_file_random_seq_indexs(loops)
 
                 # caution loop is not in sequence
-                for loop in xrange(loops):
+
+                while loop < loops:
                     before_time = time.time()
 
                     train_file = "train_set_%d.csv" % loop_indexs[loop]
@@ -177,34 +134,16 @@ def train_whole_dataset_begin(para_dic, model_name):
 
                         #ask for if want to interrupt
                         #press i to interrupt
-                        print '\n'
-                        answer = timer_input(5)
-                        while True:
-                            if answer != 'i':
-                                break
-                            else:
-                                print '\n\n\n'
-                                print interrupt_screen
-                                temp_para = SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, keep_prob_v, log_dir, module_dir, eval_last_num
-                                temp_para_dic = store_para_to_dic(temp_para)
-                                flow_number = fm.wait_input()
-                                flow_number = int(flow_number)
-                                if flow_number == 1:
-                                    fm.show_parameters(temp_para_dic)
-                                    continue
-                                elif flow_number == 2:
-                                    path = fm.wait_input('Please input the interrupt files you want to store:')
-                                    del_and_create_dir(path)
-                                    save_dic_to_json(temp_para_dic, path+'parameters.json')
+                        temp_para = [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop]
 
-                                    store_interrupt_module(path, sess, log)
-                                    store_interrupt_log(path, log)
-                                    return 'Done'
-                                elif flow_number == 3:
-                                    break
-                                else:
-                                    print 'Error number, please re-input'
-                                    continue
+                        answer = fm.interrupt_flow(temp_para, sess, log)
+                        if answer == 'Done':
+                            return 'Done'
+
+                        [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size,valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir,eval_last_num, epoch, loop] = temp_para
+
+                    loop += 1
+
 
 
                 # each epoch decay the lr_rate
@@ -219,3 +158,5 @@ def train_whole_dataset_begin(para_dic, model_name):
                 store_module(module_dir, test_acc, epoch, sess, log)
                 # store log file every epoch
                 store_log(log_dir, test_acc, epoch, log)
+
+                epoch += 1

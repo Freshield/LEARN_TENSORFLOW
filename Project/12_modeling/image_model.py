@@ -51,6 +51,13 @@ train_screen = \
     "                         3. Train the Network                           \n" \
     "                         4. Back                                        \n"
 
+#change parameters screen
+#ver 1.0
+change_para_screen = \
+    "                         1. Import Parameters from json file            \n" \
+    "                         2. Change the Parameters by hand               \n" \
+    "                         3. Back                                        \n"
+
 #train start screen
 #ver 1.0
 train_start_screen = \
@@ -61,6 +68,8 @@ train_start_screen = \
 #interrupt screen
 #ver 1.0
 interrupt_screen = \
-    "                         1. Check the Paramters                         \n" \
+    "                         1. Check the Parameters                        \n" \
     "                         2. Save model and Paramters, Exit              \n" \
-    "                         3. Continue                                    \n"
+    "                         3. Continue                                    \n" \
+    "                         4. Change Parameters                           \n" \
+    "                         5. Save model                                  \n"

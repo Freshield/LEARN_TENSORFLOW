@@ -1,0 +1,24 @@
+
+epoch [>         ][0/19]
+
+loop [>         ][0/9] loss in loop 0 is 1.462100, acc is 0.362
+loop [=>        ][1/9] loss in loop 1 is 1.122160, acc is 0.435
+loop [==>       ][2/9] loss in loop 2 is 1.099092, acc is 0.452
+loop [===>      ][3/9] loss in loop 3 is 1.101558, acc is 0.451
+loop [====>     ][4/9] loss in loop 4 is 1.074946, acc is 0.462
+loop [=====>    ][5/9] loss in loop 5 is 1.100378, acc is 0.460
+last 5 loop use 0.723068 minutes
+rest loop need 0.723 minutes
+rest epoch need 0.494 hours
+----------train acc in loop 5 is 0.4675----------
+----------valid acc in loop 5 is 0.4550----------
+loop [======>   ][6/9] loss in loop 6 is 1.088321, acc is 0.439
+loop [=======>  ][7/9] loss in loop 7 is 1.088628, acc is 0.446
+loop [========> ][8/9] loss in loop 8 is 1.078082, acc is 0.441
+loop [=========>][9/9] loss in loop 9 is 1.074057, acc is 0.461
+last 5 loop use 0.717395 minutes
+rest loop need 0.143 minutes
+rest epoch need 0.481 hours
+----------train acc in loop 9 is 0.4974----------
+----------valid acc in loop 9 is 0.4710----------
+Model saved in file: interrupt/module/module.ckpt

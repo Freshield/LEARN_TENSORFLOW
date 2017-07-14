@@ -74,6 +74,7 @@ def train_flow():
             else:
                 t = os.system('clear')
                 print deep_fish_logo + train_screen
+                print back_value
                 continue
 
 #show parameters
@@ -82,6 +83,62 @@ def show_parameters(para_dic):
     for (k, v) in para_dic.items():
         print '%s : %s' % (k, v)
     return 'Done'
+
+#change parameters flow
+#ver 1.0
+def change_parameters_flow(para_dic):
+    print deep_fish_logo + change_para_screen
+    while True:
+        flow_number = wait_input()
+        flow_number = int(flow_number)
+        if flow_number < 1 or flow_number > 4:
+            print "Error number, please re-input"
+            continue
+        else:
+            # clear screen
+            t = os.system('clear')
+            #import from json file
+            if flow_number == 1:
+                back_value = imp_para_from_json(para_dic)
+            #change by hand
+            elif flow_number == 2:
+                back_value = change_parameters(para_dic)
+            else:
+                back_value = 'Back'
+
+            if back_value == 'OK':
+                return 'OK'
+            elif back_value == 'Back':
+                return 'Done'
+            else:
+                t = os.system('clear')
+                print deep_fish_logo + change_para_screen
+                print back_value
+                continue
+
+#import parameters from json file
+#ver 1.0
+def imp_para_from_json(para_dic):
+    while True:
+        print 'Please input the json file path\nLike interrupt/parameters.json'
+        file_path = wait_input('Please input the json file path or input e to exit\nLike interrupt/parameters.json:')
+        if file_path == 'e':
+            return 'Done'
+        elif os.path.exists(file_path) != True:
+            print 'Error, file path do not exist'
+            continue
+        else:
+            temp_dic = read_json_to_dic(file_path)
+            show_parameters(temp_dic)
+            answer = wait_input('\nParameters are here, You sure want to change?(y/n)')
+            if answer == 'n':
+                continue
+            else:
+                change_para_from_dic(para_dic, temp_dic)
+                print 'Changed the parameters'
+                print 'Your parameters now are:'
+                show_parameters(para_dic)
+                return 'Done'
 
 #change parameters
 #ver 1.0
@@ -105,13 +162,30 @@ def change_parameters(para_dic):
                 para_value = wait_input('Input the parameter value:')
                 #four types value
                 if para_name == 'SPAN':
-                    para_value = [int(para_value)]
+                    try:
+                        para_value = [int(para_value)]
+                    except:
+                        print "Error value"
+                        continue
                 elif para_name == 'dir' or para_name == 'log_dir' or para_name == 'module_dir':
-                    para_value = para_value
+                    try:
+                        para_value = para_value
+                    except:
+                        print "Error value"
+                        continue
                 elif para_name == 'reg' or para_name == 'lr_rate' or para_name == 'lr_decay' or para_name == 'keep_prob_v':
-                    para_value = float(para_value)
+                    try:
+                        para_value = float(para_value)
+                    except:
+                        print "Error value"
+                        continue
                 else:
-                    para_value = int(para_value)
+                    print para_value
+                    try:
+                        para_value = int(para_value)
+                    except:
+                        print "Error value"
+                        continue
 
                 #double check
                 answer = wait_input('You sure want to change %s to %s?(y/n)' % (para_name, para_value))
@@ -167,7 +241,7 @@ def restore_flow():
 def cal_min_max_flow():
     print deep_fish_logo
     while True:
-        file_path = wait_input('Input the file path or input e to exit:')
+        file_path = wait_input('Input the file path or input e to exit\nLike /home/freshield/Ciena_data/dataset_10k/ciena10000.csv:')
 
         if file_path == 'e':
             return 'Back'
@@ -175,7 +249,7 @@ def cal_min_max_flow():
             print 'Error, file path do not exist'
             continue
         else:
-            savename = wait_input('Input the savename or input e to exit:')
+            savename = wait_input('Input the savename or input e to exit\nLike /home/freshield/Ciena_data/dataset_10k/model/min_max_10k.csv:')
 
             if savename == 'e':
                 return 'Back'
@@ -211,7 +285,7 @@ def cal_min_max_flow():
 def norm_recut_file_flow():
     print deep_fish_logo
     while True:
-        filename = wait_input('Input the filename or input e to exit:')
+        filename = wait_input('Input the filename or input e to exit\nLike /home/freshield/Ciena_data/dataset_10k/ciena10000.csv:')
 
         if filename == 'e':
             return 'Back'
@@ -219,7 +293,7 @@ def norm_recut_file_flow():
             print 'Error, file path do not exist'
             continue
         else:
-            savePath = wait_input('Input the savePath or input e to exit:')
+            savePath = wait_input('Input the savePath or input e to exit\nLike /home/freshield/Ciena_data/dataset_10k/model/:')
 
             if savePath == 'e':
                 return 'Back'
@@ -227,7 +301,7 @@ def norm_recut_file_flow():
                 print 'Error, save path do not exist'
                 continue
             else:
-                minmax_name = wait_input('Input the minmax name or input e to exit:')
+                minmax_name = wait_input('Input the minmax name or input e to exit\nLike /home/freshield/Ciena_data/dataset_10k/model/min_max_10k.csv:')
 
                 if minmax_name == 'e':
                     return 'Back'
@@ -260,6 +334,81 @@ def norm_recut_file_flow():
 
                                 return 'Done and Save the files at \n%s\n' % savePath
 
+#The interrupt flow in training
+#ver 1.0
+def interrupt_flow(temp_para, sess, log):
+    print '\n'
+    answer = timer_input(5)
+    while True:
+        if answer != 'i':
+            break
+        else:
+            print '\n\n\n'
+            print interrupt_screen
+
+            temp_para_dic = store_para_to_dic(temp_para)
+            flow_number = wait_input()
+            flow_number = int(flow_number)
+            #check parameters
+            if flow_number == 1:
+                show_parameters(temp_para_dic)
+                continue
+            #save model and exit
+            elif flow_number == 2:
+                path = wait_input('Please input the interrupt files you want to store\nLike interrupt/:')
+                del_and_create_dir(path)
+                save_dic_to_json(temp_para_dic, path + 'parameters.json')
+
+                store_interrupt_module(path, sess, log)
+                store_interrupt_log(path, log)
+                return 'Done'
+            #continue
+            elif flow_number == 3:
+                return 'Continue'
+            #change parameters
+            elif flow_number == 4:
+                print change_para_screen
+                while True:
+                    flow_number = wait_input()
+                    flow_number = int(flow_number)
+                    if flow_number < 1 or flow_number > 4:
+                        print "Error number, please re-input"
+                        continue
+                    else:
+                        # import from json file
+                        if flow_number == 1:
+                            back_value = imp_para_from_json(temp_para_dic)
+                            data_para = get_para_from_dic(temp_para_dic)
+                            change_para_from_array(temp_para, data_para)
+                        # change by hand
+                        elif flow_number == 2:
+                            back_value = change_parameters(temp_para_dic)
+                            data_para = get_para_from_dic(temp_para_dic)
+                            change_para_from_array(temp_para, data_para)
+                        #back
+                        else:
+                            back_value = 'Done'
+
+                        if back_value == 'OK':
+                            return 'OK'
+                        elif back_value == 'Back':
+                            return 'Back'
+                        else:
+                            print change_para_screen
+                            print back_value
+                            break
+            #save model
+            elif flow_number == 5:
+                path = wait_input('Please input the interrupt files you want to store\nLike interrupt/:')
+                del_and_create_dir(path)
+                save_dic_to_json(temp_para_dic, path + 'parameters.json')
+
+                store_interrupt_module(path, sess, log)
+                store_interrupt_log(path, log)
+                continue
+            else:
+                print 'Error number, please re-input'
+                continue
 
 
 
@@ -279,7 +428,7 @@ main_flow_dic = {
 #ver 1.0
 train_flow_dic = {
     1: show_parameters,
-    2: change_parameters,
+    2: change_parameters_flow,
     3: train_start_flow,
     4: return_Back
 }

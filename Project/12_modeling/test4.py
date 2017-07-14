@@ -12,3 +12,4 @@ log = test(log)
 log = test(log)
 
 print log
+
