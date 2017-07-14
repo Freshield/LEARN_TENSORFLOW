@@ -8,7 +8,7 @@ loop [===>      ][3/9] loss in loop 3 is 1.101558, acc is 0.451
 loop [====>     ][4/9] loss in loop 4 is 1.074946, acc is 0.462
 loop [=====>    ][5/9] loss in loop 5 is 1.100378, acc is 0.460
 last 5 loop use 0.723068 minutes
-rest loop need 0.723 minutes
+rest loop need 0.723 minutesasdfasdf
 rest epoch need 0.494 hours
 ----------train acc in loop 5 is 0.4675----------
 ----------valid acc in loop 5 is 0.4550----------
