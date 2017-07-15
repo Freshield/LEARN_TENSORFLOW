@@ -73,3 +73,18 @@ interrupt_screen = \
     "                         3. Continue                                    \n" \
     "                         4. Change Parameters                           \n" \
     "                         5. Save model                                  \n"
+
+
+#restore screen
+#ver 1.0
+restore_screen = \
+    "                         1. Show the Parameters                         \n" \
+    "                         2. Change the Parameters                       \n" \
+    "                         3. Restore the Network                           \n" \
+    "                         4. Back                                        \n"
+#restore start screen
+#ver 1.0
+restore_start_screen = \
+    "                         1. Restore Link Parameter CNN model                \n" \
+    "                         2. Restore Resnet Link Parameter model             \n" \
+    "                         3. Back                                        \n"

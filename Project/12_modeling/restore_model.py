@@ -2,9 +2,9 @@ from file_system_model import *
 from basic_model import *
 import flow_model as fm
 
-#train the model
+#restore the model
 #ver 1.0
-def restore_whole_dataset_begin(para_dic, model_name, model_path, log_path = None, loop_indexs_path=None):
+def restore_begin(para_dic, model_name, model_path, log_path = None, loop_indexs_path=None):
 
     #choose model
     if model_name == 'resnet_link':
@@ -63,6 +63,7 @@ def restore_whole_dataset_begin(para_dic, model_name, model_path, log_path = Non
 
             saver.restore(sess, model_path)
 
+            print ''
             print 'Model was restored'
 
             restore_first = True
@@ -129,5 +130,7 @@ def restore_whole_dataset_begin(para_dic, model_name, model_path, log_path = Non
 
                 epoch += 1
 
-para_dic = read_json_to_dic('interrupt/parameters.json')
-restore_whole_dataset_begin(para_dic, 'link_cnn', 'interrupt/module/module.ckpt', 'interrupt/interrupt', 'interrupt/loop_indexs')
+    return 'Done'
+
+#para_dic = read_json_to_dic('interrupt/parameters.json')
+#restore_begin(para_dic, 'link_cnn', 'interrupt/module/module.ckpt', 'interrupt/interrupt', 'interrupt/loop_indexs')

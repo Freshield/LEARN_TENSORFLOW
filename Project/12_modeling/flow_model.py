@@ -4,6 +4,7 @@ from image_model import *
 from calculate_min_max_model import *
 from recut_file_model import *
 from train_model import *
+from restore_model import *
 
 #wait the input and get the input number
 #ver 1.0
@@ -120,7 +121,6 @@ def change_parameters_flow(para_dic):
 #ver 1.0
 def imp_para_from_json(para_dic):
     while True:
-        print 'Please input the json file path\nLike interrupt/parameters.json'
         file_path = wait_input('Please input the json file path or input e to exit\nLike interrupt/parameters.json:')
         if file_path == 'e':
             return 'Done'
@@ -218,6 +218,7 @@ def train_start_flow():
                 print deep_fish_logo
                 print "The model you choose is %s" % back_value
                 show_parameters(para_whole_dataset_dic)
+                print 'model name is %s' % back_value
                 print
                 while True:
                     answer = wait_input('Input y to start train or input e to go back:')
@@ -231,10 +232,115 @@ def train_start_flow():
 
 
 
+
 #to restore a model
 #ver 1.0
 def restore_flow():
-    print deep_fish_logo + "restore flow"
+    print deep_fish_logo + restore_screen
+    while True:
+        flow_number = wait_input()
+        flow_number = int(flow_number)
+        if flow_number < 1 or flow_number > 4:
+            print "Error number, please re-input"
+            continue
+        else:
+            #clear screen
+            t = os.system('clear')
+            #show parameter
+            if flow_number == 1:
+                back_value = restore_flow_dic.get(flow_number)(para_whole_dataset_dic)
+                wait_input('Input c to continue:')
+            #change parameter
+            elif flow_number == 2:
+                back_value = restore_flow_dic.get(flow_number)(para_whole_dataset_dic)
+            #restore begin
+            else:
+                back_value = restore_flow_dic.get(flow_number)()
+
+            if back_value == 'OK':
+                return 'OK'
+            elif back_value == 'Back':
+                return 'Back'
+            else:
+                t = os.system('clear')
+                print deep_fish_logo + restore_screen
+                print back_value
+                continue
+
+
+
+#restore start flow
+#ver 1.0
+def restore_start_flow():
+    print deep_fish_logo + restore_start_screen
+    while True:
+        flow_number = wait_input("Please input the Model number:")
+        flow_number = int(flow_number)
+        if flow_number < 1 or flow_number > 3:
+            print "Error number, please re-input"
+            continue
+        else:
+            # clear screen
+            t = os.system('clear')
+            back_value = model_dic[flow_number]
+            if back_value == 'OK':
+                return 'OK'
+            elif back_value == 'Back':
+                return 'Back'
+            else:
+                t = os.system('clear')
+                print deep_fish_logo
+                print "The model you choose is %s" % back_value
+
+                #ask for the log, model and loop indexs path
+                while True:
+                    print ''
+                    model_path = wait_input('Please input the model path or input e to go back\nLike interrupt/module/module.ckpt:')
+                    if model_path == 'e':
+                        return 'Back to restore flow'
+                    else:
+                        while True:
+                            print ''
+                            log_path = wait_input(
+                                'Please input the log path or input n to not use or input e to go back\nLike interrupt/interrupt:')
+                            if log_path == 'e':
+                                return 'Back to restore flow'
+                            elif log_path != 'n' and os.path.exists(log_path) != True:
+                                print 'Error, file path do not exist'
+                                continue
+                            else:
+                                if log_path == 'n':
+                                    log_path = None
+
+                                while True:
+                                    print ''
+                                    loop_index_path = wait_input(
+                                        'Please input the loop_index_path or input n to not use or input e to go back\nLike interrupt/loop_indexs:')
+                                    if loop_index_path == 'e':
+                                        return 'Back to restore flow'
+                                    elif loop_index_path != 'n' and os.path.exists(loop_index_path) != True:
+                                        print 'Error, file path do not exist'
+                                        continue
+                                    else:
+                                        if loop_index_path == 'n':
+                                            loop_index_path = None
+
+                                        print ''
+                                        show_parameters(para_whole_dataset_dic)
+                                        print 'model name is %s' % back_value
+                                        print 'model path is %s' % model_path
+                                        print 'log path is %s' % log_path
+                                        print 'loop indexs path is %s' % loop_index_path
+                                        print
+                                        while True:
+                                            answer = wait_input('Input y to start restore and train or input e to go back:')
+                                            if answer == 'e':
+                                                return 'Back to restore flow'
+                                            elif answer == 'y':
+                                                value = restore_begin(para_whole_dataset_dic, back_value, model_path, log_path, loop_index_path)
+                                                return value
+                                            else:
+                                                print 'Error input, please re-input'
 
 #to calculate the min and max value
 #ver 1.0
@@ -430,6 +536,15 @@ train_flow_dic = {
     1: show_parameters,
     2: change_parameters_flow,
     3: train_start_flow,
+    4: return_Back
+}
+
+#The restore flow dictionary
+#ver 1.0
+restore_flow_dic = {
+    1: show_parameters,
+    2: change_parameters_flow,
+    3: restore_start_flow,
     4: return_Back
 }
 

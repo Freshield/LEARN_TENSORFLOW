@@ -162,3 +162,4 @@ def train_whole_dataset_begin(para_dic, model_name):
                 store_log(log_dir, test_acc, epoch, log)
 
                 epoch += 1
+    return 'Done'
