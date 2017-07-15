@@ -354,10 +354,9 @@ def store_interrupt_log(log_dir, log):
 
 #read loop_indexs from file
 #ver 1.0
-def read_loop_indexs(module_dir):
-    filename = module_dir + 'loop_indexs'
+def read_loop_indexs(filename):
     loop_indexs_dic = read_json_to_dic(filename)
-    return loop_indexs_dic['loop_indexs']
+    return np.array(loop_indexs_dic['loop_indexs'])
 
 #store the module
 #ver 1.0
@@ -370,12 +369,12 @@ def store_module(module_dir, test_acc, epoch, sess, log, loop_indexs):
     words = "Model saved in file: %s" % save_path
     words_log_print(words, log)
     filename = module_dir + 'loop_indexs'
-    loop_indexs_dic = {'loop_indexs' : loop_indexs}
+    loop_indexs_dic = {'loop_indexs' : loop_indexs.tolist()}
     save_dic_to_json(loop_indexs_dic, filename)
 
 #store the interrupt module
 #ver 1.0
-def store_interrupt_module(module_dir, sess, log):
+def store_interrupt_module(module_dir, sess, log, loop_indexs):
     saver = tf.train.Saver()
     module_path = module_dir + 'module/'
     module_name = module_path + 'module.ckpt'
@@ -383,6 +382,9 @@ def store_interrupt_module(module_dir, sess, log):
     save_path = saver.save(sess, module_name)
     words = "Model saved in file: %s" % save_path
     words_log_print(words, log)
+    filename = module_dir + 'loop_indexs'
+    loop_indexs_dic = {'loop_indexs' : loop_indexs.tolist()}
+    save_dic_to_json(loop_indexs_dic, filename)
 
 #to process the input time out
 #ver 1.0
@@ -420,6 +422,16 @@ class Log():
 
     def clear_content(self):
         self.content = ''
+
+    def add_content_from_file(self, filename):
+        file_object = open(filename)
+        try:
+            all_the_text = file_object.read()
+            self.add_content(all_the_text)
+        finally:
+            file_object.close()
+
+
 
 
 #make para into dic

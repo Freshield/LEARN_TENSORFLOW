@@ -4,7 +4,7 @@ import flow_model as fm
 
 #train the model
 #ver 1.0
-def restore_whole_dataset_begin(para_dic, model_name, model_path):
+def restore_whole_dataset_begin(para_dic, model_name, model_path, log_path = None, loop_indexs_path=None):
 
     #choose model
     if model_name == 'resnet_link':
@@ -26,6 +26,11 @@ def restore_whole_dataset_begin(para_dic, model_name, model_path):
     max_step = train_file_size // batch_size
     loops = data_size // file_size
     log = Log()
+
+    #restore log
+    if log_path != None:
+        log.add_content_from_file(log_path)
+
     del_and_create_dir(log_dir)
     del_and_create_dir(module_dir)
 
@@ -58,12 +63,22 @@ def restore_whole_dataset_begin(para_dic, model_name, model_path):
 
             saver.restore(sess, model_path)
 
+            print 'Model was restored'
+
+            restore_first = True
+
             while epoch < epochs:
 
                 # show the epoch num
                 words_log_print_epoch(epoch, epochs, log)
 
-                loop_indexs = dpm.get_file_random_seq_indexs(loops)
+                #loop indexs restore
+                if restore_first == True and loop_indexs_path != None:
+                    loop_indexs = read_loop_indexs(loop_indexs_path)
+                else:
+                    loop_indexs = dpm.get_file_random_seq_indexs(loops)
+                    restore_first = False
+
 
                 # caution loop is not in sequence
 
@@ -89,7 +104,7 @@ def restore_whole_dataset_begin(para_dic, model_name, model_path):
                         #press i to interrupt
                         temp_para = [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop]
 
-                        answer = fm.interrupt_flow(temp_para, sess, log)
+                        answer = fm.interrupt_flow(temp_para, sess, log, loop_indexs)
                         if answer == 'Done':
                             return 'Done'
 
@@ -97,8 +112,8 @@ def restore_whole_dataset_begin(para_dic, model_name, model_path):
 
                     loop += 1
 
-
-
+                #reset loop
+                loop = 0
                 # each epoch decay the lr_rate
                 lr_rate *= lr_decay
 
@@ -108,8 +123,11 @@ def restore_whole_dataset_begin(para_dic, model_name, model_path):
                 test_acc = evaluate_test(test_parameter)
 
                 # store module every epoch
-                store_module(module_dir, test_acc, epoch, sess, log)
+                store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
                 # store log file every epoch
                 store_log(log_dir, test_acc, epoch, log)
 
                 epoch += 1
+
+para_dic = read_json_to_dic('interrupt/parameters.json')
+restore_whole_dataset_begin(para_dic, 'link_cnn', 'interrupt/module/module.ckpt', 'interrupt/interrupt', 'interrupt/loop_indexs')

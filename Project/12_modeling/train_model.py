@@ -136,7 +136,7 @@ def train_whole_dataset_begin(para_dic, model_name):
                         #press i to interrupt
                         temp_para = [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop]
 
-                        answer = fm.interrupt_flow(temp_para, sess, log)
+                        answer = fm.interrupt_flow(temp_para, sess, log, loop_indexs)
                         if answer == 'Done':
                             return 'Done'
 
@@ -146,6 +146,8 @@ def train_whole_dataset_begin(para_dic, model_name):
 
 
 
+                #reset loop
+                loop = 0
                 # each epoch decay the lr_rate
                 lr_rate *= lr_decay
 

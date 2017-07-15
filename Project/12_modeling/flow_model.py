@@ -336,7 +336,7 @@ def norm_recut_file_flow():
 
 #The interrupt flow in training
 #ver 1.0
-def interrupt_flow(temp_para, sess, log):
+def interrupt_flow(temp_para, sess, log, loop_indexs):
     print '\n'
     answer = timer_input(5)
     while True:
@@ -359,7 +359,7 @@ def interrupt_flow(temp_para, sess, log):
                 del_and_create_dir(path)
                 save_dic_to_json(temp_para_dic, path + 'parameters.json')
 
-                store_interrupt_module(path, sess, log)
+                store_interrupt_module(path, sess, log, loop_indexs)
                 store_interrupt_log(path, log)
                 return 'Done'
             #continue
@@ -403,7 +403,7 @@ def interrupt_flow(temp_para, sess, log):
                 del_and_create_dir(path)
                 save_dic_to_json(temp_para_dic, path + 'parameters.json')
 
-                store_interrupt_module(path, sess, log)
+                store_interrupt_module(path, sess, log, loop_indexs)
                 store_interrupt_log(path, log)
                 continue
             else:
