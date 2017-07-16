@@ -437,7 +437,7 @@ class Log():
 #make para into dic
 #ver 1.0
 def store_para_to_dic(para):
-    [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop] = para
+    [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic] = para
 
     para_dic = {
         'SPAN' : SPAN,
@@ -458,7 +458,10 @@ def store_para_to_dic(para):
         'module_dir' : module_dir,
         'eval_last_num' : eval_last_num,
         'epoch' : epoch,
-        'loop' : loop
+        'loop' : loop,
+        'best_model_number' : best_model_number,
+        'best_model_acc_dic' : best_model_acc_dic,
+        'best_model_dir_dic' : best_model_dir_dic
     }
     return para_dic
 
@@ -484,7 +487,10 @@ def get_para_from_dic(para_dic):
     eval_last_num = para_dic['eval_last_num']
     epoch = para_dic['epoch']
     loop = para_dic['loop']
-    return [SPAN,dir,epochs,data_size,file_size,loop_eval_num,batch_size,train_file_size,valid_file_size,test_file_size,reg,lr_rate,lr_decay,keep_prob_v,log_dir,module_dir,eval_last_num, epoch, loop]
+    best_model_number = para_dic['best_model_number']
+    best_model_acc_dic = para_dic['best_model_acc_dic']
+    best_model_dir_dic = para_dic['best_model_dir_dic']
+    return [SPAN,dir,epochs,data_size,file_size,loop_eval_num,batch_size,train_file_size,valid_file_size,test_file_size,reg,lr_rate,lr_decay,keep_prob_v,log_dir,module_dir,eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic]
 
 #change parameters from other dictionary
 #ver 1.0

@@ -23,10 +23,13 @@ reg = 0.000067
 lr_rate = 0.002
 lr_decay = 0.99
 keep_prob_v = 0.9569
-log_dir = 'logs/Link_CNN/'
-module_dir = 'modules/Link_CNN/'
+log_dir = 'logs/'
+module_dir = 'modules/'
 epoch = 0
 loop = 0
+best_model_number = 10
+best_model_acc_dic = None
+best_model_dir_dic = None
 ########################################################
 
 para_whole_dataset_dic = {
@@ -48,7 +51,10 @@ para_whole_dataset_dic = {
     'module_dir' : module_dir,
     'eval_last_num' : eval_last_num,
     'epoch' : epoch,
-    'loop' : loop
+    'loop' : loop,
+    'best_model_number' : best_model_number,
+    'best_model_acc_dic' : best_model_acc_dic,
+    'best_model_dir_dic' : best_model_dir_dic
 }
 
 #train the model
@@ -70,7 +76,17 @@ def train_whole_dataset_begin(para_dic, model_name):
     dpm.model = model
 
     #get all para first
-    [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop] = get_para_from_dic(para_dic)
+    [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic] = get_para_from_dic(para_dic)
+
+    #change the dir and log dir name
+    dir = dir + model_name + '/'
+    log_dir = log_dir + model_name + '/'
+
+    #create the acc dic and dir dic
+    best_model_acc_dic = np.arange(0,-best_model_number,-1)
+    best_model_dir_dic = []
+    for i in range(best_model_number):
+        best_model_dir_dic.append('%s'%best_model_acc_dic[i])
 
     max_step = train_file_size // batch_size
     loops = data_size // file_size
@@ -134,13 +150,13 @@ def train_whole_dataset_begin(para_dic, model_name):
 
                         #ask for if want to interrupt
                         #press i to interrupt
-                        temp_para = [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop]
+                        temp_para = [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic]
 
                         answer = fm.interrupt_flow(temp_para, sess, log, loop_indexs)
                         if answer == 'Done':
                             return 'Done'
 
-                        [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size,valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir,eval_last_num, epoch, loop] = temp_para
+                        [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size,valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir,eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic] = temp_para
 
                     loop += 1
 
@@ -156,10 +172,17 @@ def train_whole_dataset_begin(para_dic, model_name):
                 # do the test evaluate
                 test_acc = evaluate_test(test_parameter)
 
-                # store module every epoch
-                store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
-                # store log file every epoch
-                store_log(log_dir, test_acc, epoch, log)
+                #only store x best model
+                if test_acc > best_model_acc_dic.min():
+                    best_model_acc_dic[best_model_acc_dic.argmin()] = test_acc
+                    module_path = module_dir + "%.4f_epoch%d/" % (test_acc, epoch)
+                    #delete the latest module
+                    del_dir(best_model_dir_dic[best_model_acc_dic.argmin()])
+                    best_model_dir_dic[best_model_acc_dic.argmin()] = module_path
+                    # store module every epoch
+                    store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
+                    # store log file every epoch
+                    store_log(log_dir, test_acc, epoch, log)
 
                 epoch += 1
     return 'Done'

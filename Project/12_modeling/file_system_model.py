@@ -28,6 +28,15 @@ def del_and_create_dir(dir_path):
         tf.gfile.DeleteRecursively(dir_path)
     tf.gfile.MakeDirs(dir_path)
 
+#delete the target dir
+#ver 1.0
+def del_dir(dir_path):
+    if tf.gfile.Exists(dir_path):
+        tf.gfile.DeleteRecursively(dir_path)
+        return 'Done'
+    else:
+        return 'Error, do not have the dir path'
+
 #to save the dictionary to json file
 #ver 1.0
 def save_dic_to_json(dic, filename):
