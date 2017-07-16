@@ -78,12 +78,11 @@ def train_whole_dataset_begin(para_dic, model_name):
     #get all para first
     [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic] = get_para_from_dic(para_dic)
 
-    #change the dir and log dir name
-    dir = dir + model_name + '/'
+    #change the dir and log dir nameodule_dir = module_dir + model_name + '/'
     log_dir = log_dir + model_name + '/'
 
     #create the acc dic and dir dic
-    best_model_acc_dic = np.arange(0,-best_model_number,-1)
+    best_model_acc_dic = np.arange(0.0,-best_model_number,-1.0).tolist()
     best_model_dir_dic = []
     for i in range(best_model_number):
         best_model_dir_dic.append('%s'%best_model_acc_dic[i])
@@ -172,13 +171,16 @@ def train_whole_dataset_begin(para_dic, model_name):
                 # do the test evaluate
                 test_acc = evaluate_test(test_parameter)
 
+                temp_best_acc = np.array(best_model_acc_dic)
                 #only store x best model
-                if test_acc > best_model_acc_dic.min():
-                    best_model_acc_dic[best_model_acc_dic.argmin()] = test_acc
+                if test_acc > temp_best_acc.min():
+                    small_index = temp_best_acc.argmin()
+                    temp_best_acc[small_index] = test_acc
                     module_path = module_dir + "%.4f_epoch%d/" % (test_acc, epoch)
                     #delete the latest module
-                    del_dir(best_model_dir_dic[best_model_acc_dic.argmin()])
-                    best_model_dir_dic[best_model_acc_dic.argmin()] = module_path
+                    del_dir(best_model_dir_dic[small_index])
+                    best_model_dir_dic[small_index] = module_path
+                    best_model_acc_dic = temp_best_acc.tolist()
                     # store module every epoch
                     store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
                     # store log file every epoch

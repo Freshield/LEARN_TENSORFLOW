@@ -27,8 +27,8 @@
       <file leaf-file-name="restore_model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/restore_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="591">
-              <caret line="152" column="0" lean-forward="true" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
+            <state relative-caret-position="493">
+              <caret line="154" column="60" lean-forward="false" selection-start-line="154" selection-start-column="60" selection-end-line="154" selection-end-column="60" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -39,8 +39,8 @@
       <file leaf-file-name="train_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="185" column="0" lean-forward="true" selection-start-line="173" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
+            <state relative-caret-position="444">
+              <caret line="186" column="60" lean-forward="true" selection-start-line="176" selection-start-column="19" selection-end-line="186" selection-end-column="60" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -73,8 +73,8 @@
       <file leaf-file-name="test7.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test7.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="31" column="46" lean-forward="false" selection-start-line="31" selection-start-column="46" selection-end-line="31" selection-end-column="46" />
+            <state relative-caret-position="464">
+              <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -82,11 +82,21 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="test8.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test8.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="444">
+              <caret line="16" column="11" lean-forward="false" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="basic_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/basic_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="364" column="66" lean-forward="true" selection-start-line="364" selection-start-column="4" selection-end-line="364" selection-end-column="66" />
+            <state relative-caret-position="-1742">
+              <caret line="462" column="49" lean-forward="false" selection-start-line="462" selection-start-column="49" selection-end-line="462" selection-end-column="49" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -97,7 +107,7 @@
       <file leaf-file-name="file_system_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/file_system_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
+            <state relative-caret-position="69">
               <caret line="31" column="8" lean-forward="false" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -142,6 +152,7 @@
       <find>store</find>
       <find>res</find>
       <find>store_m</find>
+      <find>loop_eval_num</find>
     </findStrings>
     <replaceStrings>
       <replace>epoch</replace>
@@ -179,9 +190,10 @@
         <option value="$PROJECT_DIR$/image_model.py" />
         <option value="$PROJECT_DIR$/test_restore.py" />
         <option value="$PROJECT_DIR$/flow_model.py" />
-        <option value="$PROJECT_DIR$/basic_model.py" />
         <option value="$PROJECT_DIR$/file_system_model.py" />
+        <option value="$PROJECT_DIR$/basic_model.py" />
         <option value="$PROJECT_DIR$/test7.py" />
+        <option value="$PROJECT_DIR$/test8.py" />
         <option value="$PROJECT_DIR$/train_model.py" />
         <option value="$PROJECT_DIR$/restore_model.py" />
       </list>
@@ -221,38 +233,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="12_modeling" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="12_modeling" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="modules" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Link_CNN" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="12_modeling" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="12_modeling" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="interrupt" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -273,25 +253,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test7">
-    <configuration default="false" name="test_class" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="12_modeling" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_class.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.test8">
     <configuration default="false" name="test5" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -364,6 +326,24 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
+    <configuration default="false" name="test8" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="12_modeling" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test8.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -430,19 +410,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.test_class" />
-      <item index="1" class="java.lang.String" itemvalue="Python.test5" />
-      <item index="2" class="java.lang.String" itemvalue="Python.test6" />
-      <item index="3" class="java.lang.String" itemvalue="Python.test_restore" />
-      <item index="4" class="java.lang.String" itemvalue="Python.test7" />
+      <item index="0" class="java.lang.String" itemvalue="Python.test5" />
+      <item index="1" class="java.lang.String" itemvalue="Python.test6" />
+      <item index="2" class="java.lang.String" itemvalue="Python.test_restore" />
+      <item index="3" class="java.lang.String" itemvalue="Python.test7" />
+      <item index="4" class="java.lang.String" itemvalue="Python.test8" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.test7" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test_restore" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test6" />
-        <item index="3" class="java.lang.String" itemvalue="Python.test5" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test_class" />
+        <item index="0" class="java.lang.String" itemvalue="Python.test8" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test7" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test_restore" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test6" />
+        <item index="4" class="java.lang.String" itemvalue="Python.test5" />
       </list>
     </recent_temporary>
   </component>
@@ -471,7 +451,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2386044" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.50189495" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37934905" sideWeight="0.49810505" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2514029" sideWeight="0.49810505" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32996634" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -503,16 +483,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/basic_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8265">
-          <caret line="291" column="33" lean-forward="true" selection-start-line="291" selection-start-column="33" selection-end-line="291" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/train_model.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="638">
@@ -805,9 +775,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/basic_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1742">
+          <caret line="462" column="49" lean-forward="false" selection-start-line="462" selection-start-column="49" selection-end-line="462" selection-end-column="49" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/file_system_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
+        <state relative-caret-position="69">
           <caret line="31" column="8" lean-forward="false" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
@@ -815,30 +795,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/basic_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="364" column="66" lean-forward="true" selection-start-line="364" selection-start-column="4" selection-end-line="364" selection-end-column="66" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test7.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="31" column="46" lean-forward="false" selection-start-line="31" selection-start-column="46" selection-end-line="31" selection-end-column="46" />
+        <state relative-caret-position="464">
+          <caret line="22" column="7" lean-forward="true" selection-start-line="22" selection-start-column="7" selection-end-line="22" selection-end-column="7" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test8.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="444">
+          <caret line="16" column="11" lean-forward="false" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/train_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="185" column="0" lean-forward="true" selection-start-line="173" selection-start-column="0" selection-end-line="185" selection-end-column="0" />
+        <state relative-caret-position="444">
+          <caret line="186" column="60" lean-forward="true" selection-start-line="176" selection-start-column="19" selection-end-line="186" selection-end-column="60" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -847,8 +825,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/restore_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="591">
-          <caret line="152" column="0" lean-forward="true" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
+        <state relative-caret-position="493">
+          <caret line="154" column="60" lean-forward="false" selection-start-line="154" selection-start-column="60" selection-end-line="154" selection-end-column="60" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

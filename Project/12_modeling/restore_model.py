@@ -25,13 +25,13 @@ def restore_begin(para_dic, model_name, model_path, log_path = None, loop_indexs
 
 
     #change the dir and log dir name
-    dir = dir + model_name + '/'
-    log_dir = log_dir + model_name + '/'
+    #module_dir = module_dir + model_name + '/'
+    #log_dir = log_dir + model_name + '/'
 
 
     #consider the acc dic and dir dic
     if best_model_acc_dic == None:
-        best_model_acc_dic = np.arange(0,-best_model_number,-1)
+        best_model_acc_dic = np.arange(0.0,-best_model_number,-1.0).tolist()
     if best_model_dir_dic == None:
         best_model_dir_dic = []
         for i in range(best_model_number):
@@ -139,13 +139,16 @@ def restore_begin(para_dic, model_name, model_path, log_path = None, loop_indexs
                 # do the test evaluate
                 test_acc = evaluate_test(test_parameter)
 
+                temp_best_acc = np.array(best_model_acc_dic)
                 #only store x best model
-                if test_acc > best_model_acc_dic.min():
-                    best_model_acc_dic[best_model_acc_dic.argmin()] = test_acc
+                if test_acc > temp_best_acc.min():
+                    small_index = temp_best_acc.argmin()
+                    temp_best_acc[small_index] = test_acc
                     module_path = module_dir + "%.4f_epoch%d/" % (test_acc, epoch)
-                    #delete the latest module
-                    del_dir(best_model_dir_dic[best_model_acc_dic.argmin()])
-                    best_model_dir_dic[best_model_acc_dic.argmin()] = module_path
+                    # delete the latest module
+                    del_dir(best_model_dir_dic[small_index])
+                    best_model_dir_dic[small_index] = module_path
+                    best_model_acc_dic = temp_best_acc.tolist()
                     # store module every epoch
                     store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
                     # store log file every epoch

@@ -29,7 +29,7 @@ def del_dir(dir_path):
     else:
         return 'Error, do not have the dir path'
 
-print del_dir('modules/Link_CNN/0.4280_epoch8/')
+print del_dir('-8.0')
 
 c = 10
 d = np.arange(0,-c,-1)
