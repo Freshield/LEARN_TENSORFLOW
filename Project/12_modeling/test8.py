@@ -1,4 +1,5 @@
 import numpy as np
+import file_system_model as fsm
 
 a = np.arange(0.0,-10,-1.0)
 print a
@@ -18,3 +19,5 @@ if b > a.min():
 
 print a
 print c
+
+fsm.create_dir('interrupt1')

@@ -90,8 +90,8 @@ def train_whole_dataset_begin(para_dic, model_name):
     max_step = train_file_size // batch_size
     loops = data_size // file_size
     log = Log()
-    del_and_create_dir(log_dir)
-    del_and_create_dir(module_dir)
+    create_dir(log_dir)
+    create_dir(module_dir)
 
     with tf.Graph().as_default():
         with tf.Session() as sess:
@@ -138,8 +138,10 @@ def train_whole_dataset_begin(para_dic, model_name):
 
                     words_log_print_loop(loop, loops, loop_loss_v, loop_acc, log)
 
+                    loop += 1
+
                     # each loop_eval_num, do evaluation
-                    if (loop != 0 and loop % loop_eval_num == 0) or loop == loops - 1:
+                    if loop % loop_eval_num == 0 or loop == loops:
                         # show the time
                         time_show(before_time, loop_eval_num, loop, loops, epoch, epochs, log)
                         # store the parameter first
@@ -157,7 +159,6 @@ def train_whole_dataset_begin(para_dic, model_name):
 
                         [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size,valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir,eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic] = temp_para
 
-                    loop += 1
 
 
 

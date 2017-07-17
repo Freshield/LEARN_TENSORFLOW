@@ -28,6 +28,12 @@ def del_and_create_dir(dir_path):
         tf.gfile.DeleteRecursively(dir_path)
     tf.gfile.MakeDirs(dir_path)
 
+#create dir
+#ver 1.0
+def create_dir(dir_path):
+    if tf.gfile.Exists(dir_path) != True:
+        tf.gfile.MakeDirs(dir_path)
+
 #delete the target dir
 #ver 1.0
 def del_dir(dir_path):
