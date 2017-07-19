@@ -13,11 +13,16 @@ def Gaussian_possible(number, mu, sigma):
 
 def Gaussian_array(x, mu, sigma):
     #Dimension
-    #x(7500,10)
-    #mu(7500,10)
-    #sigma(7500,7500,10)
+    #N1 + N2 = 10
+    #x(7500,N1)
+    #mu(7500,1)
+    #sigma(7500,7500,1)
     D,N = x.shape
-    x = x.T - 
+    mu_array = np.zeros((D,N))
+    for i in range(N):
+        mu_array[:,i] = np.reshape(mu,(D))
+
+    x = x.T - mu_array.T
 
 
 
