@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import time
 
+dic = {'Class_1':1, 'Class_2':2, 'Class_3':3, 'Class_4':4, 'Class_5':5, 'Class_6':6, 'Class_7':7, 'Class_8':8, 'Class_9':9}
+
 #split the dataset into three part:
 #training, validation, test
 #ver 1.0
@@ -9,73 +11,59 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
     if radio != None:
         test_dataset_size = int(radio * len(dataset))
 
-    train_set = dataset.values[0:-test_dataset_size * 2]
-    validation_set = dataset.values[-test_dataset_size * 2:-test_dataset_size]
-    test_set = dataset.values[-test_dataset_size:len(dataset)]
+    indexs = np.arange(len(dataset))
+    np.random.shuffle(indexs)
+
+    train_set = dataset.values[indexs[0:-test_dataset_size * 2]]
+    validation_set = dataset.values[indexs[-test_dataset_size * 2:-test_dataset_size]]
+    test_set = dataset.values[indexs[-test_dataset_size:len(dataset)]]
 
     return train_set, validation_set, test_set
 
 #normalize the dataset, push data between -1 to 1
 #ver 1.0
-def normalize_dataset(dataset, min_values=None, max_values=None):
-    norm_dataset = np.zeros((dataset.shape))
-    norm_dataset[:, :] = dataset[:, :]
-
-    if min_values == None:
-        CMr_min = np.min(norm_dataset[:,0:3100])
-        CMi_min = np.min(norm_dataset[:,3100:6200])
-        CD_min = np.min(norm_dataset[:,6200:6201])
-        length_min = np.min(norm_dataset[:,6201:6221])
-        power_min = np.min(norm_dataset[:,6221:6241])
-    else:
-        CMr_min, CMi_min, CD_min, length_min, power_min = min_values
-
-
-    if max_values == None:
-        CMr_max = np.max(norm_dataset[:,0:3100])
-        CMi_max = np.max(norm_dataset[:,3100:6200])
-        CD_max = np.max(norm_dataset[:,6200:6201])
-        length_max = np.max(norm_dataset[:,6201:6221])
-        power_max = np.max(norm_dataset[:,6221:6241])
-    else:
-        CMr_max, CMi_max, CD_max, length_max, power_max = max_values
+def normalize_dataset(dataset, min_values=None, max_values=None, type='train'):
 
     def calcul_norm(dataset, min, max):
         return (2 * dataset - max - min) / (max - min)
 
-    norm_dataset[:, 0:3100] = calcul_norm(norm_dataset[:, 0:3100], CMr_min, CMr_max)
-    norm_dataset[:, 3100:6200] = calcul_norm(norm_dataset[:, 3100:6200], CMi_min, CMi_max)
-    norm_dataset[:, 6200:6201] = calcul_norm(norm_dataset[:, 6200:6201], CD_min, CD_max)
-    norm_dataset[:, 6201:6221] = calcul_norm(norm_dataset[:, 6201:6221], length_min, length_max)
-    norm_dataset[:, 6221:6241] = calcul_norm(norm_dataset[:, 6221:6241], power_min, power_max)
+    if type == 'train':
+        x,y = dataset.shape
+        norm_dataset = np.zeros((x,y-1))
+        values = np.zeros((x,y-2))
+        values[:,:] = dataset[:,1:-1]
+        for i in range(len(norm_dataset)):
+            norm_dataset[i,-1] = dic[dataset[i,-1]]
+    elif type == 'test':
+        x, y = dataset.shape
+        norm_dataset = np.zeros((x, y - 1))
+        values = np.zeros((x, y - 1))
+        values[:,:] = dataset[:, 1:]
 
-    min_values = (CMr_min, CMi_min, CD_min, length_min, power_min)
-    max_values = (CMr_max, CMi_max, CD_max, length_max, power_max)
+    if min_values == None:
+        min_values = np.min(values, axis=0)
 
-    return norm_dataset, min_values, max_values
+    if max_values == None:
+        max_values = np.max(values, axis=0)
 
-#get the values from array read from csv file
-#ver 1.0
-def get_values_from_array(array, num):
-    CMr = array[num,0]
-    CMi = array[num,1]
-    CD = array[num,2]
-    length = array[num,3]
-    power = array[num,4]
+    values = calcul_norm(values, min_values, max_values)
 
-    values = CMr, CMi, CD, length, power
+    if type == 'train':
+        norm_dataset[:,:-1] = values[:,:]
+    elif type == 'test':
+        norm_dataset[:,:] = values[:,:]
 
-    return values
+    return norm_dataset
 
 #recut the normalize and split the dataset
 #ver 1.0
-def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize):
+def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize, type='train'):
     #filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
     #chunkSize = 1000
     #savePath = '/media/freshield/LINUX/Ciena/CIENA/raw/norm/'
     #minmax_name = '/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv'
 
-    reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
+    reader = pd.read_csv(filename, iterator=True)
 
     loop = True
     # to do
@@ -89,8 +77,8 @@ def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize):
     minmax_array = pd.read_csv(minmax_name, header=None, dtype=np.float32).values
 
     # get min and max
-    min_values = get_values_from_array(minmax_array, 0)
-    max_values = get_values_from_array(minmax_array, 1)
+    min_values = minmax_array[0]
+    max_values = minmax_array[1]
 
     print 'begin to norm and recut the file'
 
@@ -99,17 +87,21 @@ def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize):
         try:
             chunk = reader.get_chunk(chunkSize)
 
-            train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
+            if type == 'train':
+                train_set, validation_set, test_set = split_dataset(chunk, radio=0.025)
 
-            # normalize dataset
-            train_set, _, _ = normalize_dataset(train_set, min_values, max_values)
-            validation_set, _, _ = normalize_dataset(validation_set, min_values, max_values)
-            test_set, _, _ = normalize_dataset(test_set, min_values, max_values)
+                # normalize dataset
+                train_set = normalize_dataset(train_set, min_values, max_values, type)
+                validation_set = normalize_dataset(validation_set, min_values, max_values, type)
+                test_set = normalize_dataset(test_set, min_values, max_values, type)
 
-            np.savetxt(savePath + "train_set_%d.csv" % count, train_set, delimiter=",")
-            np.savetxt(savePath + "validation_set_%d.csv" % count, validation_set,
-                       delimiter=",")
-            np.savetxt(savePath + "test_set_%d.csv" % count, test_set, delimiter=",")
+                np.savetxt(savePath + "train_set_%d.csv" % count, train_set, delimiter=",")
+                np.savetxt(savePath + "validation_set_%d.csv" % count, validation_set, delimiter=",")
+                np.savetxt(savePath + "test_set_%d.csv" % count, test_set, delimiter=",")
+            elif type == 'test':
+                test_set = chunk.values
+                test_set = normalize_dataset(test_set, min_values, max_values, type)
+                np.savetxt(savePath + "test_set_%d.csv" % count, test_set, delimiter=",")
 
             if count % 10 == 0:
                 span_time = time.time() - before_time
@@ -126,4 +118,5 @@ def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize):
             print "stop"
             break
 
-#norm_recut_dataset('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000,100)
+#norm_recut_dataset('data/train.csv', 'data/norm/train/', 'data/min_max.csv', 61878, 10000, 'train')
+norm_recut_dataset('data/test.csv', 'data/norm/test/', 'data/min_max.csv', 144368, 10000, 'test')

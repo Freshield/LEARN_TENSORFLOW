@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
 
-data = pd.read_csv('data/min_max.csv', header=None)
+data = pd.read_csv('data/train.csv', header=None)
 
-print data.values
+print data.values.shape

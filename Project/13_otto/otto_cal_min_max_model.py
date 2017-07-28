@@ -75,7 +75,8 @@ def cal_min_max(filename, savename, datasize, chunkSize):
             print count
             chunk = reader.get_chunk(chunkSize)
 
-            train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
+            #train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
+            train_set = chunk.values
 
             # get min and max
             min_values, max_values = get_min_max_values(train_set)

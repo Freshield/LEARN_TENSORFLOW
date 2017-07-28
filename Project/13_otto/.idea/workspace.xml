@@ -15,8 +15,8 @@
       <file leaf-file-name="test_pandas.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_pandas.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="667">
-              <caret line="24" column="31" lean-forward="false" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
+            <state relative-caret-position="348">
+              <caret line="12" column="45" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="45" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -27,11 +27,9 @@
       <file leaf-file-name="data_process_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../12_modeling/data_process_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="58">
+              <caret line="42" column="17" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="42" selection-end-column="17" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -39,8 +37,8 @@
       <file leaf-file-name="otto_recut_file_model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/otto_recut_file_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2494">
-              <caret line="85" column="9" lean-forward="false" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
+            <state relative-caret-position="345">
+              <caret line="121" column="51" lean-forward="false" selection-start-line="121" selection-start-column="51" selection-end-line="121" selection-end-column="51" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -48,11 +46,45 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="test3.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test3.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="432">
+              <caret line="32" column="7" lean-forward="false" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test4.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test4.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="20" column="23" lean-forward="false" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sample.csv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/sample.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-189">
+              <caret line="5" column="195" lean-forward="false" selection-start-line="5" selection-start-column="195" selection-end-line="5" selection-end-column="195" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="otto_cal_min_max_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/otto_cal_min_max_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3161">
-              <caret line="111" column="1" lean-forward="false" selection-start-line="111" selection-start-column="1" selection-end-line="111" selection-end-column="1" />
+            <state relative-caret-position="290">
+              <caret line="112" column="1" lean-forward="false" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -63,8 +95,8 @@
       <file leaf-file-name="test2.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+            <state relative-caret-position="145">
+              <caret line="5" column="23" lean-forward="false" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -75,7 +107,7 @@
       <file leaf-file-name="test_chunkread.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_chunkread.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
+            <state relative-caret-position="493">
               <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
@@ -87,7 +119,7 @@
       <file leaf-file-name="test1.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1334">
+            <state relative-caret-position="345">
               <caret line="46" column="7" lean-forward="false" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
               <folding />
             </state>
@@ -103,6 +135,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>rand</find>
+    </findStrings>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -112,7 +149,9 @@
         <option value="$PROJECT_DIR$/test_chunkread.py" />
         <option value="$PROJECT_DIR$/test_pandas.py" />
         <option value="$PROJECT_DIR$/test2.py" />
+        <option value="$PROJECT_DIR$/test3.py" />
         <option value="$PROJECT_DIR$/otto_cal_min_max_model.py" />
+        <option value="$PROJECT_DIR$/test4.py" />
         <option value="$PROJECT_DIR$/otto_recut_file_model.py" />
       </list>
     </option>
@@ -166,12 +205,30 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="13_otto" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="13_otto" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="norm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../12_modeling/calculate_min_max_model.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../12_modeling/data_process_model.py" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -185,61 +242,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.otto_cal_min_max_model">
-    <configuration default="false" name="test_pandas" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="13_otto" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_pandas.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="test1" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="13_otto" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test1.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="test_chunkread" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="13_otto" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_chunkread.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.otto_recut_file_model">
     <configuration default="false" name="otto_cal_min_max_model" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -271,6 +274,60 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="13_otto" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="test3" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="13_otto" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test3.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="otto_recut_file_model" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="13_otto" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/otto_recut_file_model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="test4" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="13_otto" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test4.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -357,19 +414,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.test_pandas" />
-      <item index="1" class="java.lang.String" itemvalue="Python.test1" />
-      <item index="2" class="java.lang.String" itemvalue="Python.test_chunkread" />
-      <item index="3" class="java.lang.String" itemvalue="Python.otto_cal_min_max_model" />
-      <item index="4" class="java.lang.String" itemvalue="Python.test2" />
+      <item index="0" class="java.lang.String" itemvalue="Python.otto_cal_min_max_model" />
+      <item index="1" class="java.lang.String" itemvalue="Python.test2" />
+      <item index="2" class="java.lang.String" itemvalue="Python.test3" />
+      <item index="3" class="java.lang.String" itemvalue="Python.otto_recut_file_model" />
+      <item index="4" class="java.lang.String" itemvalue="Python.test4" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.otto_cal_min_max_model" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test2" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test_pandas" />
-        <item index="3" class="java.lang.String" itemvalue="Python.test_chunkread" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test1" />
+        <item index="0" class="java.lang.String" itemvalue="Python.otto_recut_file_model" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test4" />
+        <item index="2" class="java.lang.String" itemvalue="Python.otto_cal_min_max_model" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test3" />
+        <item index="4" class="java.lang.String" itemvalue="Python.test2" />
       </list>
     </recent_temporary>
   </component>
@@ -401,7 +458,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2689927" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32996634" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32996634" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -442,7 +499,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -510,7 +567,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -539,6 +596,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="87">
           <caret line="3" column="20" lean-forward="false" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -547,7 +605,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -587,24 +645,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/sample.csv">
+    <entry file="file://$PROJECT_DIR$/data/min_max.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="5" column="195" lean-forward="false" selection-start-line="5" selection-start-column="195" selection-end-line="5" selection-end-column="195" />
+        <state relative-caret-position="-788">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1334">
+        <state relative-caret-position="345">
           <caret line="46" column="7" lean-forward="false" selection-start-line="46" selection-start-column="7" selection-end-line="46" selection-end-column="7" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="5" column="23" lean-forward="false" selection-start-line="5" selection-start-column="23" selection-end-line="5" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test_chunkread.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
+        <state relative-caret-position="493">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
@@ -612,37 +681,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../12_modeling/data_process_model.py">
+    <entry file="file://$PROJECT_DIR$/../12_modeling/basic_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="141">
+          <caret line="189" column="25" lean-forward="false" selection-start-line="189" selection-start-column="21" selection-end-line="189" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test_pandas.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="667">
-          <caret line="24" column="31" lean-forward="false" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
+        <state relative-caret-position="348">
+          <caret line="12" column="45" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="45" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/min_max.csv">
+    <entry file="file://$PROJECT_DIR$/data/sample.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-696">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="-189">
+          <caret line="5" column="195" lean-forward="false" selection-start-line="5" selection-start-column="195" selection-end-line="5" selection-end-column="195" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test2.py">
+    <entry file="file://$PROJECT_DIR$/../12_modeling/data_process_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+        <state relative-caret-position="58">
+          <caret line="42" column="17" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="42" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="32" column="7" lean-forward="false" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
@@ -651,18 +727,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/otto_cal_min_max_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3161">
-          <caret line="111" column="1" lean-forward="false" selection-start-line="111" selection-start-column="1" selection-end-line="111" selection-end-column="1" />
+        <state relative-caret-position="290">
+          <caret line="112" column="1" lean-forward="false" selection-start-line="112" selection-start-column="1" selection-end-line="112" selection-end-column="1" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test4.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="20" column="23" lean-forward="false" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/otto_recut_file_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2494">
-          <caret line="85" column="9" lean-forward="false" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
+        <state relative-caret-position="345">
+          <caret line="121" column="51" lean-forward="false" selection-start-line="121" selection-start-column="51" selection-end-line="121" selection-end-column="51" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
