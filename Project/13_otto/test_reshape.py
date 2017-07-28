@@ -23,3 +23,7 @@ for i in xrange(x):
         data[i,j] = np.concatenate((left, right))
 
 print data
+
+result = np.zeros((x,y+3,y+3))
+result[:,1:-2,1:-2] = data[:,:,:]
+print result

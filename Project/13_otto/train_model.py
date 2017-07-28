@@ -5,19 +5,20 @@ import flow_model as fm
 #the parameter need fill
 #######################################################
 #from network_model_example import *
-SPAN=[10]
-dir = '/home/freshield/Ciena_data/dataset_10k/model/'
-epochs = 20
-data_size = 10000
-file_size = 1000
+SPAN = [10]
+dir = 'data/norm/train/'
+epochs = 200
+data_size = 61878
+file_size = 10000
 #how many loops do an evaluation
-loop_eval_num = 5
+loop_eval_num = 50
 #how many file do the valid
 eval_last_num = 10
+
 batch_size = 100
-train_file_size = 800
-valid_file_size = 100
-test_file_size = 100
+train_file_size = 9000
+valid_file_size = 500
+test_file_size = 500
 #hypers
 reg = 0.000067
 lr_rate = 0.002
@@ -68,6 +69,9 @@ def train_whole_dataset_begin(para_dic, model_name):
     elif model_name == 'link_cnn':
         import Link_CNN_model as lc
         model = lc
+    elif model_name == 'otto_resnet':
+        import otto_resnet_model as orm
+        model = orm
     else:
         print "Error model name"
         return 'error'
@@ -96,7 +100,7 @@ def train_whole_dataset_begin(para_dic, model_name):
     with tf.Graph().as_default():
         with tf.Session() as sess:
             # inputs
-            input_x = tf.placeholder(tf.float32, [None, 32, 104, 2], name='input_x')
+            input_x = tf.placeholder(tf.float32, [None, 96, 96, 1], name='input_x')
             para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
             input_y = tf.placeholder(tf.float32, [None, 3], name='input_y')
             train_phase = tf.placeholder(tf.bool, name='train_phase')

@@ -14,18 +14,23 @@ def reshape_dataset(dataset, SPAN):
 
     feature_data = dataset[:,:-1]
 
-    input_data = np.zeros((x, y, y))
+    temp_data = np.zeros((x,y,y))
+    input_data = np.zeros((x, y+3, y+3))
 
     for i in xrange(x):
         for j in xrange(y):
             right = feature_data[i, :j]
             left = feature_data[i, j:]
-            input_data[i, j] = np.concatenate((left, right))
+            temp_data[i, j] = np.concatenate((left, right))
+
+    input_data[:,1:-2,1:-2] = temp_data[:,:,:]
+
+    para_data = np.zeros((x,41))
 
     output_data = dataset[:, -1].astype(int)
     output_data = dpm.num_to_one_hot(output_data, 3)
 
-    return input_data, output_data
+    return input_data, para_data, output_data
 
 
 
@@ -184,87 +189,69 @@ def resnet_layer(input_layer, layer_depth, train_phase, name):
 #get the y_pred, define the whole net
 #architecture:
 #
-#   32*104*2
+#   96*96*1
 #       |
-#   32*104*64
+#   96*96*64
 #       |
-#   32*104*128
+#   48*48*128
 #       |
-#   16*52*256
+#   24*24*256
 #       |
-#   8*26*512
+#   12*12*512
 #       |
-#   4*13*1024
+#   6*6*1024
 #       |
 #   avg pooling
 #       |
-#   2*5*1024
+#   1*1*1024
 #       |
 #     flat
 #       |
-#       fc
-#       |
-#       512 + 41
-#           |
-#          556
-#           |
-#          256
-#           |
-#           3
+#       3
 #ver 1.0
 def inference(input_layer, para_data, train_phase, keep_prob):
     parameters = []
-    #input shape should be (N,32,104,2)
+    #input shape should be (N,96,96,1)
     input_depth = input_layer.shape[-1]
 
-    #input[N,32,100,3],output[N,32,104,64]
+    #input[N,96,96,1],output[N,96,96,64]
     with tf.variable_scope('preprocess'):
         bn_input = bm.batch_norm_layer(input_layer, train_phase, 'bn_input')
         filter = bm.weight_variable([3,3,input_depth,64], 'filter_input')
         biases = bm.bias_variable([64])
         conv_input = bm.conv2d(bn_input, filter, 1, 'SAME') + biases
 
-    #input[N,32,104,64],output[N,32,104,128]
+    #input[N,96,96,64],output[N,96,96,64]
     #first layer not change the depth
-    resnet_l1, p1 = resnet_first_layer(conv_input, 128, train_phase, 'resnet_l1')
+    resnet_l0, p0 = resnet_first_layer(conv_input, 64, train_phase, 'resnet_l0')
+    parameters[0:0] = p0
+
+    #input[N,96,96,64],output[N,48,48,128]
+    #first layer not change the depth
+    resnet_l1, p1 = resnet_layer(resnet_l0, 128, train_phase, 'resnet_l1')
     parameters[0:0] = p1
 
-    #input[N,32,104,128],output[N,16,52,256]
+    #input[N,48,48,128],output[N,24,24,256]
     resnet_l2, p2 = resnet_layer(resnet_l1, 256, train_phase, 'resnet_l2')
     parameters[0:0] = p2
 
-    #input[N,16,52,256],output[N,8,26,512]
+    #input[N,24,24,256],output[N,12,12,512]
     resnet_l3, p3 = resnet_layer(resnet_l2, 512, train_phase, 'resnet_l3')
     parameters[0:0] = p3
 
-    #input[N,8,26,512],output[N,4,13,1024]
+    #input[N,12,12,512],output[N,6,6,1024]
     resnet_l4, p4 = resnet_layer(resnet_l3, 1024, train_phase, 'resnet_l4')
     parameters[0:0] = p4
 
-    #pad for avg pool
-    #input[N,4,13,1024],output[N,6,15,1024]
-    resnet_l4_pad = tf.pad(resnet_l4, [[0,0],[1,1],[1,1],[0,0]], 'CONSTANT', 'l4_pad')
-    #input[N,6,15,1024],output[N,2,5,1024]
-    avg_pool_layer = tf.nn.avg_pool(resnet_l4_pad, [1,3,3,1], [1,3,3,1], 'VALID')
+    #input[N,6,6,1024],output[N,1,1,1024]
+    avg_pool_layer = tf.nn.avg_pool(resnet_l4, [1,6,6,1], [1,1,1,1], 'VALID')
 
     #platten for fc
     #input[N,2,5,1024],output[N,2*5*1024]
-    avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 2 * 5 * 1024])
-
-    #fc layer
-    #input[N,4*9*1024],output[N,512]
-    fc1, p_fc = bm.fc_layer(avg_pool_flat, 512)
-    parameters[0:0] = p_fc
-
-    # link the para_data(N,556)
-    fc1_link = tf.concat([fc1, para_data], axis=1)
-
-    # fc layer2(N,256)
-    fc2, fc_weight2 = bm.fc_bn_drop_layer(fc1_link, 256, train_phase, keep_prob, "fc2")
-    parameters[0:0] = fc_weight2
+    avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 1024])
 
     # score layer
-    y_pred, score_weight = bm.score_layer(fc2, 3)
+    y_pred, score_weight = bm.score_layer(avg_pool_flat, 3)
     parameters[0:0] = score_weight
 
     return y_pred, parameters
