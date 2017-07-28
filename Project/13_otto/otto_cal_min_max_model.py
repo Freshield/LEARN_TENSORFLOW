@@ -18,86 +18,38 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
 #create total mininum and total maxium values
 #ver 1.0
-def create_min_max():
-    CMr_min = 0.0
-    CMi_min = 0.0
-    CD_min = 0.0
-    length_min = 0.0
-    power_min = 0.0
+def create_min_max(size):
 
-    CMr_max = 0.0
-    CMi_max = 0.0
-    CD_max = 0.0
-    length_max = 0.0
-    power_max = 0.0
-
-    min_values = (CMr_min, CMi_min, CD_min, length_min, power_min)
-    max_values = (CMr_max, CMi_max, CD_max, length_max, power_max)
+    min_values = np.zeros(size, dtype=np.float32)
+    max_values = np.zeros(size, dtype=np.float32)
 
     return min_values, max_values
 
 #get the min and max values in dataset
 #ver 1.0
 def get_min_max_values(norm_dataset):
-    CMr_min = np.min(norm_dataset[:, 0:3100])
-    CMi_min = np.min(norm_dataset[:, 3100:6200])
-    CD_min = np.min(norm_dataset[:, 6200:6201])
-    length_min = np.min(norm_dataset[:, 6201:6221])
-    power_min = np.min(norm_dataset[:, 6221:6241])
-
-    CMr_max = np.max(norm_dataset[:, 0:3100])
-    CMi_max = np.max(norm_dataset[:, 3100:6200])
-    CD_max = np.max(norm_dataset[:, 6200:6201])
-    length_max = np.max(norm_dataset[:, 6201:6221])
-    power_max = np.max(norm_dataset[:, 6221:6241])
-
-    min_values = (CMr_min, CMi_min, CD_min, length_min, power_min)
-    max_values = (CMr_max, CMi_max, CD_max, length_max, power_max)
+    print norm_dataset.shape
+    values = norm_dataset[:,1:-1]
+    min_values = np.min(values, axis=0)
+    max_values = np.max(values, axis=0)
 
     return min_values, max_values
-
-#add the values into array for save in csv file
-#ver 1.0
-def add_values_to_array(values, array, num):
-    CMr, CMi, CD, length, power = values
-
-    array[num,0] = CMr
-    array[num,1] = CMi
-    array[num,2] = CD
-    array[num,3] = length
-    array[num,4] = power
 
 #compare and return the mininum values
 #ver 1.0
 def mininum_values(values1, values2):
-    CMr_1, CMi_1, CD_1, length_1, power_1 = values1
-    CMr_2, CMi_2, CD_2, length_2, power_2 = values2
 
-    CMr = min(CMr_1, CMr_2)
-    CMi = min(CMi_1, CMi_2)
-    CD = min(CD_1, CD_2)
-    length = min(length_1, length_2)
-    power = min(power_1, power_2)
+    min_values = np.minimum(values1,values2)
 
-    output = (CMr, CMi, CD, length, power)
-
-    return output
+    return min_values
 
 #compare and return the maxium values
 #ver 1.0
 def maxium_values(values1, values2):
-    CMr_1, CMi_1, CD_1, length_1, power_1 = values1
-    CMr_2, CMi_2, CD_2, length_2, power_2 = values2
 
-    CMr = max(CMr_1, CMr_2)
-    CMi = max(CMi_1, CMi_2)
-    CD = max(CD_1, CD_2)
-    length = max(length_1, length_2)
-    power = max(power_1, power_2)
+    max_values = np.maximum(values1,values2)
 
-    output = CMr, CMi, CD, length, power
-
-    return output
+    return max_values
 
 #calculate and restore min and max
 #ver 1.0
@@ -105,15 +57,15 @@ def cal_min_max(filename, savename, datasize, chunkSize):
     #filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
     #savename = "/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv"
 
-    reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
+    reader = pd.read_csv(filename, iterator=True)
 
     loop = True
     #chunkSize = 10000
     count = 0
 
-    total_loop = datasize / chunkSize
+    total_loop = datasize // chunkSize
 
-    total_min, total_max = create_min_max()
+    total_min, total_max = create_min_max(93)
 
     print 'begin to calculate the min max value'
     while loop:
@@ -152,10 +104,10 @@ def cal_min_max(filename, savename, datasize, chunkSize):
     print total_max
     print total_min
 
-    array = np.zeros([2, 5], dtype=np.float32)
-    add_values_to_array(total_min, array, 0)
-    add_values_to_array(total_max, array, 1)
+    array = np.zeros([2, 93])
+    array[0] = total_min
+    array[1] = total_max
     np.savetxt(savename, array, delimiter=",")
 
-#cal_min_max('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000, 100)
+#cal_min_max('data/train.csv','data/min_max.csv',61878,10000)
 

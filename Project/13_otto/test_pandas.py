@@ -25,6 +25,10 @@ print result
 data2 = pd.read_csv('data/train.csv')
 
 print data2.shape
-value2 = data2.values[1:,1:]
-
+value2 = data2.values[:,1:-1]
 print value2.shape
+print value2[1]
+
+
+#print value2.shape
+#print value2.astype(np.float32)
