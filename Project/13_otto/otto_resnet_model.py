@@ -12,23 +12,27 @@ def reshape_dataset(dataset, SPAN):
     #You need fill as your program
     x,y = dataset.shape
 
+    print x
+    print y
+
     feature_data = dataset[:,:-1]
 
-    temp_data = np.zeros((x,y,y))
-    input_data = np.zeros((x, y+3, y+3))
+    temp_data = np.zeros((x,y-1,y-1))
+    input_data = np.zeros((x, y+2, y+2))
 
     for i in xrange(x):
-        for j in xrange(y):
+        for j in xrange(y-1):
             right = feature_data[i, :j]
             left = feature_data[i, j:]
             temp_data[i, j] = np.concatenate((left, right))
 
     input_data[:,1:-2,1:-2] = temp_data[:,:,:]
+    input_data = input_data.reshape((x,y+2,y+2,1))
 
     para_data = np.zeros((x,41))
 
     output_data = dataset[:, -1].astype(int)
-    output_data = dpm.num_to_one_hot(output_data, 3)
+    output_data = dpm.num_to_one_hot(output_data, 9)
 
     return input_data, para_data, output_data
 
@@ -207,7 +211,7 @@ def resnet_layer(input_layer, layer_depth, train_phase, name):
 #       |
 #     flat
 #       |
-#       3
+#       9
 #ver 1.0
 def inference(input_layer, para_data, train_phase, keep_prob):
     parameters = []
@@ -251,7 +255,7 @@ def inference(input_layer, para_data, train_phase, keep_prob):
     avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 1024])
 
     # score layer
-    y_pred, score_weight = bm.score_layer(avg_pool_flat, 3)
+    y_pred, score_weight = bm.score_layer(avg_pool_flat, 9)
     parameters[0:0] = score_weight
 
     return y_pred, parameters

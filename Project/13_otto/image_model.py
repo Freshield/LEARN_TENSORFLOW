@@ -63,7 +63,8 @@ change_para_screen = \
 train_start_screen = \
     "                         1. Use Link Parameter CNN model                \n" \
     "                         2. Use Resnet Link Parameter model             \n" \
-    "                         3. Back                                        \n"
+    "                         3. Back                                        \n" \
+    "                         4. Use Otto Resnet model                       \n"
 
 #interrupt screen
 #ver 1.0

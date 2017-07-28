@@ -1,8 +1,8 @@
 import os
 
 from image_model import *
-from calculate_min_max_model import *
-from recut_file_model import *
+from otto_cal_min_max_model import *
+from otto_recut_file_model import *
 from train_model import *
 from restore_model import *
 
@@ -202,7 +202,7 @@ def train_start_flow():
     while True:
         flow_number = wait_input("Please input the Model number:")
         flow_number = int(flow_number)
-        if flow_number < 1 or flow_number > 3:
+        if flow_number < 1 or flow_number > 4:
             print "Error number, please re-input"
             continue
         else:
@@ -553,7 +553,8 @@ restore_flow_dic = {
 model_dic = {
     1 : 'link_cnn',
     2 : 'resnet_link',
-    3 : 'Back'
+    3 : 'Back',
+    4 : 'otto_resnet'
 }
 
 

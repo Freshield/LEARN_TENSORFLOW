@@ -16,9 +16,9 @@ loop_eval_num = 50
 eval_last_num = 10
 
 batch_size = 100
-train_file_size = 9000
-valid_file_size = 500
-test_file_size = 500
+train_file_size = 9500
+valid_file_size = 250
+test_file_size = 250
 #hypers
 reg = 0.000067
 lr_rate = 0.002
@@ -102,7 +102,7 @@ def train_whole_dataset_begin(para_dic, model_name):
             # inputs
             input_x = tf.placeholder(tf.float32, [None, 96, 96, 1], name='input_x')
             para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
-            input_y = tf.placeholder(tf.float32, [None, 3], name='input_y')
+            input_y = tf.placeholder(tf.float32, [None, 9], name='input_y')
             train_phase = tf.placeholder(tf.bool, name='train_phase')
             keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
