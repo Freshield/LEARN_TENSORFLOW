@@ -119,4 +119,4 @@ def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize, typ
             break
 
 #norm_recut_dataset('data/train.csv', 'data/norm/train/', 'data/min_max.csv', 61878, 10000, 'train')
-norm_recut_dataset('data/test.csv', 'data/norm/test/', 'data/min_max.csv', 144368, 10000, 'test')
+#norm_recut_dataset('data/test.csv', 'data/norm/test/', 'data/min_max.csv', 144368, 10000, 'test')
