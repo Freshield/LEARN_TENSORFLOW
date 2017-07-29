@@ -15,7 +15,7 @@ loop_eval_num = 3
 #how many file do the valid
 eval_last_num = 3
 
-batch_size = 250
+batch_size = 100
 train_file_size = 9500
 valid_file_size = 250
 test_file_size = 250
