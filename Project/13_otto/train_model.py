@@ -11,11 +11,11 @@ epochs = 200
 data_size = 61878
 file_size = 10000
 #how many loops do an evaluation
-loop_eval_num = 50
+loop_eval_num = 3
 #how many file do the valid
-eval_last_num = 10
+eval_last_num = 3
 
-batch_size = 100
+batch_size = 250
 train_file_size = 9500
 valid_file_size = 250
 test_file_size = 250
