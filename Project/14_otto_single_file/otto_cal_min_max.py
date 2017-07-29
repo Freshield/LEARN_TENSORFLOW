@@ -3,7 +3,7 @@ import numpy as np
 
 filename = 'data/train.csv'
 
-dic = {'Class_1':0, 'Class_2':1, 'Class_3':2, 'Class_4':3, 'Class_5':4, 'Class_6':5, 'Class_7':6, 'Class_8':7, 'Class_9':8}
+dic = {'Class_1':0., 'Class_2':1., 'Class_3':2., 'Class_4':3., 'Class_5':4., 'Class_6':5., 'Class_7':6., 'Class_8':7., 'Class_9':8.}
 
 
 def calcul_norm_new(dataset, min, max, mean):
@@ -40,3 +40,12 @@ norm_test_data = np.zeros((878,94))
 norm_train_data[:,:-1] = calcul_norm_new(train_set_value, min_value, max_value, mean_value)
 norm_test_data[:,:-1] = calcul_norm_new(test_set_value, min_value, max_value, mean_value)
 
+for i in xrange(norm_train_data.shape[0]):
+    norm_train_data[i,-1] = dic[train_set[i,-1]]
+
+
+for i in xrange(norm_test_data.shape[0]):
+    norm_test_data[i,-1] = dic[test_set[i,-1]]
+
+#np.savetxt('data/norm/train_set.csv', norm_train_data, delimiter=',')
+#np.savetxt('data/norm/test_set.csv', norm_test_data, delimiter=',')
