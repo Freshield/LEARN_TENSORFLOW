@@ -6,19 +6,19 @@ import flow_model as fm
 #######################################################
 #from network_model_example import *
 SPAN = [10]
-dir = 'data/norm/train/'
+dir = 'data/norm/train1000/'
 epochs = 200
 data_size = 61878
-file_size = 10000
+file_size = 1000
 #how many loops do an evaluation
-loop_eval_num = 3
+loop_eval_num = 25
 #how many file do the valid
-eval_last_num = 3
+eval_last_num = 5
 
 batch_size = 100
-train_file_size = 9500
-valid_file_size = 250
-test_file_size = 250
+train_file_size = 950
+valid_file_size = 25
+test_file_size = 25
 #hypers
 reg = 0.000067
 lr_rate = 0.002

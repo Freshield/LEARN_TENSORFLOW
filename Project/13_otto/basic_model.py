@@ -171,7 +171,7 @@ def do_eval(sess, X_dataset, para_dataset, y_dataset, batch_size, correct_num, p
 
     if rest_data_size != 0:
         # the rest data
-        index, data, _ = dpm.sequence_get_data(X_dataset, y_dataset, indexs, index, rest_data_size)
+        index, data, _ = dpm.sequence_get_data(X_dataset, para_dataset, y_dataset, indexs, index, rest_data_size)
 
         feed_dict = {input_x: data['X'], para_pl:data['p'], input_y: data['y'], train_phase: False, keep_prob: 1.0}
 
@@ -297,8 +297,8 @@ def evaluate_last_x_files(number, eval_parameters, dir):
     for step in xrange(number):
         print step,
         # careful for the file name
-        train_file = "train_set_%d.csv" % loop_indexs[loop - 10 + step]
-        validation_file = "validation_set_%d.csv" % loop_indexs[loop - 10 + step]
+        train_file = "train_set_%d.csv" % loop_indexs[loop - number + step]
+        validation_file = "validation_set_%d.csv" % loop_indexs[loop - number + step]
 
         X_train, para_train, y_train = dpm.prepare_dataset(dir, train_file, SPAN)
         X_valid, para_valid, y_valid = dpm.prepare_dataset(dir, validation_file, SPAN)
