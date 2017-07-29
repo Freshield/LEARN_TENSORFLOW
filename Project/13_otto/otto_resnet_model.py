@@ -12,9 +12,6 @@ def reshape_dataset(dataset, SPAN):
     #You need fill as your program
     x,y = dataset.shape
 
-    print x
-    print y
-
     feature_data = dataset[:,:-1]
 
     temp_data = np.zeros((x,y-1,y-1))

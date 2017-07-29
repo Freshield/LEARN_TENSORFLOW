@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import time
 
-dic = {'Class_1':1, 'Class_2':2, 'Class_3':3, 'Class_4':4, 'Class_5':5, 'Class_6':6, 'Class_7':7, 'Class_8':8, 'Class_9':9}
+dic = {'Class_1':0, 'Class_2':1, 'Class_3':2, 'Class_4':3, 'Class_5':4, 'Class_6':5, 'Class_7':6, 'Class_8':7, 'Class_9':8}
 
 #split the dataset into three part:
 #training, validation, test
@@ -118,5 +118,5 @@ def norm_recut_dataset(filename, savePath, minmax_name, dataSize, chunkSize, typ
             print "stop"
             break
 
-#norm_recut_dataset('data/train.csv', 'data/norm/train/', 'data/min_max.csv', 61878, 10000, 'train')
+norm_recut_dataset('data/train.csv', 'data/norm/train/', 'data/min_max.csv', 61878, 10000, 'train')
 #norm_recut_dataset('data/test.csv', 'data/norm/test/', 'data/min_max.csv', 144368, 10000, 'test')
