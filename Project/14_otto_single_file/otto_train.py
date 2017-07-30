@@ -10,6 +10,7 @@ dir = 'data/norm/train1000/'
 epochs = 200
 data_size = 61000
 file_size = 61000
+test_size = 878
 
 batch_size = 100
 #hypers
@@ -64,6 +65,9 @@ def get_random_seq_indexs(data_set):
 log_dir = log_dir + 'otto_resnet' + '/'
 
 loops = data_size // batch_size
+test_loops = test_size // batch_size
+test_rest = test_size % batch_size
+test_loop = 0
 
 with tf.Graph().as_default():
     with tf.Session() as sess:
@@ -92,14 +96,18 @@ with tf.Graph().as_default():
         test_data = pd.read_csv(test_filename, header=None).values
         test_x, test_y = model.reshape_dataset(test_data)
         while epoch < epochs:
-            before_time = time.time()
 
+            print
+            print 'total loop is %d, total epoch is %d' % (loops, epochs)
+            print 'here is the %d epoch' % epoch
+            print
 
             indexs = get_random_seq_indexs(train_data)
             last_index = 0
             out_of_dataset = False
 
             while loop < loops:
+                before_time = time.time()
 
                 # should not happen
                 if out_of_dataset == True:
@@ -120,16 +128,65 @@ with tf.Graph().as_default():
 
                 loop += 1
 
+                #show time
+                if loop % 50 == 0:
+                    print
+                    print 'total loop is %d, total epoch is %d' % (loops, epochs)
+                    print 'here is the %d epoch' % epoch
+                    print
+
+                    last_time = time.time()
+                    span_time = last_time - before_time
+                    rest_loop = loops - loop
+                    rest_epoch = epochs - epoch
+                    last_loop_num = 10
+
+                    # show the last loop time
+                    print 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
+
+                    # show the rest loop time
+                    print 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
+
+                    # show the rest epoch time
+                    print 'rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600)
+                    print
+
+
+            indexs = get_random_seq_indexs(test_data)
+            out_of_dataset = False
+            last_index = 0
+            total_acc_num = 0.0
+
             #do the test
+            while test_loop < test_loops:
+                print '%d '%test_loop,
 
+                last_index, data, out_of_dataset = sequence_get_data(test_data, indexs, last_index, batch_size)
 
-            feed_dict = {input_x: test_x, input_y: test_y, train_phase: True, keep_prob: keep_prob_v}
-            acc = sess.run(accuracy, feed_dict=feed_dict)
+                data_x, data_y = model.reshape_dataset(data)
 
-            print 'test acc in epoch %d is %.4f' % acc
+                feed_dict = {input_x: data_x, input_y: data_y, train_phase: True,
+                             keep_prob: keep_prob_v}
+                corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                total_acc_num += corr_num
+
+                test_loop += 1
+
+            if test_rest !=0:
+                span_index = indexs[last_index:]
+                data = test_data[span_index]
+                data_x, data_y = model.reshape_dataset(data)
+                feed_dict = {input_x: data_x, input_y: data_y, train_phase: True,
+                             keep_prob: keep_prob_v}
+                corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                total_acc_num += corr_num
+
+            acc = total_acc_num / test_size
+            print 'test acc in epoch %d is %.4f' % (epoch, acc)
 
             # reset loop
             loop = 0
+            test_loop = 0
             # each epoch decay the lr_rate
             lr_rate *= lr_decay
 
