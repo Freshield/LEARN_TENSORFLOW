@@ -103,10 +103,10 @@ for reg in regs:
                     # reset the log dir
                     log_dir = 'logs/Restnet_link_cross_valid/'
                     #show hyper info
-                    words = '\nhyper\n'
-                    words += 'reg is %f\n' % reg
-                    words += 'lr_rate is %f\n' % lr_rate
-                    words += 'keep_prob_v is %f\n' % keep_prob_v
+                    word = '\nhyper\n'
+                    word += 'reg is %f\n' % reg
+                    word += 'lr_rate is %f\n' % lr_rate
+                    word += 'keep_prob_v is %f\n' % keep_prob_v
                     print_and_log(word, log)
 
                     # inputs
@@ -195,6 +195,13 @@ for reg in regs:
                                 # show the rest epoch time
                                 word = 'rest epoch need %.3f hours' % (
                                 span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600)
+                                print_and_log(word, log)
+
+                                #show the rest total time
+                                rest_count = count_total - count
+                                word = 'rest total time need %.3f hours' % (
+                                span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600 + span_time *
+                                loops * epochs * rest_count / 3600)
                                 print_and_log(word, log)
                                 print
 
