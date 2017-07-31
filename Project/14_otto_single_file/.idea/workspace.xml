@@ -12,14 +12,36 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="otto_train.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="otto_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/otto_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-136">
-              <caret line="71" column="21" lean-forward="false" selection-start-line="71" selection-start-column="21" selection-end-line="71" selection-end-column="21" />
+            <state relative-caret-position="726">
+              <caret line="245" column="22" lean-forward="true" selection-start-line="86" selection-start-column="0" selection-end-line="245" selection-end-column="22" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="otto_cross_valid.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/otto_cross_valid.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4931">
+              <caret line="234" column="48" lean-forward="true" selection-start-line="234" selection-start-column="48" selection-end-line="234" selection-end-column="48" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Resnet_link_cross_valid.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../10_resnet_link_para/Resnet_link_cross_valid.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2377">
+              <caret line="66" column="62" lean-forward="true" selection-start-line="62" selection-start-column="20" selection-end-line="66" selection-end-column="62" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -116,6 +138,7 @@
         <option value="$PROJECT_DIR$/basic_model.py" />
         <option value="$PROJECT_DIR$/../13_otto/train_model.py" />
         <option value="$PROJECT_DIR$/otto_train.py" />
+        <option value="$PROJECT_DIR$/otto_cross_valid.py" />
       </list>
     </option>
   </component>
@@ -191,7 +214,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../13_otto/train_model.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../10_resnet_link_para/Resnet_link_cross_valid.py" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -701,10 +724,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/otto_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-136">
-          <caret line="71" column="21" lean-forward="false" selection-start-line="71" selection-start-column="21" selection-end-line="71" selection-end-column="21" />
+        <state relative-caret-position="726">
+          <caret line="245" column="22" lean-forward="true" selection-start-line="86" selection-start-column="0" selection-end-line="245" selection-end-column="22" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../10_resnet_link_para/Resnet_link_cross_valid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2377">
+          <caret line="66" column="62" lean-forward="true" selection-start-line="62" selection-start-column="20" selection-end-line="66" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/otto_cross_valid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4931">
+          <caret line="234" column="48" lean-forward="true" selection-start-line="234" selection-start-column="48" selection-end-line="234" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
