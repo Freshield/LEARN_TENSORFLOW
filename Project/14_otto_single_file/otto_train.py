@@ -59,15 +59,30 @@ def get_random_seq_indexs(data_set):
     np.random.shuffle(indexs)
     return indexs
 
+def print_and_log(word, log):
+    print word
+    log += word + '\n'
+
 ################################################################################
 
 # change the dir and log dir nameodule_dir = module_dir + model_name + '/'
 log_dir = log_dir + 'otto_resnet' + '/'
 
+create_dir(log_dir)
+create_dir(module_dir)
+
 loops = data_size // batch_size
 test_loops = test_size // batch_size
 test_rest = test_size % batch_size
 test_loop = 0
+
+log = ''
+
+#for store modle
+best_model_acc_dic = np.arange(0.0,-best_model_number,-1.0).tolist()
+best_model_dir_dic = []
+for i in range(best_model_number):
+    best_model_dir_dic.append('%s'%best_model_acc_dic[i])
 
 with tf.Graph().as_default():
     with tf.Session() as sess:
@@ -98,8 +113,10 @@ with tf.Graph().as_default():
         while epoch < epochs:
 
             print
-            print 'total loop is %d, total epoch is %d' % (loops, epochs)
-            print 'here is the %d epoch' % epoch
+            word = 'total loop is %d, total epoch is %d' % (loops, epochs)
+            print_and_log(word, log)
+            word = 'here is the %d epoch' % epoch
+            print_and_log(word, log)
             print
 
             indexs = get_random_seq_indexs(train_data)
@@ -124,15 +141,18 @@ with tf.Graph().as_default():
                              keep_prob: keep_prob_v}
                 _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
 
-                print 'loss in loop %d is %.4f, acc is %.4f' % (loop, loss_v, acc)
+                word = 'loss in loop %d is %.4f, acc is %.4f' % (loop, loss_v, acc)
+                print_and_log(word, log)
 
                 loop += 1
 
                 #show time
                 if loop % 50 == 0:
                     print
-                    print 'total loop is %d, total epoch is %d' % (loops, epochs)
-                    print 'here is the %d epoch' % epoch
+                    word = 'total loop is %d, total epoch is %d' % (loops, epochs)
+                    print_and_log(word, log)
+                    word = 'here is the %d epoch' % epoch
+                    print_and_log(word, log)
                     print
 
                     last_time = time.time()
@@ -142,24 +162,29 @@ with tf.Graph().as_default():
                     last_loop_num = 10
 
                     # show the last loop time
-                    print 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
+                    word = 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
+                    print_and_log(word, log)
 
                     # show the rest loop time
-                    print 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
+                    word = 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
+                    print_and_log(word, log)
 
                     # show the rest epoch time
-                    print 'rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600)
+                    word = 'rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600)
+                    print_and_log(word, log)
                     print
 
 
+            # do the test
             indexs = get_random_seq_indexs(test_data)
             out_of_dataset = False
             last_index = 0
             total_acc_num = 0.0
 
-            #do the test
+
             while test_loop < test_loops:
-                print '%d '%test_loop,
+                word = '%d '%test_loop,
+                print_and_log(word, log)
 
                 last_index, data, out_of_dataset = sequence_get_data(test_data, indexs, last_index, batch_size)
 
@@ -182,7 +207,35 @@ with tf.Graph().as_default():
                 total_acc_num += corr_num
 
             acc = total_acc_num / test_size
-            print 'test acc in epoch %d is %.4f' % (epoch, acc)
+            word = 'test acc in epoch %d is %.4f' % (epoch, acc)
+            print_and_log(word, log)
+
+            #for store model
+            temp_best_acc = np.array(best_model_acc_dic)
+            # only store x best model
+            if acc > temp_best_acc.min():
+                #find the smallest index
+                small_index = temp_best_acc.argmin()
+                temp_best_acc[small_index] = acc
+                module_path = module_dir + "%.4f_epoch%d/" % (acc, epoch)
+                # delete the latest module
+                del_dir(best_model_dir_dic[small_index])
+                #update the dir and acc dic
+                best_model_dir_dic[small_index] = module_path
+                best_model_acc_dic = temp_best_acc.tolist()
+                # store module
+                saver = tf.train.Saver()
+                module_path = module_dir + "%.4f_epoch%d/" % (acc, epoch)
+                module_name = module_path + "module.ckpt"
+                del_and_create_dir(module_path)
+                save_path = saver.save(sess, module_name)
+                words = "Model saved in file: %s" % save_path
+                print_and_log(words)
+
+            filename = log_dir + '%.4f_epoch%d' % (acc, epoch)
+            f = file(filename, 'w+')
+            f.write(log)
+            f.close()
 
             # reset loop
             loop = 0

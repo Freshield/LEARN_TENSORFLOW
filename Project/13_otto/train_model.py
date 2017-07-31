@@ -188,8 +188,8 @@ def train_whole_dataset_begin(para_dic, model_name):
                     best_model_acc_dic = temp_best_acc.tolist()
                     # store module every epoch
                     store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
-                    # store log file every epoch
-                    store_log(log_dir, test_acc, epoch, log)
+                # store log file every epoch
+                store_log(log_dir, test_acc, epoch, log)
 
                 epoch += 1
     return 'Done'
