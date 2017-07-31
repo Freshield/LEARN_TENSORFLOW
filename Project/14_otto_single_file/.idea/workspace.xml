@@ -15,8 +15,8 @@
       <file leaf-file-name="otto_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/otto_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6989">
-              <caret line="245" column="22" lean-forward="false" selection-start-line="86" selection-start-column="0" selection-end-line="245" selection-end-column="22" />
+            <state relative-caret-position="436">
+              <caret line="236" column="24" lean-forward="true" selection-start-line="236" selection-start-column="24" selection-end-line="236" selection-end-column="24" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -24,24 +24,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="otto_cross_valid.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="otto_cross_valid.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/otto_cross_valid.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="173">
-              <caret line="204" column="46" lean-forward="false" selection-start-line="204" selection-start-column="46" selection-end-line="204" selection-end-column="46" />
+            <state relative-caret-position="407">
+              <caret line="103" column="47" lean-forward="false" selection-start-line="103" selection-start-column="47" selection-end-line="103" selection-end-column="47" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="otto_cross_valid.py" pinned="false" current-in-tab="true">
-        <entry file="file://$USER_HOME$/ciena_test/14_otto_single_file/otto_cross_valid.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5274">
-              <caret line="269" column="8" lean-forward="false" selection-start-line="269" selection-start-column="8" selection-end-line="269" selection-end-column="8" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -148,17 +138,17 @@
         <option value="$PROJECT_DIR$/test1.py" />
         <option value="$PROJECT_DIR$/basic_model.py" />
         <option value="$PROJECT_DIR$/../13_otto/train_model.py" />
+        <option value="$USER_HOME$/ciena_test/14_otto_single_file/otto_cross_valid.py" />
         <option value="$PROJECT_DIR$/otto_train.py" />
         <option value="$PROJECT_DIR$/otto_cross_valid.py" />
-        <option value="$USER_HOME$/ciena_test/14_otto_single_file/otto_cross_valid.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="97" />
-    <option name="y" value="1" />
-    <option name="width" value="1824" />
-    <option name="height" value="1080" />
+    <option name="x" value="1992" />
+    <option name="y" value="-8" />
+    <option name="width" value="1849" />
+    <option name="height" value="1089" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -175,8 +165,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -223,6 +211,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -427,9 +417,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="97" y="1" width="1824" height="1080" extended-state="6" />
+    <frame x="1992" y="-8" width="1849" height="1089" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27454337" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27968487" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.68480724" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -471,7 +461,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="638">
           <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -553,7 +542,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="638">
           <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -624,7 +612,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="638">
           <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -676,7 +663,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="638">
           <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -728,7 +714,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="638">
           <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -770,7 +755,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="594">
           <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -798,7 +782,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="638">
           <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -864,8 +847,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/otto_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6989">
-          <caret line="245" column="22" lean-forward="false" selection-start-line="86" selection-start-column="0" selection-end-line="245" selection-end-column="22" />
+        <state relative-caret-position="436">
+          <caret line="236" column="24" lean-forward="true" selection-start-line="236" selection-start-column="24" selection-end-line="236" selection-end-column="24" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -888,21 +871,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/ciena_test/14_otto_single_file/otto_cross_valid.py" />
     <entry file="file://$PROJECT_DIR$/otto_cross_valid.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="204" column="46" lean-forward="false" selection-start-line="204" selection-start-column="46" selection-end-line="204" selection-end-column="46" />
+        <state relative-caret-position="407">
+          <caret line="103" column="47" lean-forward="false" selection-start-line="103" selection-start-column="47" selection-end-line="103" selection-end-column="47" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/ciena_test/14_otto_single_file/otto_cross_valid.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5274">
-          <caret line="269" column="8" lean-forward="false" selection-start-line="269" selection-start-column="8" selection-end-line="269" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>

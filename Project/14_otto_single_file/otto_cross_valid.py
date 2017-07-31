@@ -86,7 +86,7 @@ keeps = random_uniform_array(4, -0.3, 0)
 
 log = ''
 
-log_dir = 'logs/Restnet_link_cross_valid/'
+log_dir = 'logs/otto_resnet/'
 del_and_create_dir(log_dir)
 
 count_total = len(regs) * len(lr_rates) * len(keeps)
@@ -101,7 +101,7 @@ for reg in regs:
                     log = ''
 
                     # reset the log dir
-                    log_dir = 'logs/Restnet_link_cross_valid/'
+                    log_dir = 'logs/otto_resnet/'
                     #show hyper info
                     word = '\nhyper\n'
                     word += 'reg is %f\n' % reg
