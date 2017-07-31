@@ -212,8 +212,7 @@ for reg in regs:
                         total_acc_num = 0.0
 
                         while test_loop < test_loops:
-                            word = '%d ' % test_loop,
-                            print_and_log(word, log)
+                            print '%d ' % test_loop,
 
                             last_index, data, out_of_dataset = sequence_get_data(test_data, indexs, last_index,
                                                                                  batch_size)
