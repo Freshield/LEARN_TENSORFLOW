@@ -15,7 +15,7 @@
       <file leaf-file-name="otto_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/otto_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="639">
+            <state relative-caret-position="5481">
               <caret line="193" column="0" lean-forward="false" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
@@ -39,7 +39,7 @@
       <file leaf-file-name="otto_resnet_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/otto_resnet_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="755">
+            <state relative-caret-position="6003">
               <caret line="210" column="27" lean-forward="false" selection-start-line="210" selection-start-column="27" selection-end-line="210" selection-end-column="27" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
@@ -52,7 +52,7 @@
         <entry file="file://$PROJECT_DIR$/otto_cal_recut_norm.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="377">
-              <caret line="18" column="25" lean-forward="true" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
+              <caret line="18" column="25" lean-forward="false" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -109,10 +109,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1993" />
-    <option name="y" value="-5" />
-    <option name="width" value="1847" />
-    <option name="height" value="1085" />
+    <option name="x" value="1992" />
+    <option name="y" value="-8" />
+    <option name="width" value="1849" />
+    <option name="height" value="1089" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -361,9 +361,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1993" y="-5" width="1847" height="1085" extended-state="6" />
+    <frame x="1992" y="-8" width="1849" height="1089" extended-state="6" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25492403" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.259426" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4758772" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -391,6 +391,64 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/otto_train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5481">
+          <caret line="193" column="0" lean-forward="false" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4263">
+          <caret line="151" column="0" lean-forward="false" selection-start-line="151" selection-start-column="0" selection-end-line="151" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/otto_resnet_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6003">
+          <caret line="210" column="27" lean-forward="false" selection-start-line="210" selection-start-column="27" selection-end-line="210" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="22" column="42" lean-forward="false" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="464">
+          <caret line="17" column="35" lean-forward="false" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/otto_cal_recut_norm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="18" column="25" lean-forward="true" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/otto_train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -519,9 +577,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="329">
           <caret line="244" column="31" lean-forward="true" selection-start-line="229" selection-start-column="4" selection-end-line="244" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -537,7 +592,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/otto_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="639">
+        <state relative-caret-position="5481">
           <caret line="193" column="0" lean-forward="false" selection-start-line="193" selection-start-column="0" selection-end-line="193" selection-end-column="0" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
@@ -547,7 +602,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/otto_resnet_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="755">
+        <state relative-caret-position="6003">
           <caret line="210" column="27" lean-forward="false" selection-start-line="210" selection-start-column="27" selection-end-line="210" selection-end-column="27" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
@@ -558,7 +613,7 @@
     <entry file="file://$PROJECT_DIR$/otto_cal_recut_norm.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
-          <caret line="18" column="25" lean-forward="true" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
+          <caret line="18" column="25" lean-forward="false" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
