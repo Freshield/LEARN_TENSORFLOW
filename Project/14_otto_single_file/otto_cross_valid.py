@@ -175,7 +175,7 @@ for reg in regs:
                         loop += 1
 
                         # show time
-                        if loop % 15 == 0:
+                        if loop % 50 == 0:
                             print
                             word = 'total loop is %d, total epoch is %d' % (loops, epochs)
                             log = print_and_log(word, log)
@@ -210,7 +210,6 @@ for reg in regs:
                             log = print_and_log(word, log)
                             print
 
-                            loop = 605
 
 
                     # do the test
