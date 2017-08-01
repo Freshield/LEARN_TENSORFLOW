@@ -62,6 +62,7 @@ def get_random_seq_indexs(data_set):
 def print_and_log(word, log):
     print word
     log += word + '\n'
+    return log
 
 ################################################################################
 
@@ -111,7 +112,7 @@ for reg in regs:
                 word += 'reg is %f\n' % reg
                 word += 'lr_rate is %f\n' % lr_rate
                 word += 'keep_prob_v is %f\n' % keep_prob_v
-                print_and_log(word, log)
+                log = print_and_log(word, log)
 
                 # inputs
                 input_x = tf.placeholder(tf.float32, [None, 96, 96, 1], name='input_x')
@@ -141,9 +142,9 @@ for reg in regs:
 
                     print
                     word = 'total loop is %d, total epoch is %d' % (loops, epochs)
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
                     word = 'here is the %d epoch' % epoch
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
                     print
 
                     indexs = get_random_seq_indexs(train_data)
@@ -169,7 +170,7 @@ for reg in regs:
                         _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
 
                         word = 'loss in loop %d is %.4f, acc is %.4f' % (loop, loss_v, acc)
-                        print_and_log(word, log)
+                        log = print_and_log(word, log)
 
                         loop += 1
 
@@ -177,9 +178,9 @@ for reg in regs:
                         if loop % 15 == 0:
                             print
                             word = 'total loop is %d, total epoch is %d' % (loops, epochs)
-                            print_and_log(word, log)
+                            log = print_and_log(word, log)
                             word = 'here is the %d epoch' % epoch
-                            print_and_log(word, log)
+                            log = print_and_log(word, log)
                             print
 
                             last_time = time.time()
@@ -190,26 +191,27 @@ for reg in regs:
 
                             # show the last loop time
                             word = 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
-                            print_and_log(word, log)
+                            log = print_and_log(word, log)
 
                             # show the rest loop time
                             word = 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
-                            print_and_log(word, log)
+                            log = print_and_log(word, log)
 
                             # show the rest epoch time
                             word = 'rest epoch need %.3f hours' % (
                                 span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600)
-                            print_and_log(word, log)
+                            log = print_and_log(word, log)
 
                             # show the rest total time
                             rest_count = count_total - count
                             word = 'rest total time need %.3f hours' % (
                                 span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600 + span_time *
                                 loops * epochs * rest_count / 3600)
-                            print_and_log(word, log)
+                            log = print_and_log(word, log)
                             print
 
                             loop = 605
+
 
                     # do the test
                     indexs = get_random_seq_indexs(test_data)
@@ -241,7 +243,7 @@ for reg in regs:
 
                     acc = total_acc_num / test_size
                     word = 'test acc in epoch %d is %.4f' % (epoch, acc)
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
 
                     # to create the count dir
                     if epoch == 0:
