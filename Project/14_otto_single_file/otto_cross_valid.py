@@ -7,7 +7,7 @@ import otto_resnet_model as model
 #######################################################
 #from network_model_example import *
 dir = 'data/norm/train1000/'
-epochs = 4
+epochs = 3
 data_size = 61000
 file_size = 61000
 test_size = 878
@@ -17,7 +17,7 @@ batch_size = 100
 reg = 0.000067
 lr_rate = 0.002
 lr_decay = 0.99
-keep_prob_v = 0.9569
+keep_prob_v = 1.0
 log_dir = 'logs/'
 module_dir = 'modules/'
 epoch = 0
@@ -82,189 +82,192 @@ log = ''
 lr_decay = 0.99
 regs = random_uniform_array(7, -5, -1)
 lr_rates = random_uniform_array(7, -7, -2)
-keeps = random_uniform_array(4, -0.3, 0)
+#keeps = random_uniform_array(4, -0.3, 0)
 
 log = ''
 
 log_dir = 'logs/otto_resnet/'
 del_and_create_dir(log_dir)
 
-count_total = len(regs) * len(lr_rates) * len(keeps)
+count_total = len(regs) * len(lr_rates)
 count = 0
 
 for reg in regs:
     for lr_rate in lr_rates:
-        for keep_prob_v in keeps:
-            with tf.Graph().as_default():
-                with tf.Session() as sess:
-                    # log should update
-                    log = ''
+        with tf.Graph().as_default():
+            with tf.Session() as sess:
+                # log should update
+                log = ''
 
-                    # reset the log dir
-                    log_dir = 'logs/otto_resnet/'
-                    #show hyper info
-                    word = '\nhyper\n'
-                    word += 'reg is %f\n' % reg
-                    word += 'lr_rate is %f\n' % lr_rate
-                    word += 'keep_prob_v is %f\n' % keep_prob_v
+                # reset the log dir
+                log_dir = 'logs/otto_resnet/'
+
+                # reset epoch and loop
+                epoch = 0
+                loop = 0
+
+                # show hyper info
+                word = '\nhyper\n'
+                word += 'reg is %f\n' % reg
+                word += 'lr_rate is %f\n' % lr_rate
+                word += 'keep_prob_v is %f\n' % keep_prob_v
+                print_and_log(word, log)
+
+                # inputs
+                input_x = tf.placeholder(tf.float32, [None, 96, 96, 1], name='input_x')
+                input_y = tf.placeholder(tf.float32, [None, 9], name='input_y')
+                train_phase = tf.placeholder(tf.bool, name='train_phase')
+                keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+
+                # logits
+                y_pred, parameters = model.inference(input_x, train_phase, keep_prob)
+
+                # loss
+                loss_value = loss(input_y, y_pred, reg, parameters)
+
+                # train
+                train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss_value)
+
+                # predict
+                correct_num, accuracy = corr_num_acc(input_y, y_pred)
+
+                sess.run(tf.global_variables_initializer())
+
+                # read file
+                train_data = pd.read_csv(train_filename, header=None).values
+                test_data = pd.read_csv(test_filename, header=None).values
+                test_x, test_y = model.reshape_dataset(test_data)
+                while epoch < epochs:
+
+                    print
+                    word = 'total loop is %d, total epoch is %d' % (loops, epochs)
                     print_and_log(word, log)
+                    word = 'here is the %d epoch' % epoch
+                    print_and_log(word, log)
+                    print
 
-                    # inputs
-                    input_x = tf.placeholder(tf.float32, [None, 96, 96, 1], name='input_x')
-                    input_y = tf.placeholder(tf.float32, [None, 9], name='input_y')
-                    train_phase = tf.placeholder(tf.bool, name='train_phase')
-                    keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+                    indexs = get_random_seq_indexs(train_data)
+                    last_index = 0
+                    out_of_dataset = False
 
-                    # logits
-                    y_pred, parameters = model.inference(input_x, train_phase, keep_prob)
+                    while loop < loops:
+                        before_time = time.time()
 
-                    # loss
-                    loss_value = loss(input_y, y_pred, reg, parameters)
+                        # should not happen
+                        if out_of_dataset == True:
+                            print "out of dataset"
+                            indexs = get_random_seq_indexs(train_data)
+                            last_index = 0
+                            out_of_dataset = False
 
-                    # train
-                    train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss_value)
+                        last_index, data, out_of_dataset = sequence_get_data(train_data, indexs, last_index,
+                                                                             batch_size)
 
-                    # predict
-                    correct_num, accuracy = corr_num_acc(input_y, y_pred)
+                        data_x, data_y = model.reshape_dataset(data)
 
-                    sess.run(tf.global_variables_initializer())
+                        feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
+                        _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
 
-                    # read file
-                    train_data = pd.read_csv(train_filename, header=None).values
-                    test_data = pd.read_csv(test_filename, header=None).values
-                    test_x, test_y = model.reshape_dataset(test_data)
-                    while epoch < epochs:
-
-                        print
-                        word = 'total loop is %d, total epoch is %d' % (loops, epochs)
+                        word = 'loss in loop %d is %.4f, acc is %.4f' % (loop, loss_v, acc)
                         print_and_log(word, log)
-                        word = 'here is the %d epoch' % epoch
-                        print_and_log(word, log)
-                        print
 
-                        indexs = get_random_seq_indexs(train_data)
-                        last_index = 0
-                        out_of_dataset = False
+                        loop += 1
 
-                        while loop < loops:
-                            before_time = time.time()
+                        # show time
+                        if loop % 15 == 0:
+                            print
+                            word = 'total loop is %d, total epoch is %d' % (loops, epochs)
+                            print_and_log(word, log)
+                            word = 'here is the %d epoch' % epoch
+                            print_and_log(word, log)
+                            print
 
-                            # should not happen
-                            if out_of_dataset == True:
-                                print "out of dataset"
-                                indexs = get_random_seq_indexs(train_data)
-                                last_index = 0
-                                out_of_dataset = False
+                            last_time = time.time()
+                            span_time = last_time - before_time
+                            rest_loop = loops - loop
+                            rest_epoch = epochs - epoch
+                            last_loop_num = 10
 
-                            last_index, data, out_of_dataset = sequence_get_data(train_data, indexs, last_index,
-                                                                                 batch_size)
-
-                            data_x, data_y = model.reshape_dataset(data)
-
-                            feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
-                            _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
-
-                            word = 'loss in loop %d is %.4f, acc is %.4f' % (loop, loss_v, acc)
+                            # show the last loop time
+                            word = 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
                             print_and_log(word, log)
 
-                            loop += 1
+                            # show the rest loop time
+                            word = 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
+                            print_and_log(word, log)
 
-                            # show time
-                            if loop % 50 == 0:
-                                print
-                                word = 'total loop is %d, total epoch is %d' % (loops, epochs)
-                                print_and_log(word, log)
-                                word = 'here is the %d epoch' % epoch
-                                print_and_log(word, log)
-                                print
-
-                                last_time = time.time()
-                                span_time = last_time - before_time
-                                rest_loop = loops - loop
-                                rest_epoch = epochs - epoch
-                                last_loop_num = 10
-
-                                # show the last loop time
-                                word = 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
-                                print_and_log(word, log)
-
-                                # show the rest loop time
-                                word = 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
-                                print_and_log(word, log)
-
-                                # show the rest epoch time
-                                word = 'rest epoch need %.3f hours' % (
+                            # show the rest epoch time
+                            word = 'rest epoch need %.3f hours' % (
                                 span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600)
-                                print_and_log(word, log)
+                            print_and_log(word, log)
 
-                                #show the rest total time
-                                rest_count = count_total - count
-                                word = 'rest total time need %.3f hours' % (
+                            # show the rest total time
+                            rest_count = count_total - count
+                            word = 'rest total time need %.3f hours' % (
                                 span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600 + span_time *
                                 loops * epochs * rest_count / 3600)
-                                print_and_log(word, log)
-                                print
+                            print_and_log(word, log)
+                            print
 
-                        # do the test
-                        indexs = get_random_seq_indexs(test_data)
-                        out_of_dataset = False
-                        last_index = 0
-                        total_acc_num = 0.0
+                            loop = 605
 
-                        while test_loop < test_loops:
-                            print '%d ' % test_loop,
+                    # do the test
+                    indexs = get_random_seq_indexs(test_data)
+                    out_of_dataset = False
+                    last_index = 0
+                    total_acc_num = 0.0
 
-                            last_index, data, out_of_dataset = sequence_get_data(test_data, indexs, last_index,
-                                                                                 batch_size)
+                    while test_loop < test_loops:
+                        print '%d ' % test_loop,
 
-                            data_x, data_y = model.reshape_dataset(data)
+                        last_index, data, out_of_dataset = sequence_get_data(test_data, indexs, last_index,
+                                                                             batch_size)
 
-                            feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
-                            corr_num = sess.run(correct_num, feed_dict=feed_dict)
-                            total_acc_num += corr_num
+                        data_x, data_y = model.reshape_dataset(data)
 
-                            test_loop += 1
+                        feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
+                        corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                        total_acc_num += corr_num
 
-                        if test_rest != 0:
-                            span_index = indexs[last_index:]
-                            data = test_data[span_index]
-                            data_x, data_y = model.reshape_dataset(data)
-                            feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
-                            corr_num = sess.run(correct_num, feed_dict=feed_dict)
-                            total_acc_num += corr_num
+                        test_loop += 1
 
-                        acc = total_acc_num / test_size
-                        word = 'test acc in epoch %d is %.4f' % (epoch, acc)
-                        print_and_log(word, log)
+                    if test_rest != 0:
+                        span_index = indexs[last_index:]
+                        data = test_data[span_index]
+                        data_x, data_y = model.reshape_dataset(data)
+                        feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
+                        corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                        total_acc_num += corr_num
 
+                    acc = total_acc_num / test_size
+                    word = 'test acc in epoch %d is %.4f' % (epoch, acc)
+                    print_and_log(word, log)
 
-                        #to create the count dir
-                        if epoch == 0:
-                            log_dir += '%.4f_count%d/' % (acc, count)
-                            del_and_create_dir(log_dir)
+                    # to create the count dir
+                    if epoch == 0:
+                        log_dir += '%.4f_count%d/' % (acc, count)
+                        del_and_create_dir(log_dir)
 
-                            filename = log_dir + 'hypers'
-                            hyper_info = '\nhyper\n'
-                            hyper_info += 'reg is %f\n' % reg
-                            hyper_info += 'lr_rate is %f\n' % lr_rate
-                            hyper_info += 'keep_prob_v is %f\n' % keep_prob_v
-                            f = file(filename, 'w+')
-                            f.write(hyper_info)
-                            f.close()
-
-
-                        filename = log_dir + '%.4f_epoch%d' % (acc, epoch)
+                        filename = log_dir + 'hypers'
+                        hyper_info = '\nhyper\n'
+                        hyper_info += 'reg is %f\n' % reg
+                        hyper_info += 'lr_rate is %f\n' % lr_rate
+                        hyper_info += 'keep_prob_v is %f\n' % keep_prob_v
                         f = file(filename, 'w+')
-                        f.write(log)
+                        f.write(hyper_info)
                         f.close()
 
-                        # reset loop
-                        loop = 0
-                        test_loop = 0
-                        # each epoch decay the lr_rate
-                        lr_rate *= lr_decay
+                    filename = log_dir + '%.4f_epoch%d' % (acc, epoch)
+                    f = file(filename, 'w+')
+                    f.write(log)
+                    f.close()
 
-                        epoch += 1
+                    # reset loop
+                    loop = 0
+                    test_loop = 0
+                    # each epoch decay the lr_rate
+                    lr_rate *= lr_decay
 
+                    epoch += 1
 
-            count += 1
+        count += 1
