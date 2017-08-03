@@ -14,10 +14,10 @@ test_size = 878
 
 batch_size = 100
 #hypers
-reg = 0.000067
-lr_rate = 0.002
+reg = 0.12789
+lr_rate = 0.000094
 lr_decay = 0.99
-keep_prob_v = 0.9569
+keep_prob_v = 1.0
 log_dir = 'logs/'
 module_dir = 'modules/'
 epoch = 0
@@ -180,6 +180,7 @@ with tf.Graph().as_default():
             out_of_dataset = False
             last_index = 0
             total_acc_num = 0.0
+            total_loss = 0.0
 
 
             while test_loop < test_loops:
@@ -192,8 +193,9 @@ with tf.Graph().as_default():
 
                 feed_dict = {input_x: data_x, input_y: data_y, train_phase: True,
                              keep_prob: keep_prob_v}
-                corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                corr_num, test_loss = sess.run([correct_num, loss_value], feed_dict=feed_dict)
                 total_acc_num += corr_num
+                total_loss += test_loss
 
                 test_loop += 1
 
@@ -203,11 +205,14 @@ with tf.Graph().as_default():
                 data_x, data_y = model.reshape_dataset(data)
                 feed_dict = {input_x: data_x, input_y: data_y, train_phase: True,
                              keep_prob: keep_prob_v}
-                corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                corr_num, test_loss = sess.run([correct_num, loss_value], feed_dict=feed_dict)
                 total_acc_num += corr_num
+                total_loss += test_loss
 
             acc = total_acc_num / test_size
-            word = 'test acc in epoch %d is %.4f' % (epoch, acc)
+            test_loss = total_loss / test_size
+
+            word = 'test acc in epoch %d is %.4f, loss is %.4f' % (epoch, acc, test_loss)
             print_and_log(word, log)
 
             #for store model
@@ -217,7 +222,7 @@ with tf.Graph().as_default():
                 #find the smallest index
                 small_index = temp_best_acc.argmin()
                 temp_best_acc[small_index] = acc
-                module_path = module_dir + "%.4f_epoch%d/" % (acc, epoch)
+                module_path = module_dir + "%.4f_ls%.4f_epoch%d/" % (acc, test_loss, epoch)
                 # delete the latest module
                 del_dir(best_model_dir_dic[small_index])
                 #update the dir and acc dic
@@ -225,14 +230,13 @@ with tf.Graph().as_default():
                 best_model_acc_dic = temp_best_acc.tolist()
                 # store module
                 saver = tf.train.Saver()
-                module_path = module_dir + "%.4f_epoch%d/" % (acc, epoch)
                 module_name = module_path + "module.ckpt"
                 del_and_create_dir(module_path)
                 save_path = saver.save(sess, module_name)
                 words = "Model saved in file: %s" % save_path
                 print_and_log(words)
 
-            filename = log_dir + '%.4f_epoch%d' % (acc, epoch)
+            filename = log_dir + '%.4f_ls%.4f_epoch%d' % (acc, test_loss, epoch)
             f = file(filename, 'w+')
             f.write(log)
             f.close()
