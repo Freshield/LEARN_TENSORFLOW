@@ -218,14 +218,9 @@ def inference(input_layer, train_phase, keep_prob):
         biases = bm.bias_variable([64])
         conv_input = bm.conv2d(bn_input, filter, 1, 'SAME') + biases
 
-    #input[N,96,96,64],output[N,96,96,64]
-    #first layer not change the depth
-    resnet_l0, p0 = resnet_first_layer(conv_input, 64, train_phase, 'resnet_l0')
-    parameters[0:0] = p0
-
     #input[N,96,96,64],output[N,48,48,128]
     #first layer not change the depth
-    resnet_l1, p1 = resnet_layer(resnet_l0, 128, train_phase, 'resnet_l1')
+    resnet_l1, p1 = resnet_layer(conv_input, 128, train_phase, 'resnet_l1')
     parameters[0:0] = p1
 
     #input[N,48,48,128],output[N,24,24,256]

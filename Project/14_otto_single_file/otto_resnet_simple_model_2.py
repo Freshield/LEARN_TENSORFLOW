@@ -190,15 +190,13 @@ def resnet_layer(input_layer, layer_depth, train_phase, name):
 #
 #   96*96*1
 #       |
-#   96*96*64
+#   96*96*128
 #       |
-#   48*48*128
+#   48*48*256
 #       |
-#   24*24*256
+#   24*24*512
 #       |
-#   12*12*512
-#       |
-#   6*6*1024
+#   12*12*1024
 #       |
 #   avg pooling
 #       |
@@ -213,37 +211,33 @@ def inference(input_layer, train_phase, keep_prob):
     #input shape should be (N,96,96,1)
     input_depth = input_layer.shape[-1]
 
-    #input[N,96,96,1],output[N,96,96,64]
+    #input[N,96,96,1],output[N,96,96,128]
     with tf.variable_scope('preprocess'):
         bn_input = bm.batch_norm_layer(input_layer, train_phase, 'bn_input')
-        filter = bm.weight_variable([3,3,input_depth,64], 'filter_input')
-        biases = bm.bias_variable([64])
+        filter = bm.weight_variable([3,3,input_depth,128], 'filter_input')
+        biases = bm.bias_variable([128])
         conv_input = bm.conv2d(bn_input, filter, 1, 'SAME') + biases
 
-    #input[N,96,96,64],output[N,96,96,64]
-    #first layer not change the depth
-    resnet_l0, p0 = resnet_first_layer(conv_input, 64, train_phase, 'resnet_l0')
-    parameters[0:0] = p0
 
-    #input[N,96,96,64],output[N,48,48,128]
+    #input[N,96,96,128],output[N,48,48,256]
     #first layer not change the depth
-    resnet_l1, p1 = resnet_layer(resnet_l0, 128, train_phase, 'resnet_l1')
+    resnet_l1, p1 = resnet_layer(conv_input, 256, train_phase, 'resnet_l1')
     parameters[0:0] = p1
 
-    #input[N,48,48,128],output[N,24,24,256]
-    resnet_l2, p2 = resnet_layer(resnet_l1, 256, train_phase, 'resnet_l2')
+    #input[N,48,48,256],output[N,24,24,512]
+    resnet_l2, p2 = resnet_layer(resnet_l1, 512, train_phase, 'resnet_l2')
     parameters[0:0] = p2
 
-    #input[N,24,24,256],output[N,12,12,512]
-    resnet_l3, p3 = resnet_layer(resnet_l2, 512, train_phase, 'resnet_l3')
+    #input[N,24,24,512],output[N,12,12,1024]
+    resnet_l3, p3 = resnet_layer(resnet_l2, 1024, train_phase, 'resnet_l3')
     parameters[0:0] = p3
 
-    #input[N,6,6,1024],output[N,1,1,1024]
+    #input[N,12,12,1024],output[N,1,1,1024]
     avg_pool_layer = tf.nn.avg_pool(resnet_l3, [1,12,12,1], [1,1,1,1], 'VALID')
 
     #platten for fc
-    #input[N,2,5,1024],output[N,2*5*1024]
-    avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 512])
+    #input[N,1,1,1024],output[N,1024]
+    avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 1024])
 
     # score layer
     y_pred, score_weight = bm.score_layer(avg_pool_flat, 9)
