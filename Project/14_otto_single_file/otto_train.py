@@ -184,8 +184,7 @@ with tf.Graph().as_default():
 
 
             while test_loop < test_loops:
-                word = '%d '%test_loop,
-                print_and_log(word, log)
+                print '%d '%test_loop,
 
                 last_index, data, out_of_dataset = sequence_get_data(test_data, indexs, last_index, batch_size)
 
@@ -234,7 +233,7 @@ with tf.Graph().as_default():
                 del_and_create_dir(module_path)
                 save_path = saver.save(sess, module_name)
                 words = "Model saved in file: %s" % save_path
-                print_and_log(words)
+                print_and_log(words, log)
 
             filename = log_dir + '%.4f_ls%.4f_epoch%d' % (acc, test_loss, epoch)
             f = file(filename, 'w+')
