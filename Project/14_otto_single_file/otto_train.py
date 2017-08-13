@@ -62,6 +62,7 @@ def get_random_seq_indexs(data_set):
 def print_and_log(word, log):
     print word
     log += word + '\n'
+    return log
 
 ################################################################################
 
@@ -114,9 +115,9 @@ with tf.Graph().as_default():
 
             print
             word = 'total loop is %d, total epoch is %d' % (loops, epochs)
-            print_and_log(word, log)
+            log = print_and_log(word, log)
             word = 'here is the %d epoch' % epoch
-            print_and_log(word, log)
+            log = print_and_log(word, log)
             print
 
             indexs = get_random_seq_indexs(train_data)
@@ -142,7 +143,7 @@ with tf.Graph().as_default():
                 _, loss_v, acc = sess.run([train_step, loss_value, accuracy], feed_dict=feed_dict)
 
                 word = 'loss in loop %d is %.4f, acc is %.4f' % (loop, loss_v, acc)
-                print_and_log(word, log)
+                log = print_and_log(word, log)
 
                 loop += 1
 
@@ -150,9 +151,9 @@ with tf.Graph().as_default():
                 if loop % 50 == 0:
                     print
                     word = 'total loop is %d, total epoch is %d' % (loops, epochs)
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
                     word = 'here is the %d epoch' % epoch
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
                     print
 
                     last_time = time.time()
@@ -163,15 +164,15 @@ with tf.Graph().as_default():
 
                     # show the last loop time
                     word = 'last %d loop use %f minutes' % (last_loop_num, span_time * last_loop_num / 60)
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
 
                     # show the rest loop time
                     word = 'rest loop need %.3f minutes' % (span_time * rest_loop / 60)
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
 
                     # show the rest epoch time
                     word = 'rest epoch need %.3f hours' % (span_time * rest_loop / 3600 + span_time * loops * rest_epoch / 3600)
-                    print_and_log(word, log)
+                    log = print_and_log(word, log)
                     print
 
 
@@ -212,7 +213,7 @@ with tf.Graph().as_default():
             test_loss = total_loss / test_size
 
             word = 'test acc in epoch %d is %.4f, loss is %.4f' % (epoch, acc, test_loss)
-            print_and_log(word, log)
+            log = print_and_log(word, log)
 
             #for store model
             temp_best_acc = np.array(best_model_acc_dic)
@@ -233,7 +234,7 @@ with tf.Graph().as_default():
                 del_and_create_dir(module_path)
                 save_path = saver.save(sess, module_name)
                 words = "Model saved in file: %s" % save_path
-                print_and_log(words, log)
+                log = print_and_log(words, log)
 
             filename = log_dir + '%.4f_ls%.4f_epoch%d' % (acc, test_loss, epoch)
             f = file(filename, 'w+')
