@@ -8,6 +8,7 @@ import tensorflow as tf
 #Here is just an example
 #ver 1.0
 def reshape_dataset(dataset):
+    print dataset.shape
 
     #You need fill as your program
     x,y = dataset.shape
@@ -28,6 +29,8 @@ def reshape_dataset(dataset):
 
     output_data = dataset[:, -1].astype(int)
     output_data = dpm.num_to_one_hot(output_data, 9)
+
+    print input_data.shape
 
     return input_data, output_data
 
