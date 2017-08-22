@@ -6,8 +6,8 @@ import numpy as np
 (0.010286, 0.0053022001, 9904.0996, 127.93, 5.3010998)
 """
 
-filename = 'sample/sample_set_train.csv'
+filename = '/media/freshield/LINUX/Ciena/norm/Raw_data_0_train.csv'
 
 data = pd.read_csv(filename,header=None)
 
-print data.values[:,12001:12011]
+print np.mean(data.values[:,12001:12011])
