@@ -23,8 +23,7 @@ for filenum in [3,4,5,6,7,8,9,10]:
             chunk = reader.get_chunk(chunkSize)
             print count
             print count + (filenum - 1) * 100
-            np.savetxt(save_dir + 'Raw_data_' + str(count + (filenum - 1) * 100) + '.csv', chunk,
-                       delimiter=',')
+            np.savetxt(save_dir + 'Raw_data_' + str(count + (filenum - 1) * 100) + '.csv', chunk, delimiter=',')
 
             count += 1
 

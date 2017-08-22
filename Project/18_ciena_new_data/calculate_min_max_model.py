@@ -16,6 +16,16 @@ def split_dataset(dataset, test_dataset_size=None, radio=None):
 
     return train_set, validation_set, test_set
 
+def split_indexs(indexs, test_dataset_size=None, radio=None):
+    if radio != None:
+        test_dataset_size = int(radio * len(indexs))
+
+    train_set = indexs[0:-test_dataset_size * 2]
+    validation_set = indexs[-test_dataset_size * 2:-test_dataset_size]
+    test_set = indexs[-test_dataset_size:len(indexs)]
+
+    return train_set, validation_set, test_set
+
 #create total mininum and total maxium values
 #ver 1.0
 def create_min_max():
@@ -101,61 +111,67 @@ def maxium_values(values1, values2):
 
 #calculate and restore min and max
 #ver 1.0
-def cal_min_max(filename, savename, datasize, chunkSize):
+def cal_minmax_split_single_file(filename, save_path):
     #filename = '/media/freshield/LINUX/Ciena/CIENA/raw/FiberID_Data_noPCA.csv'
     #savename = "/media/freshield/LINUX/Ciena/CIENA/raw/min_max.csv"
 
-    reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
+    data = pd.read_csv(filename, header=None, dtype=np.float32)
 
-    loop = True
-    #chunkSize = 10000
-    count = 0
+    indexs = np.arange(len(data))
+    np.random.shuffle(indexs)
 
-    total_loop = datasize / chunkSize
+    train_index, validation_index, test_index = split_indexs(indexs, radio=0.1)
+
+    train_set = data.values[train_index,:]
+    validation_set = data.values[validation_index,:]
+    test_set = data.values[test_index,:]
+
+    # get min and max
+    min_values, max_values = get_min_max_values(train_set)
+
+    #split the dataset
+    savename = filename.split('/')[-1].split('.')[0]
+
+    np.savetxt(save_path+savename+'_train.csv', train_set, delimiter=',')
+    np.savetxt(save_path+savename+'_valid.csv', validation_set, delimiter=',')
+    np.savetxt(save_path+savename+'_test.csv', test_set, delimiter=',')
+
+    return min_values,max_values
+
+def cal_minmax_split_files(dir_path,temp_name,file_amount,save_path):
+    print 'Begin to split files'
 
     total_min, total_max = create_min_max()
 
-    print 'begin to calculate the min max value'
-    while loop:
+    for filenum in range(file_amount):
+
+        print filenum
+
         before_time = time.time()
-        try:
 
-            print count
-            chunk = reader.get_chunk(chunkSize)
+        filename = dir_path + temp_name + str(filenum) + '.csv'
 
-            train_set, validation_set, test_set = split_dataset(chunk, radio=0.1)
+        minVal, maxVal = cal_minmax_split_single_file(filename,save_path)
 
-            # get min and max
-            min_values, max_values = get_min_max_values(train_set)
+        if filenum == 0:
+            total_min = minVal
+            total_max = maxVal
+        else:
+            # compare values
+            total_min = mininum_values(total_min, minVal)
+            total_max = maxium_values(total_max, maxVal)
 
-            if count == 0:
-                total_min = min_values
-                total_max = max_values
-            else:
-                # compare values
-                total_min = mininum_values(total_min, min_values)
-                total_max = maxium_values(total_max, max_values)
-
-            if count % 10 == 0:
-                span_time = time.time() - before_time
-                print "use %.2f second in 10 loop" % (span_time * 10)
-                print "need %.2f minutes for all loop" % (((total_loop - count) * span_time) / 60)
-
-            # i += chunk.shape[0]
-            count += 1
-
-
-        except StopIteration:
-            print "stop"
-            break
-
-    print total_max
-    print total_min
+        if filenum % 50 == 0:
+            span_time = time.time() - before_time
+            print "use %.2f second in 10 loop" % (span_time * 10)
+            print "need %.2f minutes for all loop" % (((file_amount - filenum) * span_time) / 60)
 
     array = np.zeros([2, 5], dtype=np.float32)
     add_values_to_array(total_min, array, 0)
     add_values_to_array(total_max, array, 1)
-    np.savetxt(savename, array, delimiter=",")
+    np.savetxt(save_path+'minmax_value.csv', array, delimiter=",")
 
+cal_minmax_split_files('/media/freshield/DATA_W/Ciena_new_data/10spans/','Raw_data_',1000,'/media/freshield/DATA_W/Ciena_new_data/10spans_split/')
+#minVal,maxVal = cal_minmax_split_single_file('sample/sample_set.csv','sample/')
 #cal_min_max('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000, 100)
 
