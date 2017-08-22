@@ -5,6 +5,7 @@ for filenum in [3,4,5,6,7,8,9,10]:
 
     dir_name = '/media/freshield/DATA_U/Ciena_data/new_data/FiberID_6fibers_10Spans/'
     filename = 'FiberID_6fibers_10Spans_noPCA_'
+    save_dir = '/media/freshield/DATA_W/Ciena_new_data/10spans/'
     #filenum = '3.csv'
     dataSize = 100 * 1000
 
@@ -22,7 +23,7 @@ for filenum in [3,4,5,6,7,8,9,10]:
             chunk = reader.get_chunk(chunkSize)
             print count
             print count + (filenum - 1) * 100
-            np.savetxt(dir_name + 'RecutFile/Raw_data_' + str(count + (filenum - 1) * 100) + '.csv', chunk,
+            np.savetxt(save_dir + 'Raw_data_' + str(count + (filenum - 1) * 100) + '.csv', chunk,
                        delimiter=',')
 
             count += 1
