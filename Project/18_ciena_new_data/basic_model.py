@@ -297,8 +297,8 @@ def evaluate_last_x_files(number, eval_parameters, dir):
     for step in xrange(number):
         print step,
         # careful for the file name
-        train_file = "train_set_%d.csv" % loop_indexs[loop - 10 + step]
-        validation_file = "validation_set_%d.csv" % loop_indexs[loop - 10 + step]
+        train_file = "Raw_data_%d_train.csv" % loop_indexs[loop - 10 + step]
+        validation_file = "Raw_data_%d_valid.csv" % loop_indexs[loop - 10 + step]
 
         X_train, para_train, y_train = dpm.prepare_dataset(dir, train_file, SPAN)
         X_valid, para_valid, y_valid = dpm.prepare_dataset(dir, validation_file, SPAN)
@@ -326,7 +326,7 @@ def evaluate_test(test_parameter):
     print "step",
     for test_loop in xrange(loops):
         print test_loop,
-        test_file = "test_set_%d.csv" % test_loop
+        test_file = "Raw_data_%d_test.csv" % test_loop
         X_test, para_test, y_test = dpm.prepare_dataset(dir, test_file, SPAN)
         loop_test_acc = do_eval(sess, X_test, para_test, y_test, batch_size, correct_num, placeholders)
         test_acc += loop_test_acc

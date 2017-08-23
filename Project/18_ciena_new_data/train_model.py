@@ -5,7 +5,7 @@ import flow_model as fm
 #the parameter need fill
 #######################################################
 #from network_model_example import *
-SPAN=[10]
+SPAN=[5]
 dir = '/home/freshield/Ciena_data/dataset_10k/model/'
 epochs = 20
 data_size = 10000
