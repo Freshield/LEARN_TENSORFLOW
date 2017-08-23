@@ -1,11 +1,10 @@
 import numpy as np
 
-a = np.ones((10,5))
-b = np.ones((5,1))
+a = np.arange(40).reshape((2,4,5))
 
-mul = np.dot(a,b)
-c = np.ones((10,1))
+print a
 
-result = mul + c
-print result.shape
-print result
+flap_a = a[:,::-1]
+print
+print a
+print flap_a
