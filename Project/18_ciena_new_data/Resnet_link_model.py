@@ -11,7 +11,7 @@ def reshape_dataset(dataset, SPAN):
 
     #You need fill as your program
 
-    input_data = np.zeros((dataset.shape[0], 32, 104, 2))
+    input_data = np.zeros((dataset.shape[0], 304, 104, 2))
     temp_data = np.reshape(dataset[:, :6200], (-1, 31, 100, 2))
     input_data[:, :31, 2:102, 0] = temp_data[:, :, :, 0]  # cause input size is 32 not 31
     input_data[:, :31, 2:102, 1] = temp_data[:, :, :, 1]
