@@ -7,14 +7,14 @@ import flow_model as fm
 #from network_model_example import *
 SPAN=[5]
 dir = '/media/freshield/DATA_W/Ciena_new_data/10spans_norm/'
-epochs = 3
+epochs = 1
 data_size = 1000000
 file_size = 1000
 #how many loops do an evaluation
-loop_eval_num = 10
+loop_eval_num = 50
 #how many file do the valid
 eval_last_num = 10
-batch_size = 10
+batch_size = 100
 train_file_size = 800
 valid_file_size = 100
 test_file_size = 100
