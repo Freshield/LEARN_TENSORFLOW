@@ -7,11 +7,11 @@ import flow_model as fm
 #from network_model_example import *
 SPAN=[5]
 dir = '/home/freshield/Ciena_data/dataset_10k/model/'
-epochs = 20
-data_size = 10000
+epochs = 200
+data_size = 1000000
 file_size = 1000
 #how many loops do an evaluation
-loop_eval_num = 5
+loop_eval_num = 50
 #how many file do the valid
 eval_last_num = 10
 batch_size = 100
@@ -22,7 +22,7 @@ test_file_size = 100
 reg = 0.000067
 lr_rate = 0.002
 lr_decay = 0.99
-keep_prob_v = 0.9569
+keep_prob_v = 1.0
 log_dir = 'logs/'
 module_dir = 'modules/'
 epoch = 0
@@ -93,12 +93,16 @@ def train_whole_dataset_begin(para_dic, model_name):
     create_dir(log_dir)
     create_dir(module_dir)
 
+    words = 'Begin to train\n'
+    words += time.strftime('%Y-%m-%d %H:%M:%S\n')
+    words_log_print(words)
+
     with tf.Graph().as_default():
         with tf.Session() as sess:
             # inputs
-            input_x = tf.placeholder(tf.float32, [None, 32, 104, 2], name='input_x')
-            para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
-            input_y = tf.placeholder(tf.float32, [None, 3], name='input_y')
+            input_x = tf.placeholder(tf.float32, [None, 304, 48, 2], name='input_x')
+            para_pl = tf.placeholder(tf.float32, [None, 21], name='para_pl')
+            input_y = tf.placeholder(tf.float32, [None, 6], name='input_y')
             train_phase = tf.placeholder(tf.bool, name='train_phase')
             keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
@@ -122,6 +126,9 @@ def train_whole_dataset_begin(para_dic, model_name):
 
             while epoch < epochs:
 
+                words = time.strftime('%Y-%m-%d %H:%M:%S\n')
+                words_log_print(words, log)
+
                 # show the epoch num
                 words_log_print_epoch(epoch, epochs, log)
 
@@ -132,7 +139,7 @@ def train_whole_dataset_begin(para_dic, model_name):
                 while loop < loops:
                     before_time = time.time()
 
-                    train_file = "train_set_%d.csv" % loop_indexs[loop]
+                    train_file = "Raw_data_%d_train.csv" % loop_indexs[loop]
 
                     loop_loss_v, loop_acc = do_train_file(sess, train_pl, dir, train_file, SPAN, max_step, batch_size,keep_prob_v)
 
@@ -142,6 +149,10 @@ def train_whole_dataset_begin(para_dic, model_name):
 
                     # each loop_eval_num, do evaluation
                     if loop % loop_eval_num == 0 or loop == loops:
+
+                        words = time.strftime('%Y-%m-%d %H:%M:%S\n')
+                        words_log_print(words, log)
+
                         # show the time
                         time_show(before_time, loop_eval_num, loop, loops, epoch, epochs, log)
                         # store the parameter first
@@ -184,8 +195,9 @@ def train_whole_dataset_begin(para_dic, model_name):
                     best_model_acc_dic = temp_best_acc.tolist()
                     # store module every epoch
                     store_module(module_dir, test_acc, epoch, sess, log, loop_indexs)
-                    # store log file every epoch
-                    store_log(log_dir, test_acc, epoch, log)
+
+                # store log file every epoch
+                store_log(log_dir, test_acc, epoch, log)
 
                 epoch += 1
     return 'Done'
