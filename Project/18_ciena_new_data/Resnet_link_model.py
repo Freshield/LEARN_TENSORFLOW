@@ -232,7 +232,7 @@ def inference(input_layer, para_data, train_phase, keep_prob):
 
     #input[N,304,48,64],output[N,152,24,128]
     #first layer not change the depth
-    resnet_l1, p1 = resnet_first_layer(conv_input, 128, train_phase,'resnet_l1')
+    resnet_l1, p1 = resnet_layer(conv_input, 128, train_phase,'resnet_l1')
     parameters[0:0] = p1
 
     #input[N,152,24,128],output[N,76,12,256]
@@ -250,12 +250,14 @@ def inference(input_layer, para_data, train_phase, keep_prob):
     #pad for avg pool
     #input[N,19,3,1024],output[N,20,4,1024]
     resnet_l4_pad = tf.pad(resnet_l4, [[0,0],[0,1],[0,1],[0,0]], 'CONSTANT', 'l4_pad')
+
     #input[N,20,4,1024],output[N,5,1,1024]
     avg_pool_layer = tf.nn.avg_pool(resnet_l4_pad, [1,4,4,1], [1,4,4,1], 'VALID')
 
     #platten for fc
     #input[N,5,1,1024],output[N,5*1*1024]
     avg_pool_flat = tf.reshape(avg_pool_layer, [-1, 5 * 1 * 1024])
+
 
     #fc layer
     #input[N,5*1*1024],output[N,512]

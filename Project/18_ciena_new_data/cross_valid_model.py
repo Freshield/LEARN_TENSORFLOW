@@ -11,10 +11,10 @@ epochs = 3
 data_size = 1000000
 file_size = 1000
 #how many loops do an evaluation
-loop_eval_num = 100
+loop_eval_num = 10
 #how many file do the valid
 eval_last_num = 10
-batch_size = 100
+batch_size = 10
 train_file_size = 800
 valid_file_size = 100
 test_file_size = 100
@@ -22,7 +22,7 @@ test_file_size = 100
 reg = 0.000067
 lr_rate = 0.002
 lr_decay = 0.99
-keep_prob_v = 0.9569
+keep_prob_v = 1.0
 log_dir = 'logs/'
 module_dir = 'modules/'
 epoch = 0
@@ -89,6 +89,9 @@ def cross_valid(para_dic):
     count_total = len(regs) * len(lr_rates)
     count = 0
 
+    print 'Begin to cross valid'
+    print time.strftime('%Y-%m-%d %H:%M:%S')
+
     for reg in regs:
         for lr_rate in lr_rates:
             log = Log()
@@ -145,6 +148,9 @@ def cross_valid(para_dic):
 
                     while epoch < epochs:
 
+                        words = time.strftime('%Y-%m-%d %H:%M:%S')
+                        words_log_print(words, log)
+
                         # show the epoch num
                         words_log_print_epoch(epoch, epochs, log)
 
@@ -165,8 +171,12 @@ def cross_valid(para_dic):
 
                             # each loop_eval_num, do evaluation
                             if loop % loop_eval_num == 0 or loop == loops:
+
+                                words = time.strftime('%Y-%m-%d %H:%M:%S')
+                                words_log_print(words, log)
+
                                 # show the time
-                                time_show(before_time, loop_eval_num, loop, loops, epoch, epochs, log)
+                                time_show(before_time, loop_eval_num, loop, loops, epoch, epochs, log, count, count_total)
                                 # store the parameter first
                                 eval_parameters = (loop, loop_indexs, SPAN, sess, batch_size, correct_num, placeholders, log)
                                 # here only evaluate last eval_last_num files
@@ -181,6 +191,7 @@ def cross_valid(para_dic):
                                     return 'Done'
 
                                 [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size,valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir,module_dir, eval_last_num, epoch, loop, best_model_number, best_model_acc_dic,best_model_dir_dic] = temp_para
+
 
                         # reset loop
                         loop = 0
