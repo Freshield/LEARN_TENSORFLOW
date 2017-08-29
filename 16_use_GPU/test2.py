@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-with tf.device('/gpu:0'):
+with tf.device('/gpu:1'):
 
     a = tf.constant([1.,2.,3.,4.,5.,6.], shape=[2,3], name='a')
     b = tf.constant([1.,2.,3.,4.,5.,6.], shape=[3,2], name='b')
