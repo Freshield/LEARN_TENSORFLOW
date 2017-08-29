@@ -11,16 +11,16 @@ epochs = 200
 data_size = 1000000
 file_size = 1000
 #how many loops do an evaluation
-loop_eval_num = 5
+loop_eval_num = 50
 #how many file do the valid
-eval_last_num = 5
+eval_last_num = 10
 batch_size = 100
 train_file_size = 800
 valid_file_size = 100
 test_file_size = 100
 #hypers
-reg = 0.000067
-lr_rate = 0.002
+reg = 0.00266
+lr_rate = 0.00021
 lr_decay = 0.99
 keep_prob_v = 1.0
 log_dir = 'logs/'
@@ -95,7 +95,7 @@ def train_whole_dataset_begin(para_dic, model_name):
 
     words = 'Begin to train\n'
     words += time.strftime('%Y-%m-%d %H:%M:%S\n')
-    words_log_print(words)
+    words_log_print(words, log)
 
     with tf.Graph().as_default():
         with tf.Session() as sess:
@@ -169,9 +169,6 @@ def train_whole_dataset_begin(para_dic, model_name):
                             return 'Done'
 
                         [SPAN, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size,valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir,eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic] = temp_para
-
-                        if loop < 900:
-                            loop = 996
 
 
 
