@@ -3,9 +3,9 @@ import numpy as np
 
 for filenum in [1,2,3,4,5,6,7,8,9,10]:
 
-    dir_name = '/media/freshield/DATA_U/Ciena_data/new_data/FiberID_6fibers_10Spans/'
-    filename = 'FiberID_6fibers_10Spans_noPCA_'
-    save_dir = '/media/freshield/DATA_W/Ciena_new_data/10spans/'
+    dir_name = '/media/freshield/DATA_U/Ciena_data/new_data/FiberID_6fibers_20Spans/'
+    filename = 'FiberID_6fibers_20Spans_noPCA_'
+    save_dir = '/media/freshield/DATA/Ciena_new_data/20spans/split/'
     #filenum = '3.csv'
     dataSize = 100 * 1000
 
