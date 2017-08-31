@@ -129,7 +129,7 @@ def cal_minmax_split_single_file(filename, save_path):
     # get min and max
     min_values, max_values = get_min_max_values(train_set)
 
-    #split the dataset
+    #split the dataset name
     savename = filename.split('/')[-1].split('.')[0]
 
     np.savetxt(save_path+savename+'_train.csv', train_set, delimiter=',')
