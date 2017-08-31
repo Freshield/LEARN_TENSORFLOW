@@ -53,12 +53,12 @@ def get_min_max_values(norm_dataset):
     CMi_min = np.min(norm_dataset[:, 12000:24000])
     CD_min = np.min(norm_dataset[:, 24000:24001])
     length_min = np.min(norm_dataset[:, 24001:24021])
-    power_min = np.min(norm_dataset[:, 24021:12041])
+    power_min = np.min(norm_dataset[:, 24021:24041])
 
     CMr_max = np.max(norm_dataset[:, 0:12000])
     CMi_max = np.max(norm_dataset[:, 12000:24000])
     CD_max = np.max(norm_dataset[:, 24000:24001])
-    length_max = np.max(norm_dataset[:, 24001:12021])
+    length_max = np.max(norm_dataset[:, 24001:24021])
     power_max = np.max(norm_dataset[:, 24021:24041])
 
     min_values = (CMr_min, CMi_min, CD_min, length_min, power_min)
