@@ -141,7 +141,7 @@ def norm_single_file(filename, savePath, minVal, maxVal):
 
     np.savetxt(savePath + savename, norm_data, delimiter=",")
 
-def norm_files(dir_path,temp_name,file_amount,save_path,minmax_name):
+def norm_files(dir_path,temp_name,file_amount,save_path1, save_path2,minmax_name):
     print 'Begin to norm files'
 
     for filenum in range(file_amount):
@@ -154,9 +154,13 @@ def norm_files(dir_path,temp_name,file_amount,save_path,minmax_name):
 
         minVal, maxVal = get_minmax(minmax_name)
 
-        norm_single_file(filename+'_train.csv',save_path,minVal,maxVal)
-        norm_single_file(filename+'_valid.csv',save_path,minVal,maxVal)
-        norm_single_file(filename+'_test.csv',save_path,minVal,maxVal)
+        norm_single_file(filename+'_train.csv',save_path1,minVal,maxVal)
+        norm_single_file(filename+'_valid.csv',save_path1,minVal,maxVal)
+        norm_single_file(filename+'_test.csv',save_path1,minVal,maxVal)
+
+        norm_single_file(filename+'_train.csv',save_path2,minVal,maxVal)
+        norm_single_file(filename+'_valid.csv',save_path2,minVal,maxVal)
+        norm_single_file(filename+'_test.csv',save_path2,minVal,maxVal)
 
         if filenum % 50 == 0:
             span_time = time.time() - before_time
@@ -165,8 +169,19 @@ def norm_files(dir_path,temp_name,file_amount,save_path,minmax_name):
 
 #norm_files('/media/freshield/LINUX/Ciena/10spans/','Raw_data_',6,'/media/freshield/LINUX/Ciena/norm/','/media/freshield/LINUX/Ciena/10spans/minmax_value.csv')
 
+
+
 """
 minVal, maxVal = get_minmax('sample/minmax_value.csv')
 norm_single_file('sample/sample_set_train.csv','sample/norm/',minVal,maxVal)
 """
 #norm_recut_dataset('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000,100)
+
+dir_path = '/media/freshield/DATA/Ciena_new_data/20spans/minmax/'
+temp_name = 'Raw_data_'
+file_amount = 3
+save_path1 = '/media/freshield/DATA/Ciena_new_data/20spans/norm/'
+save_path2 = '/media/freshield/DATA_W/Ciena_new_data/20spans/norm/'
+minmax_name = '/media/freshield/DATA/Ciena_new_data/20spans/minmax/minmax_value.csv'
+
+norm_files(dir_path,temp_name,file_amount,save_path1,save_path2,minmax_name)
