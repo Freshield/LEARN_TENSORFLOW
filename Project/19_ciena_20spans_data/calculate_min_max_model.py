@@ -178,6 +178,7 @@ def cal_minmax_split_files(dir_path,temp_name,file_amount,save_path):
 #add_values_to_array(maxVal, array, 1)
 #np.savetxt('sample/minmax_value.csv', array, delimiter=",")
 #cal_min_max('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000, 100)
+"""
 dir_path = '/media/freshield/DATA/Ciena_new_data/20spans/split/'
 temp_name = 'Raw_data_'
 file_amount = 1000
@@ -185,4 +186,4 @@ save_path = '/media/freshield/DATA/Ciena_new_data/20spans/minmax/'
 
 
 cal_minmax_split_files(dir_path,temp_name,file_amount,save_path)
-
+"""

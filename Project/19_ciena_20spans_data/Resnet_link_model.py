@@ -12,18 +12,14 @@ def reshape_dataset(dataset, SPAN):
     #You need fill as your program
 
     input_data = np.zeros((dataset.shape[0], 304, 48, 2))
-    real_C = np.reshape(dataset[:, :6000], (dataset.shape[0], 300, 20))
-    flap_real_C = real_C[:,::-1]
-    imag_C = np.reshape(dataset[:,6000:12000], (dataset.shape[0], 300, 20))
-    flap_imag_C = imag_C[:,::-1]
-    input_data[:, 2:302, 4:24, 0] = real_C[:,:,:]
-    input_data[:, 2:302, 24:44, 0] = flap_real_C[:, :, :]
-    input_data[:, 2:302, 4:24, 1] = imag_C[:,:,:]
-    input_data[:, 2:302, 24:44, 1] = flap_imag_C[:, :, :]
-    para_data = dataset[:, 12000:12021]
+    real_C = np.reshape(dataset[:, :12000], (dataset.shape[0], 300, 40))
+    imag_C = np.reshape(dataset[:,12000:24000], (dataset.shape[0], 300, 40))
+    input_data[:, 2:302, 4:44, 0] = real_C[:,:,:]
+    input_data[:, 2:302, 4:44, 1] = imag_C[:,:,:]
+    para_data = dataset[:, 24000:24041]
 
     #cause span begin with 1 not 0
-    output_data = dataset[:, 12031 + SPAN[0] - 1].astype(int)
+    output_data = dataset[:, 24061 + SPAN[0] - 1].astype(int)
     output_data = dpm.num_to_one_hot(output_data, 6)
 
     return input_data, para_data, output_data
@@ -205,9 +201,9 @@ def resnet_layer(input_layer, layer_depth, train_phase, name):
 #       |
 #       fc
 #       |
-#       512 + 21
+#       512 + 41
 #           |
-#          533
+#          553
 #           |
 #          256
 #           |
@@ -264,7 +260,7 @@ def inference(input_layer, para_data, train_phase, keep_prob):
     fc1, p_fc = bm.fc_layer(avg_pool_flat, 512)
     parameters[0:0] = p_fc
 
-    # link the para_data(N,533)
+    # link the para_data(N,553)
     fc1_link = tf.concat([fc1, para_data], axis=1)
 
     # fc layer2(N,256)

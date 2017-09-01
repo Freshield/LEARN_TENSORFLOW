@@ -5,8 +5,8 @@ import flow_model as fm
 #the parameter need fill
 #######################################################
 #from network_model_example import *
-SPAN=[5]
-dir = '/media/freshield/DATA_W/Ciena_new_data/10spans_norm/'
+SPAN=[10]
+dir = '/media/freshield/DATA/Ciena_new_data/20spans/norm/'
 epochs = 1
 data_size = 1000000
 file_size = 1000
@@ -123,7 +123,7 @@ def cross_valid(para_dic):
                 with tf.Session() as sess:
                     # inputs
                     input_x = tf.placeholder(tf.float32, [None, 304, 48, 2], name='input_x')
-                    para_pl = tf.placeholder(tf.float32, [None, 21], name='para_pl')
+                    para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
                     input_y = tf.placeholder(tf.float32, [None, 6], name='input_y')
                     train_phase = tf.placeholder(tf.bool, name='train_phase')
                     keep_prob = tf.placeholder(tf.float32, name='keep_prob')

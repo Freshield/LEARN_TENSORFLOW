@@ -174,14 +174,15 @@ def norm_files(dir_path,temp_name,file_amount,save_path1, save_path2,minmax_name
 """
 minVal, maxVal = get_minmax('sample/minmax_value.csv')
 norm_single_file('sample/sample_set_train.csv','sample/norm/',minVal,maxVal)
-"""
+
 #norm_recut_dataset('/home/freshield/Ciena_data/dataset_10k/ciena10000.csv','/home/freshield/Ciena_data/dataset_10k/model/','/home/freshield/Ciena_data/dataset_10k/model/min_max.csv',10000,100)
 
 dir_path = '/media/freshield/DATA/Ciena_new_data/20spans/minmax/'
 temp_name = 'Raw_data_'
-file_amount = 3
+file_amount = 1000
 save_path1 = '/media/freshield/DATA/Ciena_new_data/20spans/norm/'
 save_path2 = '/media/freshield/DATA_W/Ciena_new_data/20spans/norm/'
 minmax_name = '/media/freshield/DATA/Ciena_new_data/20spans/minmax/minmax_value.csv'
 
 norm_files(dir_path,temp_name,file_amount,save_path1,save_path2,minmax_name)
+"""
