@@ -22,32 +22,32 @@ def normalize_dataset(dataset, min_values=None, max_values=None):
     norm_dataset[:, :] = dataset[:, :]
 
     if min_values == None:
-        CMr_min = np.min(norm_dataset[:, 0:6000])
-        CMi_min = np.min(norm_dataset[:, 6000:12000])
-        CD_min = np.min(norm_dataset[:, 12000:12001])
-        length_min = np.min(norm_dataset[:, 12001:12011])
-        power_min = np.min(norm_dataset[:, 12011:12021])
+        CMr_min = np.min(norm_dataset[:, 0:12000])
+        CMi_min = np.min(norm_dataset[:, 12000:24000])
+        CD_min = np.min(norm_dataset[:, 24000:24001])
+        length_min = np.min(norm_dataset[:, 24001:24021])
+        power_min = np.min(norm_dataset[:, 24021:24041])
     else:
         CMr_min, CMi_min, CD_min, length_min, power_min = min_values
 
 
     if max_values == None:
-        CMr_max = np.max(norm_dataset[:, 0:6000])
-        CMi_max = np.max(norm_dataset[:, 6000:12000])
-        CD_max = np.max(norm_dataset[:, 12000:12001])
-        length_max = np.max(norm_dataset[:, 12001:12011])
-        power_max = np.max(norm_dataset[:, 12011:12021])
+        CMr_max = np.max(norm_dataset[:, 0:12000])
+        CMi_max = np.max(norm_dataset[:, 12000:24000])
+        CD_max = np.max(norm_dataset[:, 24000:24001])
+        length_max = np.max(norm_dataset[:, 24001:24021])
+        power_max = np.max(norm_dataset[:, 24021:24041])
     else:
         CMr_max, CMi_max, CD_max, length_max, power_max = max_values
 
     def calcul_norm(dataset, min, max):
         return (2 * dataset - max - min) / (max - min)
 
-    norm_dataset[:, 0:6000] = calcul_norm(norm_dataset[:, 0:6000], CMr_min, CMr_max)
-    norm_dataset[:, 6000:12000] = calcul_norm(norm_dataset[:, 6000:12000], CMi_min, CMi_max)
-    norm_dataset[:, 12000:12001] = calcul_norm(norm_dataset[:, 12000:12001], CD_min, CD_max)
-    norm_dataset[:, 12001:12011] = calcul_norm(norm_dataset[:, 12001:12011], length_min, length_max)
-    norm_dataset[:, 12011:12021] = calcul_norm(norm_dataset[:, 12011:12021], power_min, power_max)
+    norm_dataset[:, 0:12000] = calcul_norm(norm_dataset[:, 0:12000], CMr_min, CMr_max)
+    norm_dataset[:, 12000:24000] = calcul_norm(norm_dataset[:, 12000:24000], CMi_min, CMi_max)
+    norm_dataset[:, 24000:24001] = calcul_norm(norm_dataset[:, 24000:24001], CD_min, CD_max)
+    norm_dataset[:, 24001:24021] = calcul_norm(norm_dataset[:, 24001:24021], length_min, length_max)
+    norm_dataset[:, 24021:24041] = calcul_norm(norm_dataset[:, 24021:24041], power_min, power_max)
 
     min_values = (CMr_min, CMi_min, CD_min, length_min, power_min)
     max_values = (CMr_max, CMi_max, CD_max, length_max, power_max)
