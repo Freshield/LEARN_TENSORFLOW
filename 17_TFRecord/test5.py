@@ -1,8 +1,10 @@
 import tensorflow as tf
 
-filename = 'data/data.tfrecords'
+filename = ['data/10files/%d_data.tfrecords' % i for i in range(10)]
 
-filename_queue = tf.train.string_input_producer([filename])
+print filename
+
+filename_queue = tf.train.string_input_producer(filename,shuffle=True)
 
 reader = tf.TFRecordReader()
 _, serialized_example = reader.read(filename_queue)
@@ -21,13 +23,13 @@ print features
 print input_data
 print lable_data
 
-batch_size = 2
-thread = 1
-min_after_dequeue = 200
+batch_size = 10
+thread = 5
+min_after_dequeue = 50
 capacity = min_after_dequeue + (thread + 1) * batch_size
 
 
-input_batch, label_batch = tf.train.maybe_shuffle_batch([input_data,lable_data],keep_input=True,
+input_batch, label_batch = tf.train.shuffle_batch([input_data,lable_data],
                                                   batch_size=batch_size,capacity=capacity,
                                                   num_threads=thread,min_after_dequeue=min_after_dequeue)
 
@@ -44,7 +46,7 @@ with tf.Session() as sess:
 
     try:
         while not coord.should_stop():
-            for i in range(20):
+            for i in range(10):
                 val, l = sess.run([input_batch, label_batch])
                 print val
                 print l

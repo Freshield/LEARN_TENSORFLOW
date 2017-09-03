@@ -27,6 +27,7 @@ def csv_to_tfrecord(filename, writer):
     writer.close()
     print 'Successfully convert'
 
-filename = 'data/num_data.csv'
-writer = tf.python_io.TFRecordWriter('data/data.tfrecords')
-csv_to_tfrecord(filename,writer)
+for i in range(10):
+    filename = 'data/10files/%d_data.csv' % i
+    writer = tf.python_io.TFRecordWriter('data/10files/%d_data.tfrecords' % i)
+    csv_to_tfrecord(filename,writer)
