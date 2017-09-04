@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 
-filename = '/media/freshield/New_2T_Data/Ciena_new_data/20spans/norm/Raw_data_0_train.csv'
+filename = '/media/freshield/New_2T_Data/Ciena_new_data/20spans/norm/Raw_data_0_test.csv'
 
-reader = pd.read_csv(filename, header=None, chunksize=100)
+reader = pd.read_csv(filename, header=None, chunksize=400)
 
 count = 0
 

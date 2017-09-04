@@ -28,7 +28,7 @@ def csv_to_tfrecord(filename, savename, chunkSize):
         #count = 0
 
         temp_Data = chunk.values
-        for lineNum in range(chunkSize):
+        for lineNum in range(temp_Data.shape[0]):
             # print '    line %d begin convert' % count
             #if count % 50 == 0:
                 #print '%s done %d lines convert' % (filename.split('/')[-1], count)
