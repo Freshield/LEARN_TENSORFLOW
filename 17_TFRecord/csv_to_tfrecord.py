@@ -157,6 +157,7 @@ def multi_threads_convert_whole_dir(threadNums, dir_path, save_path, chunkSize):
         span_num = filenum.last_num - filenum.total_num
         filenum.last_num = filenum.total_num
         print
+        print 'rest %d files' % filenum.total_num
         print "last %.2f minutes process %d file" % (span_time / 60, span_num)
         print "need %.2f hours for all files" % (((filenum.total_num / span_num) * span_time) / 3600)
         print
