@@ -24,7 +24,7 @@ def csv_to_tfrecord(filename, savename):
     count = 0
 
     for line in reader:
-        print count
+        print '    line %d begin convert' % count
         data = line.values.reshape((24081))
 
         real_C = data[0:12000]
@@ -49,7 +49,7 @@ def csv_to_tfrecord(filename, savename):
         count += 1
 
     writer.close()
-    print 'Successfully convert'
+    print 'one file successfully convert'
 
 def convert_whole_dir_csv(dir_path, save_path):
     filename_list = get_files_name(dir_path)
@@ -58,14 +58,14 @@ def convert_whole_dir_csv(dir_path, save_path):
     for filename in filename_list:
         before_time = time.time()
 
-        print count
+        print 'file %d begin to convert' % count
 
         #look like Raw_data_xxx_train.csv
         the_name = filename.split('.')[0]
         savename = save_path + the_name + '.tfrecords'
         csv_to_tfrecord(dir_path+filename,savename)
 
-        if count % 50 == 0 and count != 0:
+        if count % 10 == 0 and count != 0:
             span_time = time.time() - before_time
             print "use %.2f second in 10 loop" % (span_time * 10)
             print "need %.2f minutes for all loop" % (((total_filenum - count) * span_time) / 60)
