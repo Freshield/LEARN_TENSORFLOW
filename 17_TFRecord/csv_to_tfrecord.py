@@ -40,7 +40,7 @@ def csv_to_tfrecord(filename, savename):
                 'real_C': _float_feature(real_C),
                 'imag_C': _float_feature(imag_C),
                 'netCD' : _float_feature(netCD),
-                'length': _float_feature(length),
+                '': _float_feature(length),
                 'power' : _float_feature(power),
                 'ENLC'  : _float_feature(ENLC),
                 'labels': _float_feature(labels)
@@ -77,9 +77,8 @@ def convert_whole_dir_csv(dir_path, save_path):
 
 
 
-#dir_path = '/media/freshield/New_2T_Data/Ciena_new_data/20spans/norm/'
-dir_path = 'data/test_fuc/'
-save_path = 'data/test_fuc/'
+dir_path = '/media/freshield/New_2T_Data/Ciena_new_data/20spans/norm/'
+save_path = '/media/freshield/New_2T_Data/Ciena_new_data/20spans/tfrecords_norm/'
 
 convert_whole_dir_csv(dir_path,save_path)
 
