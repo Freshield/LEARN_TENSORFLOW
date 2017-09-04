@@ -44,7 +44,7 @@ def csv_to_tfrecord(filename, writer):
     writer.close()
     print 'Successfully convert'
 
-
+dir_name = ''
 filename = '/media/freshield/CORSAIR/LEARN_TENSORFLOW/Project/19_ciena_20spans_data/sample/sample_set.csv'
 writer = tf.python_io.TFRecordWriter('data/sample.tfrecords')
 
