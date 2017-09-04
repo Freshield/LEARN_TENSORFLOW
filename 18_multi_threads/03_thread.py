@@ -11,7 +11,17 @@ def move(func):
         print 'I was at the %s! %s' % (func,ctime())
         sleep(5)
 
-music('love')
-move('avater')
+threads = []
+
+t1 = threading.Thread(target=music, args=('love',))
+threads.append(t1)
+t2 = threading.Thread(target=move, args=('avater',))
+threads.append(t2)
+
+for t in threads:
+    t.setDaemon(True)
+    t.start()
+t.join()
 
 print 'all over %s' % ctime()
+
