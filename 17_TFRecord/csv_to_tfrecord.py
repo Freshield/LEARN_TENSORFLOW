@@ -151,13 +151,15 @@ def multi_threads_convert_whole_dir(threadNums, dir_path, save_path, chunkSize):
     # wait queue be empty
     while not workQueue.empty():
         before_time = time.time()
-        time.sleep(60)
+        time.sleep(300)
         span_time = time.time() - before_time
         filenumLock.acquire()
         span_num = filenum.last_num - filenum.total_num
         filenum.last_num = filenum.total_num
+        print
         print "last %.2f minutes process %d file" % (span_time / 60, span_num)
         print "need %.2f hours for all files" % (((filenum.total_num / span_num) * span_time) / 3600)
+        print
         filenumLock.release()
 
     exitFlag = 1
