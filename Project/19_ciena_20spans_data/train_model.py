@@ -5,7 +5,7 @@ import flow_model as fm
 #the parameter need fill
 #######################################################
 #from network_model_example import *
-SPAN=[5]
+SPAN=[10]
 dir = '/home/freshield/Ciena_data/dataset_10k/model/'
 epochs = 200
 data_size = 1000000
@@ -19,8 +19,8 @@ train_file_size = 800
 valid_file_size = 100
 test_file_size = 100
 #hypers
-reg = 0.00266
-lr_rate = 0.00021
+reg = 0.009829
+lr_rate = 0.000312
 lr_decay = 0.99
 keep_prob_v = 1.0
 log_dir = 'logs/'
@@ -101,7 +101,7 @@ def train_whole_dataset_begin(para_dic, model_name):
         with tf.Session() as sess:
             # inputs
             input_x = tf.placeholder(tf.float32, [None, 304, 48, 2], name='input_x')
-            para_pl = tf.placeholder(tf.float32, [None, 21], name='para_pl')
+            para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
             input_y = tf.placeholder(tf.float32, [None, 6], name='input_y')
             train_phase = tf.placeholder(tf.bool, name='train_phase')
             keep_prob = tf.placeholder(tf.float32, name='keep_prob')
