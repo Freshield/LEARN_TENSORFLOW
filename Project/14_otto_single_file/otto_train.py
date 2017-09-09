@@ -114,6 +114,8 @@ with tf.Graph().as_default():
         while epoch < epochs:
 
             print
+            word = time.strftime('%Y-%m-%d %H:%M:%S\n')
+            log = print_and_log(word, log)
             word = 'total loop is %d, total epoch is %d' % (loops, epochs)
             log = print_and_log(word, log)
             word = 'here is the %d epoch' % epoch
@@ -150,6 +152,8 @@ with tf.Graph().as_default():
                 #show time
                 if loop % 50 == 0:
                     print
+                    word = time.strftime('%Y-%m-%d %H:%M:%S\n')
+                    log = print_and_log(word, log)
                     word = 'total loop is %d, total epoch is %d' % (loops, epochs)
                     log = print_and_log(word, log)
                     word = 'here is the %d epoch' % epoch
