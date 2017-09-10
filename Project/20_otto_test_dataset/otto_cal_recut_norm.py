@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 
-filename = 'data/train.csv'
+train_filename = 'data/train.csv'
+test_filename = 'data/test.csv'
 
 dic = {'Class_1':0., 'Class_2':1., 'Class_3':2., 'Class_4':3., 'Class_5':4., 'Class_6':5., 'Class_7':6., 'Class_8':7., 'Class_9':8.}
 
@@ -9,31 +10,22 @@ dic = {'Class_1':0., 'Class_2':1., 'Class_3':2., 'Class_4':3., 'Class_5':4., 'Cl
 def calcul_norm_new(dataset, min, max, mean):
     return (2 * dataset - 2 * mean) / (max - min)
 
-data = pd.read_csv(filename)
+train_data = pd.read_csv(train_filename)
+test_data = pd.read_csv(test_filename)
 
-print data.shape
+train_size = 61878
+test_size = 144368
 
-test_size = 878
+#get the 93 features coloums
+train_set = train_data.values[:,1:-1].astype(np.float32)
+test_set = test_data.values[:,1:].astype(np.float32)
 
-indexs = np.arange(len(data))
-np.random.shuffle(indexs)
+#get min max mean values
+min_value = np.min(train_set, axis=0)
+max_value = np.max(train_set, axis=0)
+mean_value = np.mean(train_set, axis=0)
 
-train_set = data.values[indexs[0:-878],1:]
-test_set = data.values[indexs[-878:],1:]
-
-train_set_value = data.values[indexs[0:-878],1:-1].astype(np.float32)
-test_set_value = data.values[indexs[-878:],1:-1].astype(np.float32)
-
-print train_set_value.shape
-print test_set_value.shape
-print indexs[-10:]
-
-min_value = np.min(train_set_value, axis=0)
-max_value = np.max(train_set_value, axis=0)
-mean_value = np.mean(train_set_value, axis=0)
-
-print max_value
-
+"""
 norm_train_data = np.zeros((61000, 94))
 norm_test_data = np.zeros((878,94))
 
@@ -49,3 +41,4 @@ for i in xrange(norm_test_data.shape[0]):
 
 #np.savetxt('data/norm/train_set.csv', norm_train_data, delimiter=',')
 #np.savetxt('data/norm/test_set.csv', norm_test_data, delimiter=',')
+"""
