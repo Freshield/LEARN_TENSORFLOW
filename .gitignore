@@ -13,3 +13,6 @@ modules
 module
 interrupt
 *.asv
+*.rar
+*.gz
+*.tar
