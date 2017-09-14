@@ -25,20 +25,8 @@ min_value = np.min(train_set, axis=0)
 max_value = np.max(train_set, axis=0)
 mean_value = np.mean(train_set, axis=0)
 
-"""
-norm_train_data = np.zeros((61000, 94))
-norm_test_data = np.zeros((878,94))
+norm_test_data = np.zeros((test_size,93))
 
-norm_train_data[:,:-1] = calcul_norm_new(train_set_value, min_value, max_value, mean_value)
-norm_test_data[:,:-1] = calcul_norm_new(test_set_value, min_value, max_value, mean_value)
+norm_test_data[:,:] = calcul_norm_new(test_set, min_value, max_value, mean_value)
 
-for i in xrange(norm_train_data.shape[0]):
-    norm_train_data[i,-1] = dic[train_set[i,-1]]
-
-
-for i in xrange(norm_test_data.shape[0]):
-    norm_test_data[i,-1] = dic[test_set[i,-1]]
-
-#np.savetxt('data/norm/train_set.csv', norm_train_data, delimiter=',')
-#np.savetxt('data/norm/test_set.csv', norm_test_data, delimiter=',')
-"""
+np.savetxt('data/norm/testing.csv', norm_test_data, delimiter=',')
