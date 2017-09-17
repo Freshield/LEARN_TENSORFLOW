@@ -10,12 +10,13 @@ import tensorflow as tf
 def reshape_dataset(dataset):
 
     #You need fill as your program
+    #here y should be 93
     x,y = dataset.shape
 
-    feature_data = dataset[:,:-1]
+    feature_data = dataset[:,:]
 
-    temp_data = np.zeros((x,y-1,y-1))
-    input_data = np.zeros((x, y+2, y+2))
+    temp_data = np.zeros((x,y,y))
+    input_data = np.zeros((x, y+3, y+3))
 
     for i in xrange(x):
         for j in xrange(y-1):
@@ -24,12 +25,9 @@ def reshape_dataset(dataset):
             temp_data[i, j] = np.concatenate((left, right))
 
     input_data[:,1:-2,1:-2] = temp_data[:,:,:]
-    input_data = input_data.reshape((x,y+2,y+2,1))
+    input_data = input_data.reshape((x,y+3,y+3,1))
 
-    output_data = dataset[:, -1].astype(int)
-    output_data = dpm.num_to_one_hot(output_data, 9)
-
-    return input_data, output_data
+    return input_data
 
 
 
