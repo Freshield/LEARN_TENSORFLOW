@@ -95,7 +95,7 @@ with tf.Graph().as_default():
 
             data_x = model.reshape_dataset(data)
 
-            feed_dict = {input_x: data_x, train_phase:True, keep_prob:keep_prob_v}
+            feed_dict = {input_x: data_x, train_phase:False, keep_prob:keep_prob_v}
             y_pred_v = sess.run(y_pred, feed_dict=feed_dict)
 
             result_dataset[res_last_index:res_next_index,1:] = y_pred_v
@@ -109,12 +109,12 @@ with tf.Graph().as_default():
 
             data_x = model.reshape_dataset(data)
 
-            feed_dict = {input_x: data_x, train_phase: True, keep_prob: keep_prob_v}
+            feed_dict = {input_x: data_x, train_phase: False, keep_prob: keep_prob_v}
             y_pred_v = sess.run(y_pred, feed_dict=feed_dict)
 
             result_dataset[res_last_index:, 1:] = y_pred_v
 
-        np.savetxt('data/result_trapha_T.csv', result_dataset, delimiter=',')
+        np.savetxt('data/result_trapha_F.csv', result_dataset, delimiter=',')
 
 
 

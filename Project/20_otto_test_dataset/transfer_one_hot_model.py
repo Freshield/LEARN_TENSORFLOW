@@ -9,13 +9,7 @@ import numpy as np
 test_size = 144368
 
 batch_size = 100
-#hypers
-reg = 0.12789
-lr_rate = 0.000094
-lr_decay = 0.99
-keep_prob_v = 1.0
-model_path = '/home/freshield/ciena_test/20_otto_test_dataset/modules/model/module.ckpt'
-test_filename = 'data/norm/testing.csv'
+test_filename = 'data/result_trapha_T.csv'
 ########################################################
 
 
@@ -45,7 +39,7 @@ test_loops = test_size // batch_size
 test_rest = test_size % batch_size
 test_loop = 0
 
-result_dataset = np.zeros((test_size,10))
+result_dataset = np.zeros((test_size,10), dtype=np.float32)
 id_col = np.arange(test_size)
 id_col += 1
 result_dataset[:,0] = id_col
@@ -53,29 +47,13 @@ result_dataset[:,0] = id_col
 with tf.Graph().as_default():
     with tf.Session() as sess:
         # inputs
-        input_x = tf.placeholder(tf.float32, [None, 96, 96, 1], name='input_x')
-        input_y = tf.placeholder(tf.float32, [None, 9], name='input_y')
-        train_phase = tf.placeholder(tf.bool, name='train_phase')
-        keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+        input_data = tf.placeholder(tf.float32, [None, 9], name='input_data')
 
-        # logits
-        y_pred, parameters = model.inference(input_x, train_phase, keep_prob)
+        norm = tf.nn.softmax(input_data)
 
-        # loss
-        loss_value = loss(input_y, y_pred, reg, parameters)
+        the_argmax = tf.argmax(norm, axis=1)
 
-        # train
-        train_step = tf.train.AdamOptimizer(lr_rate).minimize(loss_value)
-
-        # predict
-        correct_num, accuracy = corr_num_acc(input_y, y_pred)
-
-        saver = tf.train.Saver()
-
-        saver.restore(sess, model_path)
-
-        print ''
-        print 'Model was restored'
+        one_hot = tf.one_hot(the_argmax, depth=9, dtype=tf.int32)
 
         # read file
         test_data = pd.read_csv(test_filename, header=None).values
@@ -91,30 +69,33 @@ with tf.Graph().as_default():
 
             res_next_index = res_last_index + batch_size
 
-            data = test_data[res_last_index:res_next_index,:]
+            data = test_data[res_last_index:res_next_index,1:]
 
-            data_x = model.reshape_dataset(data)
+            feed_dict = {input_data:data}
 
-            feed_dict = {input_x: data_x, train_phase:True, keep_prob:keep_prob_v}
-            y_pred_v = sess.run(y_pred, feed_dict=feed_dict)
+            norm_v = sess.run(norm, feed_dict=feed_dict)
 
-            result_dataset[res_last_index:res_next_index,1:] = y_pred_v
+            result_dataset[res_last_index:res_next_index,1:] = norm_v
 
             res_last_index = res_next_index
 
             test_loop += 1
 
         if test_rest != 0:
-            data = test_data[res_last_index:,:]
+            data = test_data[res_last_index:,1:]
 
-            data_x = model.reshape_dataset(data)
+            feed_dict = {input_data:data}
 
-            feed_dict = {input_x: data_x, train_phase: True, keep_prob: keep_prob_v}
-            y_pred_v = sess.run(y_pred, feed_dict=feed_dict)
+            norm_v = sess.run(norm, feed_dict=feed_dict)
 
-            result_dataset[res_last_index:, 1:] = y_pred_v
+            result_dataset[res_last_index:, 1:] = norm_v
 
-        np.savetxt('data/result_trapha_T.csv', result_dataset, delimiter=',')
+
+        header = "id,Class_1,Class_2,Class_3,Class_4,Class_5,Class_6,Class_7,Class_8,Class_9"
+
+        fmt = '%i,%1.1f,%1.1f,%1.1f,%1.1f,%1.1f,%1.1f,%1.1f,%1.1f,%1.1f'
+
+        np.savetxt('data/result_trapha_T_oh.csv', result_dataset, delimiter=',', header=header, comments='', fmt=fmt)
 
 
 
