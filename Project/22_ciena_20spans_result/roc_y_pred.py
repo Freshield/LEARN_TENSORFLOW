@@ -12,13 +12,13 @@ from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
 from scipy import interp
 
-score_filename = 'result_F.csv'
-label_filename = 'label_F.csv'
+score_filename = 'result_value.csv'
+label_filename = 'result_label.csv'
 
 y_score = pd.read_csv(score_filename, header=None).values
 y_test = pd.read_csv(label_filename, header=None, dtype=np.int32).values
 
-n_classes = 9
+n_classes = 6
 
 #compute ROC
 fpr = dict()

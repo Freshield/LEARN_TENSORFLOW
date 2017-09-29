@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
 
-filename1 = 'result_label.csv'
-filename2 = 'result_value.csv'
 
-data1 = pd.read_csv(filename1,header=None)
-data2 = pd.read_csv(filename2,header=None)
+score_filename = 'result_value.csv'
+label_filename = 'result_label.csv'
 
-print data1.values.shape
-print data2.values.shape
+y_score = pd.read_csv(score_filename, header=None).values
+y_test = pd.read_csv(label_filename, header=None, dtype=np.int32).values
+
+print y_test[:10]
