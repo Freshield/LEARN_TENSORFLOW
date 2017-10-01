@@ -6,7 +6,6 @@ import otto_resnet_model as model
 #the parameter need fill
 #######################################################
 #from network_model_example import *
-dir = 'data/norm/train1000/'
 epochs = 3
 data_size = 61000
 file_size = 61000
@@ -27,6 +26,7 @@ best_model_acc_dic = None
 best_model_dir_dic = None
 train_filename = 'data/norm/train_set.csv'
 test_filename = 'data/norm/test_set.csv'
+
 ########################################################
 
 
@@ -81,8 +81,8 @@ log = ''
 
 #hypers
 lr_decay = 0.99
-regs = random_uniform_array(7, -5, -1)
-lr_rates = random_uniform_array(7, -7, -2)
+regs = random_uniform_array(7, -5, -3)
+lr_rates = random_uniform_array(7, -5, -3)
 #keeps = random_uniform_array(4, -0.3, 0)
 
 log = ''
@@ -115,7 +115,7 @@ for reg in regs:
                 log = print_and_log(word, log)
 
                 # inputs
-                input_x = tf.placeholder(tf.float32, [None, 96, 96, 1], name='input_x')
+                input_x = tf.placeholder(tf.float32, [None, 96, 96, 93], name='input_x')
                 input_y = tf.placeholder(tf.float32, [None, 9], name='input_y')
                 train_phase = tf.placeholder(tf.bool, name='train_phase')
                 keep_prob = tf.placeholder(tf.float32, name='keep_prob')
@@ -217,6 +217,7 @@ for reg in regs:
                     out_of_dataset = False
                     last_index = 0
                     total_acc_num = 0.0
+                    total_loss = 0.0
 
                     while test_loop < test_loops:
                         print '%d ' % test_loop,
@@ -226,9 +227,10 @@ for reg in regs:
 
                         data_x, data_y = model.reshape_dataset(data)
 
-                        feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
-                        corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                        feed_dict = {input_x: data_x, input_y: data_y, train_phase: False, keep_prob: keep_prob_v}
+                        corr_num, test_loss = sess.run([correct_num, loss_value], feed_dict=feed_dict)
                         total_acc_num += corr_num
+                        total_loss += test_loss
 
                         test_loop += 1
 
@@ -236,12 +238,14 @@ for reg in regs:
                         span_index = indexs[last_index:]
                         data = test_data[span_index]
                         data_x, data_y = model.reshape_dataset(data)
-                        feed_dict = {input_x: data_x, input_y: data_y, train_phase: True, keep_prob: keep_prob_v}
-                        corr_num = sess.run(correct_num, feed_dict=feed_dict)
+                        feed_dict = {input_x: data_x, input_y: data_y, train_phase: False, keep_prob: keep_prob_v}
+                        corr_num, test_loss = sess.run([correct_num, loss_value], feed_dict=feed_dict)
                         total_acc_num += corr_num
+                        total_loss += test_loss
 
                     acc = total_acc_num / test_size
-                    word = 'test acc in epoch %d is %.4f' % (epoch, acc)
+                    test_loss = total_loss / test_size
+                    word = 'test acc in epoch %d is %.4f, loss is %.4f' % (epoch, acc, test_loss)
                     log = print_and_log(word, log)
 
                     # to create the count dir
@@ -258,7 +262,7 @@ for reg in regs:
                         f.write(hyper_info)
                         f.close()
 
-                    filename = log_dir + '%.4f_epoch%d' % (acc, epoch)
+                    filename = log_dir + '%.4f_ls%.4f_epoch%d' % (acc, test_loss, epoch)
                     f = file(filename, 'w+')
                     f.write(log)
                     f.close()

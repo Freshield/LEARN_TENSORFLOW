@@ -143,9 +143,7 @@ def loss(labels, logits, reg=None, parameters=None):
 #ver 1.0
 def random_uniform_array(number, start, end):
     array = np.zeros(number)
-    for i in np.arange(number - 2):
+    for i in np.arange(number):
         array[i] = 10 ** np.random.uniform(start, end)
-    array[-2] = 10 ** start
-    array[-1] = 10 ** end
 
     return array
