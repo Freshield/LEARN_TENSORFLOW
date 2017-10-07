@@ -3,6 +3,21 @@ import pandas as pd
 import time
 
 
+
+
+#calculate the min max value first
+
+
+
+
+
+
+
+
+
+
+
+
 # split the dataset into three part:
 # training, validation, test
 #ver 1.0
