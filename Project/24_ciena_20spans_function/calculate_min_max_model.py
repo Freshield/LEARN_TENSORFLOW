@@ -186,6 +186,37 @@ def cal_minmax_split_files(dir_path,temp_name,file_amount,save_path):
     add_values_to_array(total_max, array, 1)
     np.savetxt(save_path+'minmax_value.csv', array, delimiter=",")
 
+
+def cal_minmax_raw_file(filename):
+
+
+    reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
+
+    chunkSize = 1000
+
+    loop = True
+
+    count = 0
+
+    while loop:
+        try:
+
+            chunk = reader.get_chunk(chunkSize)
+            print chunk.shape
+            print count
+
+            count += 1
+
+
+        except StopIteration:
+            print "stop"
+            break
+
+
+            
+
+
+
 #cal_minmax_split_files('/media/freshield/DATA_W/Ciena_new_data/10spans/','Raw_data_',1000,'/media/freshield/DATA_W/Ciena_new_data/10spans_split/')
 #minVal,maxVal = cal_minmax_split_single_file('sample/sample_set.csv','sample/')
 #array = np.zeros([2, 5], dtype=np.float32)
