@@ -46,6 +46,7 @@ def predict_type_enlc(dataset, model_path=None):
     max_value = (0.041134998, 0.023029, 25980.0, 193.57001, 22.183001)
 
     norm_dataset = normalize_dataset(dataset, min_value, max_value)
+    #norm_dataset = dataset
 
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
@@ -85,9 +86,22 @@ def predict_type_enlc(dataset, model_path=None):
 
 filename = 'data_sample.csv'
 
-data = pd.read_csv(filename, header=None).values
+filename1 = '/media/freshield/Passort_2T_Data_W/Ciena_new_data/20spans/norm/Raw_data_0_test.csv'
+
+model_name = '/media/freshield/COASAIR1/CIENA/Result/modules/ciena_20spans_train/0.9292_epoch74/module.ckpt'
+
+data = pd.read_csv(filename, header=None).values[:50]
 
 type_v, enlc_v = predict_type_enlc(data)
 
+print
 print type_v
 print enlc_v
+print data[:, 24050]
+print data[:, 24070]
+print
+correct_prediction = np.equal(type_v, data[:, 24070])
+print correct_prediction
+print correct_prediction.astype(float)
+accuracy = np.sum(correct_prediction.astype(float)) / 50
+print accuracy
