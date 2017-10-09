@@ -2,6 +2,8 @@ from file_system_model import *
 from basic_model import *
 import flow_model as fm
 import Resnet_link_model as rl
+import pandas as pd
+import numpy as np
 
 ########################################################
 #                 HELPER                               #
@@ -75,4 +77,11 @@ def predict_type_enlc(dataset, model_path=None):
 
     return y_type_v, y_enlc_v
 
-predict_type_enlc()
+filename = 'data_sample.csv'
+
+data = pd.read_csv(filename, header=None).values
+
+type_v, enlc_v = predict_type_enlc(data, '/media/freshield/New_2T_Data/corsair/CIENA/Result/modules/ciena_20spans_train/0.9292_epoch74/module.ckpt')
+
+print type_v
+print enlc_v

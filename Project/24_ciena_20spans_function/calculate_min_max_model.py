@@ -257,7 +257,7 @@ dir_path = '/media/freshield/New_2T_Data/Ciena/new_data/FiberID_6fibers_20Spans/
 
 file_name = 'FiberID_6fibers_20Spans_noPCA_'
 
-cal_minmax_raw_files(dir_path, file_name, 10)
+#cal_minmax_raw_files(dir_path, file_name, 10)
 
 
 
