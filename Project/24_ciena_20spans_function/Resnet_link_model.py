@@ -25,6 +25,23 @@ def reshape_dataset(dataset, SPAN):
     return input_data, para_data, output_data
 
 
+#reshape the dataset for CNN
+#Here is just an example
+#ver 1.0
+def reshape_test_dataset(dataset):
+
+    #You need fill as your program
+
+    input_data = np.zeros((dataset.shape[0], 304, 48, 2))
+    real_C = np.reshape(dataset[:, :12000], (dataset.shape[0], 300, 40))
+    imag_C = np.reshape(dataset[:,12000:24000], (dataset.shape[0], 300, 40))
+    input_data[:, 2:302, 4:44, 0] = real_C[:,:,:]
+    input_data[:, 2:302, 4:44, 1] = imag_C[:,:,:]
+    para_data = dataset[:, 24000:24041]
+
+    return input_data, para_data
+
+
 
 #bn->relu->conv
 #the size is same

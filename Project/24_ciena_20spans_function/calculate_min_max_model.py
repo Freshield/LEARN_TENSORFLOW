@@ -189,7 +189,6 @@ def cal_minmax_split_files(dir_path,temp_name,file_amount,save_path):
 
 def cal_minmax_raw_file(filename):
 
-
     reader = pd.read_csv(filename, header=None, iterator=True, dtype=np.float32)
 
     chunkSize = 1000
@@ -198,11 +197,23 @@ def cal_minmax_raw_file(filename):
 
     count = 0
 
+    total_min, total_max = create_min_max()
+
     while loop:
         try:
+            #get the chunk
+            chunk = reader.get_chunk(chunkSize).values
+            #get the min max values
+            minVal, maxVal = get_min_max_values(chunk)
 
-            chunk = reader.get_chunk(chunkSize)
-            print chunk.shape
+            if count == 0:
+                total_min = minVal
+                total_max = maxVal
+            else:
+                # compare values
+                total_min = mininum_values(total_min, minVal)
+                total_max = maxium_values(total_max, maxVal)
+
             print count
 
             count += 1
@@ -212,8 +223,41 @@ def cal_minmax_raw_file(filename):
             print "stop"
             break
 
+    return total_min, total_max
 
-            
+def cal_minmax_raw_files(dir_path, file_name, file_amount):
+    raw_name = dir_path + file_name
+
+    total_min, total_max = create_min_max()
+
+    for file_num in xrange(file_amount):
+        filename = raw_name + str(file_num+1) + '.csv'
+
+        print 'Now to process the file: ' + file_name + str(file_num+1) + '.csv'
+
+        minVal, maxVal = cal_minmax_raw_file(filename)
+
+        if file_num == 0:
+            total_min = minVal
+            total_max = maxVal
+        else:
+            # compare values
+            total_min = mininum_values(total_min, minVal)
+            total_max = maxium_values(total_max, maxVal)
+
+    print total_min
+    print total_max
+    array = np.zeros([2, 5], dtype=np.float32)
+    add_values_to_array(total_min, array, 0)
+    add_values_to_array(total_max, array, 1)
+    np.savetxt('minmax_value.csv', array, delimiter=",")
+
+
+dir_path = '/media/freshield/New_2T_Data/Ciena/new_data/FiberID_6fibers_20Spans/'
+
+file_name = 'FiberID_6fibers_20Spans_noPCA_'
+
+cal_minmax_raw_files(dir_path, file_name, 10)
 
 
 
