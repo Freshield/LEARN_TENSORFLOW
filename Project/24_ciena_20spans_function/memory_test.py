@@ -47,11 +47,17 @@ def predict_type_enlc(dataset, model_path=None):
 
     norm_dataset = normalize_dataset(dataset, min_value, max_value)
 
+    print '1'
+    os.system("nvidia-smi")
+
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
 
     with tf.Graph().as_default():
         with tf.Session(config=config) as sess:
+
+	    print '2'
+            os.system("nvidia-smi")
 
             input_x = tf.placeholder(tf.float32, [None, 304, 48, 2], name='input_x')
             para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
@@ -69,6 +75,10 @@ def predict_type_enlc(dataset, model_path=None):
 
             y_type = tf.argmax(y_pred, 1)
 
+	    print '3'
+            os.system("nvidia-smi")
+	    
+
             saver = tf.train.Saver()
 
             saver.restore(sess, model_path)
@@ -76,16 +86,27 @@ def predict_type_enlc(dataset, model_path=None):
             print ''
             print 'Model was restored'
 
+	    print '4'
+            os.system("nvidia-smi")
+
             X_test, para_test = model.reshape_test_dataset(norm_dataset)
-	    
+	    print '5'
+            os.system("nvidia-smi")
+
             feed_dict = {input_x: X_test, para_pl: para_test, train_phase: False, keep_prob: 1.0}
+	    print '6'
+            os.system("nvidia-smi")
+
             y_type_v, y_enlc_v = sess.run([y_type, y_enlc], feed_dict=feed_dict)
+
+	    print '7'
+            os.system("nvidia-smi")
 
     return y_type_v, y_enlc_v
 
 filename = 'data_sample.csv'
 
-data = pd.read_csv(filename, header=None).values
+data = pd.read_csv(filename, header=None).values[:2]
 
 type_v, enlc_v = predict_type_enlc(data)
 
