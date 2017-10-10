@@ -42,10 +42,23 @@ def predict_type_enlc(dataset, model_path=None):
 
     dpm.model = model
 
-    min_value = (-0.040546, -0.098555997, 2563.8999, -26.066, -10.398)
-    max_value = (0.041134998, 0.023029, 25980.0, 193.57001, 22.183001)
+    min_value = (-0.0398779952125, -0.098555997, 2563.8999, -26.066, -10.398)
+    max_value = (0.041134998, 0.023029, 25699.999976, 193.57001, 22.183001)
 
     norm_dataset = normalize_dataset(dataset, min_value, max_value)
+    """
+    print np.min(norm_dataset[:, 0:12000])
+    print np.min(norm_dataset[:, 12000:24000])
+    print np.min(norm_dataset[:, 24000:24001])
+    print np.min(norm_dataset[:, 24001:24021])
+    print np.min(norm_dataset[:, 24021:24041])
+    print
+    print np.max(norm_dataset[:, 0:12000])
+    print np.max(norm_dataset[:, 12000:24000])
+    print np.max(norm_dataset[:, 24000:24001])
+    print np.max(norm_dataset[:, 24001:24021])
+    print np.max(norm_dataset[:, 24021:24041])
+    """
     #norm_dataset = dataset
 
     config = tf.ConfigProto()
@@ -88,9 +101,12 @@ filename = 'data_sample.csv'
 
 filename1 = '/media/freshield/Passort_2T_Data_W/Ciena_new_data/20spans/norm/Raw_data_0_test.csv'
 
+filename2 = '/media/freshield/Passort_2T_Data_U/Ciena_data/new_data/FiberID_6fibers_20Spans/FiberID_6fibers_20Spans_noPCA_2.csv'
+
 model_name = '/media/freshield/COASAIR1/CIENA/Result/modules/ciena_20spans_train/0.9292_epoch74/module.ckpt'
 
 data = pd.read_csv(filename, header=None).values[:50]
+#data = pd.read_csv(filename2, header=None, nrows=50).values
 
 type_v, enlc_v = predict_type_enlc(data)
 
