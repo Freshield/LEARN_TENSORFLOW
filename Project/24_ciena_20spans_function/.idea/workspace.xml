@@ -9,14 +9,43 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="testing_model.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/testing_model.py">
+      <file leaf-file-name="predict_model.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/predict_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="122" column="32" lean-forward="false" selection-start-line="122" selection-start-column="32" selection-end-line="122" selection-end-column="32" />
+            <state relative-caret-position="0">
+              <caret line="78" column="44" lean-forward="false" selection-start-line="78" selection-start-column="44" selection-end-line="78" selection-end-column="44" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Resnet_link_model.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="783">
+              <caret line="30" column="4" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="test_predict.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test_predict.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="232">
+              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="memory_test.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/memory_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="286">
+              <caret line="98" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -24,68 +53,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="predict_model.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/predict_model.py">
+      <file leaf-file-name="time_test.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/time_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="790">
-              <caret line="110" column="36" lean-forward="true" selection-start-line="110" selection-start-column="36" selection-end-line="110" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="get_minmax_from_normed_file.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/get_minmax_from_normed_file.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2069">
-              <caret line="148" column="0" lean-forward="true" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+            <state relative-caret-position="157">
+              <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
               <folding>
-                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#0#31#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="myfile.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/myfile.txt">
+      <file leaf-file-name="test6.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test6.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="203">
+              <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test4.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test4.py">
+      <file leaf-file-name="basic_model.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/basic_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
+            <state relative-caret-position="-146">
+              <caret line="229" column="21" lean-forward="false" selection-start-line="229" selection-start-column="16" selection-end-line="229" selection-end-column="21" />
               <folding>
-                <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#0#11#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="test5.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test5.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="11" column="71" lean-forward="false" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="71" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="minmax_normed.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/minmax_normed.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -93,8 +90,8 @@
       <file leaf-file-name="calculate_min_max_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/calculate_min_max_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="225" column="31" lean-forward="true" selection-start-line="189" selection-start-column="0" selection-end-line="225" selection-end-column="31" />
+            <state relative-caret-position="6467">
+              <caret line="225" column="31" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="225" selection-end-column="31" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -111,6 +108,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>time.</find>
+    </findStrings>
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -124,14 +126,17 @@
         <option value="$PROJECT_DIR$/get_minmax_from_normed_file.py" />
         <option value="$PROJECT_DIR$/test5.py" />
         <option value="$PROJECT_DIR$/predict_model.py" />
+        <option value="$PROJECT_DIR$/test_predict.py" />
+        <option value="$PROJECT_DIR$/test6.py" />
+        <option value="$PROJECT_DIR$/time_test.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="80" />
-    <option name="y" value="-5" />
-    <option name="width" value="1841" />
-    <option name="height" value="1086" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="2111" />
+    <option name="y" value="130" />
+    <option name="width" value="1831" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -148,22 +153,19 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="24_ciena_20spans_function" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="24_ciena_20spans_function" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="24_ciena_20spans_function" type="b2602c69:ProjectViewProjectNode" />
+              <item name="24_ciena_20spans_function" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -182,97 +184,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.predict_model">
-    <configuration default="false" name="test3" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="24_ciena_20spans_function" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test3.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="predict_model" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="24_ciena_20spans_function" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/predict_model.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="get_minmax_from_normed_file" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="24_ciena_20spans_function" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/get_minmax_from_normed_file.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="test4" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="24_ciena_20spans_function" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test4.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="test5" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="24_ciena_20spans_function" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test5.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.time_test">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -337,20 +249,105 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method />
     </configuration>
+    <configuration name="predict_model" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="24_ciena_20spans_function" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/predict_model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="test5" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="24_ciena_20spans_function" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test5.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="test6" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="24_ciena_20spans_function" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test6.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="test_predict" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="24_ciena_20spans_function" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test_predict.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
+    <configuration name="time_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="24_ciena_20spans_function" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/time_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+    </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.test3" />
-      <item index="1" class="java.lang.String" itemvalue="Python.predict_model" />
-      <item index="2" class="java.lang.String" itemvalue="Python.get_minmax_from_normed_file" />
-      <item index="3" class="java.lang.String" itemvalue="Python.test4" />
-      <item index="4" class="java.lang.String" itemvalue="Python.test5" />
+      <item index="0" class="java.lang.String" itemvalue="Python.predict_model" />
+      <item index="1" class="java.lang.String" itemvalue="Python.test5" />
+      <item index="2" class="java.lang.String" itemvalue="Python.test_predict" />
+      <item index="3" class="java.lang.String" itemvalue="Python.test6" />
+      <item index="4" class="java.lang.String" itemvalue="Python.time_test" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.predict_model" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test5" />
-        <item index="2" class="java.lang.String" itemvalue="Python.get_minmax_from_normed_file" />
-        <item index="3" class="java.lang.String" itemvalue="Python.test4" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test3" />
+        <item index="0" class="java.lang.String" itemvalue="Python.time_test" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test6" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test_predict" />
+        <item index="3" class="java.lang.String" itemvalue="Python.predict_model" />
+        <item index="4" class="java.lang.String" itemvalue="Python.test5" />
       </list>
     </recent_temporary>
   </component>
@@ -368,19 +365,19 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="80" y="-5" width="1841" height="1086" extended-state="6" />
+    <frame x="2111" y="130" width="1816" height="1077" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27431142" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17301038" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3881579" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3871345" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -399,80 +396,11 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/testing_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/transfer_one_hot_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="26" column="40" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="26" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../22_ciena_20spans_result/Resnet_link_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cal_enlc.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="11" column="35" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="729">
           <caret line="30" column="8" lean-forward="true" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
-          <folding>
-            <marker date="1507497720000" expanded="true" signature="1307:1349" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1437:1953" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1471:1923" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1512:1923" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1955:2048" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2136:2779" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2296:2749" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2337:2749" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2781:3032" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="3081:3700" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="3281:3667" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4220:4946" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4421:4913" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4949:5466" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="5535:6261" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="5736:6228" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6263:6309" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6378:6708" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6432:6628" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6475:6628" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6710:6808" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6871:7197" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6925:7117" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6964:7117" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="7199:7599" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="7848:8108" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8114:8191" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8303:8381" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8922:8983" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="9202:9259" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -480,7 +408,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2727">
           <caret line="102" column="75" lean-forward="false" selection-start-line="102" selection-start-column="4" selection-end-line="102" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -498,9 +425,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4031">
           <caret line="141" column="160" lean-forward="false" selection-start-line="141" selection-start-column="54" selection-end-line="141" selection-end-column="160" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -508,9 +432,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="696">
           <caret line="26" column="40" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="26" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -519,9 +440,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="290">
           <caret line="11" column="35" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -529,38 +447,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="783">
           <caret line="30" column="32" lean-forward="false" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
-          <folding>
-            <marker date="1507497720000" expanded="true" signature="1307:1349" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1437:1953" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1471:1923" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1512:1923" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1955:2048" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2136:2779" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2296:2749" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2337:2749" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2781:3032" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="3081:3700" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="3281:3667" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4220:4946" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4421:4913" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4949:5466" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="5535:6261" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="5736:6228" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6263:6309" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6378:6708" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6432:6628" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6475:6628" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6710:6808" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6871:7197" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6925:7117" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6964:7117" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="7199:7599" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="7848:8108" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8114:8191" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8303:8381" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8922:8983" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="9202:9259" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -568,7 +455,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2929">
           <caret line="102" column="75" lean-forward="false" selection-start-line="102" selection-start-column="4" selection-end-line="102" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -595,9 +481,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1537">
           <caret line="55" column="18" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="141" selection-end-column="161" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -623,9 +506,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1431">
           <caret line="55" column="18" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="141" selection-end-column="161" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -651,14 +531,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test7.py" />
-    <entry file="file://$PROJECT_DIR$/test6.py" />
     <entry file="file://$PROJECT_DIR$/test1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="261">
@@ -684,46 +560,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2727">
           <caret line="102" column="75" lean-forward="false" selection-start-line="102" selection-start-column="4" selection-end-line="102" selection-end-column="75" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="729">
-          <caret line="47" column="8" lean-forward="false" selection-start-line="47" selection-start-column="8" selection-end-line="47" selection-end-column="8" />
-          <folding>
-            <marker date="1507497720000" expanded="true" signature="1307:1349" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1437:1953" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1471:1923" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1512:1923" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="1955:2048" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2136:2779" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2296:2749" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2337:2749" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="2781:3032" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="3081:3700" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="3281:3667" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4220:4946" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4421:4913" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="4949:5466" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="5535:6261" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="5736:6228" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6263:6309" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6378:6708" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6432:6628" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6475:6628" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6710:6808" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6871:7197" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6925:7117" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="6964:7117" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="7199:7599" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="7848:8108" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8114:8191" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8303:8381" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="8922:8983" ph="..." />
-            <marker date="1507497720000" expanded="true" signature="9202:9259" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -747,7 +583,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="118" column="39" lean-forward="false" selection-start-line="118" selection-start-column="39" selection-end-line="118" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -755,7 +590,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
           <caret line="124" column="70" lean-forward="true" selection-start-line="124" selection-start-column="4" selection-end-line="124" selection-end-column="70" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -763,7 +597,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-162">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -771,9 +604,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="290">
           <caret line="11" column="35" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -781,19 +611,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
           <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testing_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
+        <state relative-caret-position="31">
           <caret line="122" column="32" lean-forward="false" selection-start-line="122" selection-start-column="32" selection-end-line="122" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -801,71 +625,83 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/calculate_min_max_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="225" column="31" lean-forward="true" selection-start-line="189" selection-start-column="0" selection-end-line="225" selection-end-column="31" />
+        <state relative-caret-position="6467">
+          <caret line="225" column="31" lean-forward="false" selection-start-line="189" selection-start-column="0" selection-end-line="225" selection-end-column="31" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/myfile.txt">
+    <entry file="file://$PROJECT_DIR$/myfile.txt" />
+    <entry file="file://$PROJECT_DIR$/test4.py" />
+    <entry file="file://$PROJECT_DIR$/minmax_normed.txt" />
+    <entry file="file://$PROJECT_DIR$/get_minmax_from_normed_file.py" />
+    <entry file="file://$PROJECT_DIR$/test5.py" />
+    <entry file="file://$PROJECT_DIR$/Resnet_link_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="783">
+          <caret line="30" column="4" lean-forward="false" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test4.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="17" column="7" lean-forward="false" selection-start-line="17" selection-start-column="7" selection-end-line="17" selection-end-column="7" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/minmax_normed.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/get_minmax_from_normed_file.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2069">
-          <caret line="148" column="0" lean-forward="true" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test5.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="11" column="71" lean-forward="false" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="71" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/predict_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="790">
-          <caret line="110" column="36" lean-forward="true" selection-start-line="110" selection-start-column="36" selection-end-line="110" selection-end-column="36" />
+        <state relative-caret-position="0">
+          <caret line="78" column="44" lean-forward="false" selection-start-line="78" selection-start-column="44" selection-end-line="78" selection-end-column="44" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test_predict.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/memory_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="98" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/basic_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-146">
+          <caret line="229" column="21" lean-forward="false" selection-start-line="229" selection-start-column="16" selection-end-line="229" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test6.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="7" column="25" lean-forward="false" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/time_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="87" column="0" lean-forward="true" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
