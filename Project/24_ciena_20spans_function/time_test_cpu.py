@@ -59,49 +59,50 @@ def predict_type_enlc(dataset, model_path=None):
 
     with tf.Graph().as_default():
         with tf.Session(config=config) as sess:
+            with tf.device('/cpu:0'):
+                sess_time = time.time()
+                print 'create session cost %.3f seconds' % (sess_time - norm_time)
 
-            sess_time = time.time()
-            print 'create session cost %.3f seconds' % (sess_time - norm_time)
+                input_x = tf.placeholder(tf.float32, [None, 304, 48, 2], name='input_x')
+                para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
+                train_phase = tf.placeholder(tf.bool, name='train_phase')
+                keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+                ENLC_array = tf.reshape(tf.constant([34.515, 23.92, 21.591, 25.829, 28.012, 29.765], dtype=tf.float32),
+                                        [6, 1])
 
-            input_x = tf.placeholder(tf.float32, [None, 304, 48, 2], name='input_x')
-            para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
-            train_phase = tf.placeholder(tf.bool, name='train_phase')
-            keep_prob = tf.placeholder(tf.float32, name='keep_prob')
-            ENLC_array = tf.reshape(tf.constant([34.515, 23.92, 21.591, 25.829, 28.012, 29.765], dtype=tf.float32),
-                                    [6, 1])
+                # logits
+                y_pred, parameters = model.inference(input_x, para_pl, train_phase, keep_prob)
 
-            # logits
-            y_pred, parameters = model.inference(input_x, para_pl, train_phase, keep_prob)
+                y_prob = tf.nn.softmax(y_pred)
 
-            y_prob = tf.nn.softmax(y_pred)
+                y_enlc = tf.matmul(y_prob, ENLC_array)
 
-            y_enlc = tf.matmul(y_prob, ENLC_array)
+                y_type = tf.argmax(y_pred, 1)
 
-            y_type = tf.argmax(y_pred, 1)
+                model_time = time.time()
+                print 'create model cost %.3f seconds' % (model_time - sess_time)
 
-            model_time = time.time()
-            print 'create model cost %.3f seconds' % (model_time - sess_time)
+                saver = tf.train.Saver()
 
-            saver = tf.train.Saver()
+                saver.restore(sess, model_path)
 
-            saver.restore(sess, model_path)
+                load_time = time.time()
+                print 'load model cost %.3f seconds' % (load_time - model_time)
 
-            load_time = time.time()
-            print 'load model cost %.3f seconds' % (load_time - model_time)
+                X_test, para_test = model.reshape_test_dataset(norm_dataset)
+                reshape_time = time.time()
+                print 'reshape data cost %.3f seconds for %d lines data' % (reshape_time - load_time, dataset.shape[0])
 
-            X_test, para_test = model.reshape_test_dataset(norm_dataset)
-            reshape_time = time.time()
-            print 'reshape data cost %.3f seconds for %d lines data' % (reshape_time - load_time, dataset.shape[0])
+                feed_dict = {input_x: X_test, para_pl: para_test, train_phase: False, keep_prob: 1.0}
 
-            feed_dict = {input_x: X_test, para_pl: para_test, train_phase: False, keep_prob: 1.0}
+                y_type_v, y_enlc_v = sess.run([y_type, y_enlc], feed_dict=feed_dict)
 
-            y_type_v, y_enlc_v = sess.run([y_type, y_enlc], feed_dict=feed_dict)
+                predict_time = time.time()
+                print 'run the predict cost %.3f seconds for %d lines data' % (predict_time - reshape_time,
+                                                                               dataset.shape[0])
 
-            predict_time = time.time()
-            print 'run the predict cost %.3f seconds for %d lines data' % (predict_time - reshape_time,
-                                                                           dataset.shape[0])
-
-            print 'total predict cost %.3f seconds for %d lines data' % (predict_time - begin_time, dataset.shape[0])
+                print 'total predict cost %.3f seconds for %d lines data' % (
+                predict_time - begin_time, dataset.shape[0])
 
     return y_type_v, y_enlc_v
 
