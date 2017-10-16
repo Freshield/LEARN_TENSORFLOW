@@ -3,8 +3,9 @@ import os
 from image_model import *
 from calculate_min_max_model import *
 from recut_file_model import *
-from train_model import *
+#from train_model import *
 from restore_model import *
+from transfer_learning import *
 
 #wait the input and get the input number
 #ver 1.0
@@ -225,7 +226,7 @@ def train_start_flow():
                     if answer == 'e':
                         return 'Back to train flow'
                     elif answer == 'y':
-                        value = train_whole_dataset_begin(para_whole_dataset_dic, back_value)
+                        value = transfer_train_dataset_begin(para_whole_dataset_dic, back_value)
                         return value
                     else:
                         print 'Error input, please re-input'
