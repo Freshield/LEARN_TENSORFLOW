@@ -11,7 +11,7 @@ data_size = 24000
 file_size = 24000
 test_size = 6000
 
-batch_size = 50
+batch_size = 100
 #hypers
 reg = 0.000043
 lr_rate = 0.000034
