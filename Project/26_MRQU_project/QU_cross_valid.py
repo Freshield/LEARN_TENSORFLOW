@@ -283,6 +283,16 @@ for reg in regs:
                         f.write(hyper_info)
                         f.close()
 
+                    if acc >= 0.8:
+                        # store module
+                        saver = tf.train.Saver()
+                        module_dir = log_dir + 'acc_%.4f/' % acc
+                        module_name = module_dir + "module.ckpt"
+                        del_and_create_dir(module_dir)
+                        save_path = saver.save(sess, module_name)
+                        words = "Model saved in file: %s" % save_path
+                        log = print_and_log(words, log)
+
                     filename = log_dir + '%.4f_ls%.4f_epoch%d' % (acc, test_loss, epoch)
                     f = file(filename, 'w+')
                     f.write(log)
