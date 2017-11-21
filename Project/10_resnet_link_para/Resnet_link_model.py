@@ -404,7 +404,7 @@ def score_layer(input_layer, label_size):
 #       |
 #       512 + 41
 #           |
-#          556
+#          553
 #           |
 #          256
 #           |

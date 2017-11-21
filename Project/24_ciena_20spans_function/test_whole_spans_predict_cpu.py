@@ -6,7 +6,7 @@ filename = 'data_sample.csv'
 
 #data type should be the numpy array
 #shape is [batch_size, 24041] (you also can use the raw data as 24081)
-data = pd.read_csv(filename, header=None).values[:2]
+data = pd.read_csv(filename, header=None).values[:50]
 
 target_spans = [i + 1 for i in range(20)]
 

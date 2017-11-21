@@ -137,6 +137,93 @@ def testing_result(para_dic, model_name, model_path, log_path = None, loop_index
 
     return 'Done'
 
+
+
+#restore the model
+#ver 1.0
+def testing_and_store(para_dic, model_name, model_path, store_path, SPAN):
+
+    #choose model
+    if model_name == 'resnet_link':
+        import Resnet_link_model as rl
+        model = rl
+    elif model_name == 'link_cnn':
+        import Link_CNN_model as lc
+        model = lc
+    else:
+        print "Error model name"
+        return 'error'
+
+    dpm.model = model
+
+    #get all para first
+    [_, dir, epochs, data_size, file_size, loop_eval_num, batch_size, train_file_size, valid_file_size, test_file_size, reg, lr_rate, lr_decay, keep_prob_v, log_dir, module_dir, eval_last_num, epoch, loop, best_model_number, best_model_acc_dic, best_model_dir_dic] = get_para_from_dic(para_dic)
+
+    loops = data_size // file_size
+
+
+    with tf.Graph().as_default():
+        with tf.Session() as sess:
+            input_x = tf.placeholder(tf.float32, [None, 304, 48, 2], name='input_x')
+            para_pl = tf.placeholder(tf.float32, [None, 41], name='para_pl')
+            input_y = tf.placeholder(tf.float32, [None, 6], name='input_y')
+            train_phase = tf.placeholder(tf.bool, name='train_phase')
+            keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+            ENLC_array = tf.reshape(tf.constant([34.515, 23.92, 21.591, 25.829, 28.012, 29.765], dtype=tf.float32),
+                                    [6, 1])
+
+            # logits
+            y_pred, parameters = model.inference(input_x, para_pl, train_phase, keep_prob)
+
+            y_prob = tf.nn.softmax(y_pred)
+
+            y_enlc = tf.matmul(y_prob, ENLC_array)
+
+            y_type = tf.argmax(y_pred, 1)
+
+            # predict
+            correct_num, accuracy = corr_num_acc(input_y, y_pred)
+
+            saver = tf.train.Saver()
+
+            saver.restore(sess, model_path)
+
+            print ''
+            print 'Model was restored'
+
+            restore_first = True
+
+            result_matrix = np.zeros((100*loops,4))
+
+            result_index = 0
+            total_acc = 0.0
+
+            print "step",
+            for test_loop in xrange(loops):
+                print test_loop,
+                test_file = "Raw_data_%d_test.csv" % test_loop
+                X_test, para_test, y_test, y_true, enlc_true = dpm.prepare_dataset_inclue_enlc(dir, test_file, SPAN)
+                feed_dict = {input_x: X_test, para_pl: para_test, input_y: y_test, train_phase: False,
+                             keep_prob: 1.0}
+                y_type_v, y_enlc_v, acc_v = sess.run([y_type, y_enlc, accuracy], feed_dict=feed_dict)
+
+                result_matrix[result_index:result_index+100, 0] = y_type_v
+                result_matrix[result_index:result_index+100, 1] = y_true
+                result_matrix[result_index:result_index+100, 2] = np.reshape(y_enlc_v, [100])
+                result_matrix[result_index:result_index+100, 3] = enlc_true
+
+                total_acc += acc_v
+
+                result_index += 100
+
+            total_acc /= loops
+            header = 'predict_type,true_type,predict_enlc,true_enlc'
+            np.savetxt(store_path + 'span%d_result_acc_%.4f.csv' % (SPAN[0],total_acc), result_matrix, delimiter=',', header=header, comments='')
+
+            print 'span%d result acc is %.4f' % (SPAN[0],total_acc)
+
+    return 'Done'
+
 #para_dic = read_json_to_dic('interrupt/parameters.json')
 
-testing_result(para_whole_dataset_dic, 'resnet_link', '/media/freshield/New_2T_Data/corsair/CIENA/Result/modules/ciena_20spans_train/0.9292_epoch74/module.ckpt')
+#testing_result(para_whole_dataset_dic, 'resnet_link', '/media/freshield/New_2T_Data/corsair/CIENA/Result/modules/ciena_20spans_train/0.9292_epoch74/module.ckpt')

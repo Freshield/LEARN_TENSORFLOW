@@ -102,3 +102,28 @@ def prepare_dataset(dir, file, SPAN):
     """
     X_data, para_data, y_data = model.reshape_dataset(dataset.values, SPAN)
     return X_data, para_data, y_data
+
+
+#read the dataset from file
+#needn't changed, just reply on reshape_dataset
+#ver 1.0
+def prepare_dataset_inclue_enlc(dir, file, SPAN):
+    filename = dir + file
+
+    dataset = pd.read_csv(filename, header=None)
+    """
+    #needn't the split cause the data file was splited
+    test_dataset_size = int(radio * dataset.shape[0])
+
+    cases = {
+        'train':dataset.values[0:-test_dataset_size * 2],
+        'validation':dataset.values[-test_dataset_size * 2:-test_dataset_size],
+        'test':dataset.values[-test_dataset_size:len(dataset)]
+    }
+
+    output = cases[model]
+    """
+    X_data, para_data, y_data = model.reshape_dataset(dataset.values, SPAN)
+    y_true = dataset.values[:, 24060 + SPAN[0]].astype(int)
+    enlc_data = dataset.values[:, 24040 + SPAN[0]]
+    return X_data, para_data, y_data, y_true, enlc_data
