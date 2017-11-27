@@ -1,5 +1,9 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
+import tensorflow as tf
+import matplotlib.pyplot as plt
+from itertools import cycle
+
 
 from sklearn.metrics import average_precision_score
 
@@ -8,26 +12,56 @@ import matplotlib.pyplot as plt
 
 from itertools import cycle
 
+import os
+def file_name(file_dir):
+    for root, dirs, files in os.walk(file_dir):
+        return files
 
-dir_name = '/media/freshield/COASAIR1/CIENA/Result/logs/ciena_20spans_predict_prob/'
-score_filename = 'span2_value_acc_0.9755.csv'
-prob_filename = 'span2_prob_acc_0.9755.csv'
-label_filename = 'span2_label_acc_0.9755.csv'
+file_dir = '/media/freshield/COASAIR1/CIENA/Result/logs/all_20spans_predict_data/'
 
-y_score = pd.read_csv(dir_name+score_filename, header=None).values
-Y_test = pd.read_csv(dir_name+label_filename, header=None, dtype=np.int32).values
+files = file_name(file_dir)
+
+files = sorted(files, key=lambda d : int(d.split('pan')[-1].split('_')[0]))
+print files
+
+file_name_dic = {}
+for i in range(20):
+    file_name_dic[i+1] = files[i]
+
+def get_one_hot(data, depth):
+    a = tf.placeholder(dtype=tf.int32,shape=(None))
+
+    b = tf.one_hot(a,depth=depth)
+
+    with tf.Session() as sess:
+        feed_dict = {a: data}
+        result = sess.run(b,feed_dict=feed_dict)
+        return result
+
+file_dir = '/media/freshield/COASAIR1/CIENA/Result/logs/all_20spans_predict_data/'
+#file_name = 'span1_result_acc_0.9948.csv'
+#file_name = 'span2_result_acc_0.9755.csv'
+#file_name = 'span3_result_acc_0.9555.csv'
+file_name = file_name_dic[20]
+print file_name
+
+data = pd.read_csv(file_dir+file_name).values
+
+temp = data[:,0].astype(np.int32)
+y_score = get_one_hot(temp,6)
+temp = data[:,1].astype(np.int32)
+y_test = get_one_hot(temp, 6)
 
 n_classes = 6
-
 
 #for each class
 precision = dict()
 recall = dict()
 average_precision = dict()
 for i in range(n_classes):
-    precision[i], recall[i], _ = precision_recall_curve(Y_test[:, i],
+    precision[i], recall[i], _ = precision_recall_curve(y_test[:, i],
                                                         y_score[:, i])
-    average_precision[i] = average_precision_score(Y_test[:,i],y_score[:,i])
+    average_precision[i] = average_precision_score(y_test[:,i],y_score[:,i])
 
 #plot pr curve for each class
 colors = cycle(['aqua', 'darkorange', 'cornflowerblue','blue','green','red','cyan','magenta','yellow'])

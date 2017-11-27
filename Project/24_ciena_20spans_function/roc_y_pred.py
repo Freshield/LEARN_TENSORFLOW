@@ -12,11 +12,12 @@ from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
 from scipy import interp
 
-score_filename = 'result_value.csv'
-label_filename = 'result_label.csv'
+dir_name = '/media/freshield/COASAIR1/CIENA/Result/logs/ciena_20spans_predict_prob/'
+score_filename = 'span2_prob_acc_0.9755.csv'
+label_filename = 'span2_label_acc_0.9755.csv'
 
-y_score = pd.read_csv(score_filename, header=None).values
-y_test = pd.read_csv(label_filename, header=None, dtype=np.int32).values
+y_score = pd.read_csv(dir_name+score_filename, header=None).values
+y_test = pd.read_csv(dir_name+label_filename, header=None, dtype=np.int32).values
 
 n_classes = 6
 
