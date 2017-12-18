@@ -76,7 +76,7 @@ plt.xlim([0.0,1.0])
 plt.ylim([0.0,1.05])
 plt.xlabel('Recall')
 plt.ylabel('Precision')
-plt.title('extension of precision-recall curve to multi-class')
+plt.title('SPAN %d PR graph' % span_num)
 plt.legend(lines,labels,loc=(0,-.38),prop=dict(size=14))
 
 plt.show()
