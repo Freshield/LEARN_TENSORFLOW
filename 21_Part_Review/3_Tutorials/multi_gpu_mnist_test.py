@@ -74,8 +74,7 @@ def multi_gpu(num_gpu):
     with tf.Graph().as_default(), tf.device('/cpu:0'):
         #lr作为一个可变的pl
         learning_rate = tf.placeholder(tf.float32, shape=[])
-        #获取optimizer
-        opt = tf.train.AdamOptimizer(learning_rate=learning_rate)
+
 
         print('build model...')
         print('build model on gpu tower...')
@@ -98,7 +97,8 @@ def multi_gpu(num_gpu):
                         #切分输入数据
                         x = images[start_pos:stop_pos]
                         y = labels[start_pos:stop_pos]
-
+                        # 获取optimizer
+                        opt = tf.train.AdamOptimizer(learning_rate=learning_rate)
                         #得到每个模型的pred，loss，accuracy
                         pred, loss, acc = build_model(x, y, REG)
                         #设置variable为reuse
