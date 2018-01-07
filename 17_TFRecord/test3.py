@@ -15,9 +15,9 @@ def csv_to_tfrecord(filename, writer):
 
     for line in reader:
         data = line.values.reshape((10))
-        print data
+        print(data)
         lable = int(data[-1])
-        print lable
+        print(lable)
         features = data[:-1]
         example = tf.train.Example(features=tf.train.Features(
             feature={'lable': _int64_feature([lable]),
@@ -25,7 +25,7 @@ def csv_to_tfrecord(filename, writer):
         writer.write(example.SerializeToString())
 
     writer.close()
-    print 'Successfully convert'
+    print('Successfully convert')
 
 for i in range(10):
     filename = 'data/10files/%d_data.csv' % i
