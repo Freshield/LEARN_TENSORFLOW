@@ -7,6 +7,12 @@ def safe_put(num, target):
         target.get()
     target.put(num)
 
+def show_queue(target):
+    for i in range(target.qsize()):
+        temp = target.get()
+        print(temp)
+        target.put(temp)
+
 safe_put(1, queue1)
 print()
 print(queue1.qsize())
@@ -25,5 +31,7 @@ safe_put(8, queue2)
 safe_put(9, queue2)
 
 print()
-for i in range(queue2.qsize()):
-    print(queue2.get())
+show_queue(queue2)
+
+print()
+show_queue(queue2)
