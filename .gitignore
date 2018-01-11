@@ -14,6 +14,7 @@ module
 interrupt
 *.asv
 *.rar
+*.zip
 *.gz
 *.tar
 model
