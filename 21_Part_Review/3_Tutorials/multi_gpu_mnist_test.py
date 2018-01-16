@@ -32,7 +32,7 @@ def multi_gpu(NUM_GPU):
 
 
     #从数据集获取两倍的batch
-    batch_size = BATCH_SIZE * NUM_GPU
+    batch_size = PARA.BATCH_SIZE * NUM_GPU
 
 
 
@@ -68,7 +68,7 @@ def multi_gpu(NUM_GPU):
             sess.run(tf.global_variables_initializer())
             #设置lr
             lr = 0.01
-            for epoch in range(EPOCH_NUM):
+            for epoch in range(PARA.EPOCH_NUM):
 
                 ###########################################
                 # TRAINING PART
