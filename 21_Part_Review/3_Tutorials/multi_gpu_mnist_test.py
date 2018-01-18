@@ -27,6 +27,18 @@ REG = 0.0001
 EPOCH_NUM = 5
 
 def average_gradients(tower_grads):
+    """Calculate the average gradient for each shared variable across all towers.
+
+      Note that this function provides a synchronization point across all towers.
+
+      Args:
+        tower_grads: List of lists of (gradient, variable) tuples. The outer list
+          is over individual gradients. The inner list is over the gradient
+          calculation for each tower.
+      Returns:
+         List of pairs of (gradient, variable) where the gradient has been averaged
+         across all towers.
+      """
     print('average_gradients')
     average_grads = []
     #tower_grads构成如下
@@ -121,7 +133,12 @@ def multi_gpu(num_gpu):
         aver_acc_op = tf.reduce_mean(tower_acc)
 
         # 选择是否显示每个op和varible的物理位置
-        config = tf.ConfigProto(log_device_placement=log_device_placement)
+        #允许分配位置
+        # Start running operations on the Graph. allow_soft_placement must be set to
+        # True to build towers on GPU, as some of the ops do not have GPU
+        # implementations.
+        config = tf.ConfigProto(allow_soft_placement=True,
+                                log_device_placement=log_device_placement)
         # 让gpu模式为随取随用而不是直接全部占满
         config.gpu_options.allow_growth = True
 
@@ -343,5 +360,5 @@ def single_gpu():
             print('Test Accuracy: %0.4f%%\n\n' % (100.0 * test_accuracy))
 
 if __name__ == '__main__':
-    single_gpu()
-    #multi_gpu(2)
+    #single_gpu()
+    multi_gpu(2)
