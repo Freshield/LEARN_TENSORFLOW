@@ -77,3 +77,99 @@ def build_model(x, y, reg):
     correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_pred, dtype=tf.float32))
     return loss, accuracy
+
+def average_gradients(tower_grads):
+    """Calculate the average gradient for each shared variable across all towers.
+
+      Note that this function provides a synchronization point across all towers.
+
+      Args:
+        tower_grads: List of lists of (gradient, variable) tuples. The outer list
+          is over individual gradients. The inner list is over the gradient
+          calculation for each tower.
+      Returns:
+         List of pairs of (gradient, variable) where the gradient has been averaged
+         across all towers.
+      """
+    print('average_gradients')
+    average_grads = []
+    #tower_grads构成如下
+    #([(tower0.conv1.grads,tower0.conv1),(tower0.bias1.grads,tower0.bias1)...],
+    # [(tower1.conv1.grads,tower1.conv1),(tower1.bias1.grads,tower1.bias1)...])
+    for grad_and_vars in zip(*tower_grads):
+        # Note that each grad_and_vars looks like the following:
+        #   ((grad0_gpu0, var0_gpu0), ... , (grad0_gpuN, var0_gpuN))
+        #比如第一个就是((tower0_conv1_grads,tower0_conv1),(tower1_conv1_grads,tower1_conv1))
+
+        #grads相当于我只取前边的grads
+        #比如第一个就是
+        #[tower0_conv1_grads,tower1_conv1_grads]
+        grads = [g for g, _ in grad_and_vars]
+
+        # Average over the 'tower' dimension.
+        #因为我们的grads也是数组，这里用stack把同个variable不同tower
+        #的grads立起来，堆到一起，再竖着计算
+        #[[tower0_conv1_grads],
+        # [tower1_conv1_grads]]
+        grad = tf.stack(grads, 0)
+        #这里竖着求出mean
+        grad = tf.reduce_mean(grad, 0)
+
+        # Keep in mind that the Variables are redundant because they are shared
+        # across towers. So .. we will just return the first tower's pointer to
+        # the Variable.
+        #因为我们共享权重，所以只需要返回一个tower的权重就可以了
+        #这里相当于我们只取第一个tower的权重
+        v = grad_and_vars[0][1]
+        #这里的tuple是(平均的grads,variables)
+        grad_and_var = (grad, v)
+        average_grads.append(grad_and_var)
+        #最后averages相当于
+        #[(avg_conv1.grads,conv1),(avg_bias1.grads,bias1),...]
+    return average_grads
+
+def tower_model(images, labels, PARA):
+    # 获取optimizer
+    opt = tf.train.AdamOptimizer(learning_rate=PARA.LEARNING_RATE)
+
+    print('build model...')
+    print('build model on gpu tower...')
+    # model数组为每个gpu的tuple数组
+    models = []
+    # 这里来做不同的GPU的tower模型
+    with tf.variable_scope(tf.get_variable_scope()):
+        # 获取gpu的id
+        for gpu_id in range(PARA.NUM_GPU):
+            # 指定目标gpu
+            with tf.device('/gpu:%d' % gpu_id):
+                print('tower:%d...' % gpu_id)
+                with tf.name_scope('tower_%d' % gpu_id):
+                    # 找到输入的起始和终止
+                    start_pos = gpu_id * PARA.BATCH_SIZE
+                    stop_pos = (gpu_id + 1) * PARA.BATCH_SIZE
+                    # 切分输入数据
+                    x = images[start_pos:stop_pos]
+                    y = labels[start_pos:stop_pos]
+                    # 得到每个模型的loss，accuracy
+                    loss, acc = build_model(x, y, PARA.REG)
+                    # 设置variable为reuse
+                    tf.get_variable_scope().reuse_variables()
+                    # 获取opt更新的当前tower的grads
+                    grads = opt.compute_gradients(loss)
+                    # 打包给models数组
+                    models.append((loss, grads, acc))
+
+    print('build model on gpu tower done.')
+
+    print('reduce model on cpu...')
+    # 通过zip(*models)来把同种数据放到一起
+    # 比如tower_losses是(tower1_loss,tower2_loss)
+    tower_losses, tower_grads, tower_acc = zip(*models)
+    # 得到average的loss
+    aver_loss_op = tf.reduce_mean(tower_losses)
+    # 得到更新gradients的op
+    apply_gradient_op = opt.apply_gradients(average_gradients(tower_grads))
+    # 得到average的accuracy
+    aver_acc_op = tf.reduce_mean(tower_acc)
+
+    return apply_gradient_op, aver_loss_op, aver_acc_op
