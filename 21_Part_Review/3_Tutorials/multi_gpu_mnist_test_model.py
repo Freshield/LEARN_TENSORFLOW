@@ -15,10 +15,16 @@ def get_bias_varible(name,shape):
 #filter_shape: [f_h, f_w, f_ic, f_oc]
 def conv2d(layer_name, x, filter_shape):
     with tf.variable_scope(layer_name):
+        para = []
+
         w = get_weight_varible('w', filter_shape)
         b = get_bias_varible('b', filter_shape[-1])
         y = tf.nn.bias_add(tf.nn.conv2d(input=x, filter=w, strides=[1, 1, 1, 1], padding='SAME'), b)
-        return y
+
+        para.append(w)
+        para.append(b)
+
+        return y, para
 
 def pool2d(layer_name, x):
     with tf.variable_scope(layer_name):
@@ -29,25 +35,44 @@ def pool2d(layer_name, x):
 #out_shape: [N, L]
 def fc(layer_name, x, inp_shape, out_shape):
     with tf.variable_scope(layer_name):
+        para = []
+
         inp_dim = inp_shape[-1]
         out_dim = out_shape[-1]
         y = tf.reshape(x, shape=inp_shape)
         w = get_weight_varible('w', [inp_dim, out_dim])
         b = get_bias_varible('b', [out_dim])
         y = tf.add(tf.matmul(y, w), b)
-        return y
 
-def build_model(x, y):
-    pred = tf.reshape(x,shape=[-1, 28, 28, 1])
+        para.append(w)
+        para.append(b)
+
+        return y, para
+
+def build_model(x, y, reg):
+    para = []
+
+    input_layer = tf.reshape(x,shape=[-1, 28, 28, 1])
     #layer 1
-    pred = conv2d('conv_1', pred, [3, 3, 1, 8])
-    pred = pool2d('pool_1', pred)
+    conv1_layer, conv1_para = conv2d('conv_1', input_layer, [3, 3, 1, 8])
+    para += conv1_para
+
+    pool1_layer = pool2d('pool_1', conv1_layer)
+
     #layer 2
-    pred = conv2d('conv_2', pred, [3, 3, 8, 16])
-    pred = pool2d('pool_2', pred)
+    conv2_layer, conv2_para = conv2d('conv_2', pool1_layer, [3, 3, 8, 16])
+    para += conv2_para
+
+    pool2_layer = pool2d('pool_2', conv2_layer)
     #layer fc
-    pred = fc('fc', pred, [-1, 7*7*16], [-1, 10])
+    pred, fc_para = fc('fc', pool2_layer, [-1, 7*7*16], [-1, 10])
+    para += fc_para
 
-    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
+    reg_loss = tf.zeros([])
+    for p in para:
+        reg_loss += reg * 0.5 * tf.nn.l2_loss(p)
+    loss = reg_loss + tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
 
-    return pred, loss
+    correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
+    accuracy = tf.reduce_mean(tf.cast(correct_pred, dtype=tf.float32))
+    return pred, loss, accuracy
