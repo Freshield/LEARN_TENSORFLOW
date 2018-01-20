@@ -56,16 +56,11 @@ def average_gradients(tower_grads):
         #[(avg_conv1.grads,conv1),(avg_bias1.grads,bias1),...]
     return average_grads
 
-def single_gpu():
-    batch_size = 128
+def multi_gpu(num_gpu):
+    #从数据集获取两倍的batch
+    batch_size = BATCH_SIZE * num_gpu
+
     mnist = input_data.read_data_sets('data/mnist',one_hot=True)
-
-    tf.reset_default_graph()
-
-    # 选择是否显示每个op和varible的物理位置
-    config = tf.ConfigProto(log_device_placement=log_device_placement)
-    # 让gpu模式为随取随用而不是直接全部占满
-    config.gpu_options.allow_growth = True
 
     with tf.Graph().as_default(), tf.device('/cpu:0'):
         #lr作为一个可变的pl
@@ -80,16 +75,32 @@ def single_gpu():
         images = tf.placeholder(tf.float32, [None, 784])
         labels = tf.placeholder(tf.float32, [None, 10])
         with tf.variable_scope(tf.get_variable_scope()):
-            with tf.device('/gpu:0'):
-                # 得到pred, 和loss
-                pred, loss, acc = build_model(images, labels, reg)
+            for gpu_id in range(num_gpu):
+                with tf.device('/gpu:%d' % gpu_id):
+                    print('tower:%d...' % gpu_id)
+                    with tf.name_scope('tower_%d' % gpu_id):
 
-                tf.get_variable_scope().reuse_variables()
-                grads = opt.compute_gradients(loss)
-                models.append((images, labels, pred, loss, grads, acc))
-        aver_loss_op = loss
-        apply_gradient_op = opt.apply_gradients(grads)
-        aver_acc_op = tf.reduce_mean(acc)
+                        if gpu_id == 0:
+                            x = images[:BATCH_SIZE]
+                            y = labels[:BATCH_SIZE]
+                        else:
+                            x = images[BATCH_SIZE:]
+                            y = labels[BATCH_SIZE:]
+
+                        #得到pred, 和loss
+                        pred, loss, acc = build_model(x, y, reg)
+
+                        tf.get_variable_scope().reuse_variables()
+                        grads = opt.compute_gradients(loss)
+                        models.append((x, y, pred, loss, grads, acc))
+
+        print('build model on gpu tower done.')
+
+        print('reduce model on cpu...')
+        tower_x, tower_y, tower_preds, tower_losses, tower_grads, tower_acc = zip(*models)
+        aver_loss_op = tf.reduce_mean(tower_losses)
+        apply_gradient_op = opt.apply_gradients(average_gradients(tower_grads))
+        aver_acc_op = tf.reduce_mean(tower_acc)
 
         # 选择是否显示每个op和varible的物理位置
         config = tf.ConfigProto(log_device_placement=log_device_placement)
@@ -126,7 +137,7 @@ def single_gpu():
                 avg_loss /= total_batch
                 avg_acc /= total_batch
 
-                lr = max(lr * 0.7, 0.00001)
+                lr = max(lr * 0.9, 0.00001)
 
 
                 print('Train loss:%.4f' % (avg_loss))
@@ -175,13 +186,17 @@ def single_gpu():
             test_accuracy = test_acc / total_batch
             print('Test Accuracy: %0.4f%%\n\n' % (100.0 * test_accuracy))
 
-def multi_gpu(num_gpu):
-    #从数据集获取两倍的batch
-    batch_size = BATCH_SIZE * num_gpu
 
+def single_gpu():
+    batch_size = 128
     mnist = input_data.read_data_sets('data/mnist',one_hot=True)
 
     tf.reset_default_graph()
+
+    # 选择是否显示每个op和varible的物理位置
+    config = tf.ConfigProto(log_device_placement=log_device_placement)
+    # 让gpu模式为随取随用而不是直接全部占满
+    config.gpu_options.allow_growth = True
 
     with tf.Graph().as_default(), tf.device('/cpu:0'):
         #lr作为一个可变的pl
@@ -196,32 +211,16 @@ def multi_gpu(num_gpu):
         images = tf.placeholder(tf.float32, [None, 784])
         labels = tf.placeholder(tf.float32, [None, 10])
         with tf.variable_scope(tf.get_variable_scope()):
-            for gpu_id in range(num_gpu):
-                with tf.device('/gpu:%d' % gpu_id):
-                    print('tower:%d...' % gpu_id)
-                    with tf.name_scope('tower_%d' % gpu_id):
+            with tf.device('/gpu:0'):
+                # 得到pred, 和loss
+                pred, loss, acc = build_model(images, labels, reg)
 
-                        if gpu_id == 0:
-                            x = images[:BATCH_SIZE]
-                            y = labels[:BATCH_SIZE]
-                        else:
-                            x = images[BATCH_SIZE:]
-                            y = labels[BATCH_SIZE:]
-
-                        #得到pred, 和loss
-                        pred, loss, acc = build_model(x, y, reg)
-
-                        tf.get_variable_scope().reuse_variables()
-                        grads = opt.compute_gradients(loss)
-                        models.append((x, y, pred, loss, grads, acc))
-
-        print('build model on gpu tower done.')
-
-        print('reduce model on cpu...')
-        tower_x, tower_y, tower_preds, tower_losses, tower_grads, tower_acc = zip(*models)
-        aver_loss_op = tf.reduce_mean(tower_losses)
-        apply_gradient_op = opt.apply_gradients(average_gradients(tower_grads))
-        aver_acc_op = tf.reduce_mean(tower_acc)
+                tf.get_variable_scope().reuse_variables()
+                grads = opt.compute_gradients(loss)
+                models.append((images, labels, pred, loss, grads, acc))
+        aver_loss_op = loss
+        apply_gradient_op = opt.apply_gradients(grads)
+        aver_acc_op = tf.reduce_mean(acc)
 
         # 选择是否显示每个op和varible的物理位置
         config = tf.ConfigProto(log_device_placement=log_device_placement)
