@@ -139,6 +139,7 @@ def multi_gpu(num_gpu):
                 ###########################################
                 # TRAINING PART
                 ###########################################
+
                 start_time = time.time()
                 #payload_per_gpu = batch_size // num_gpu
                 total_batch = mnist.train.num_examples // batch_size
