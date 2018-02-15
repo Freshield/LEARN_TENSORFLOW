@@ -5,7 +5,21 @@ import time
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
-BATCH_SIZE = 32
+#Test helper
+#if LOOK_FLAG is True, then will print the values
+LOOK_FLAG = False
+
+def look_value(*args):
+    if type(args[-1]) is bool:
+        flag = args[-1]
+    else:
+        flag = LOOK_FLAG
+
+    if flag:
+        print(args)
+
+BATCH_SIZE = 128
+log_device_placement = False
 
 def _variable_on_cpu(name, shape, initializer=tf.contrib.layers.xavier_initializer()):
     with tf.device('/cpu:0'):
@@ -48,39 +62,59 @@ def build_model(x):
     y = tf.reshape(x,shape=[-1, 28, 28, 1])
     #layer 1
     y = conv2d('conv_1', y, [3, 3, 1, 8])
+    look_value('conv1',y)
     y = pool2d('pool_1', y)
+    look_value('pool1',y)
     #layer 2
     y = conv2d('conv_2', y, [3, 3, 8, 16])
+    look_value('conv2',y)
     y = pool2d('pool_2', y)
+    look_value('pool2',y)
     #layer fc
     y = fc('fc', y, [-1, 7*7*16], [-1, 10])
+    look_value('fc',y)
     return y
 
-
 def average_losses(loss):
+    #把loss加入到losses集合中
     tf.add_to_collection('losses', loss)
 
     # Assemble all of the losses for the current tower only.
+    #得到losses集合
     losses = tf.get_collection('losses')
 
     # Calculate the total loss for the current tower.
+    #得到正则化的loss
     regularization_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+    #把loss和正则化的loss加到一起
     total_loss = tf.add_n(losses + regularization_losses, name='total_loss')
 
+    """
     # Compute the moving average of all individual losses and the total loss.
     loss_averages = tf.train.ExponentialMovingAverage(0.9, name='avg')
     loss_averages_op = loss_averages.apply(losses + [total_loss])
 
     with tf.control_dependencies([loss_averages_op]):
         total_loss = tf.identity(total_loss)
+    """
     return total_loss
 
 def average_gradients(tower_grads):
+    print('average_gradients')
     average_grads = []
+    #tower_grads构成如下
+    #([(tower0.conv1.grads,tower0.conv1),(tower0.bias1.grads,tower0.bias1)...],
+    # [(tower1.conv1.grads,tower1.conv1),(tower1.bias1.grads,tower1.bias1)...])
     for grad_and_vars in zip(*tower_grads):
         # Note that each grad_and_vars looks like the following:
         #   ((grad0_gpu0, var0_gpu0), ... , (grad0_gpuN, var0_gpuN))
+        #比如第一个就是((tower0_conv1_grads,tower0_conv1),(tower1_conv1_grads,tower1_conv1))
+
+        #grads相当于我只取前边的grads
+        #比如第一个就是
+        #[tower0_conv1_grads,tower1_conv1_grads]
         grads = [g for g, _ in grad_and_vars]
+
         # Average over the 'tower' dimension.
         grad = tf.stack(grads, 0)
         grad = tf.reduce_mean(grad, 0)
@@ -88,9 +122,13 @@ def average_gradients(tower_grads):
         # Keep in mind that the Variables are redundant because they are shared
         # across towers. So .. we will just return the first tower's pointer to
         # the Variable.
+        #因为我们共享权重，所以只需要返回一个tower的权重就可以了
         v = grad_and_vars[0][1]
+        #这里的tuple是(平均的grads,variables)
         grad_and_var = (grad, v)
         average_grads.append(grad_and_var)
+        #最后averages相当于
+        #[(avg_conv1.grads,conv1),(avg_bias1.grads,bias1),...]
     return average_grads
 
 def feed_all_gpu(inp_dict, models, payload_per_gpu, batch_x, batch_y,):
@@ -107,7 +145,7 @@ def multi_gpu(num_gpu):
     mnist = input_data.read_data_sets('/tmp/data/mnist',one_hot=True)
 
     tf.reset_default_graph()
-    with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
+    with tf.Session(config=tf.ConfigProto(log_device_placement=log_device_placement)) as sess:
         with tf.device('/cpu:0'):
             learning_rate = tf.placeholder(tf.float32, shape=[])
             opt = tf.train.AdamOptimizer(learning_rate=learning_rate)
