@@ -33,21 +33,3 @@ unzip_list = list(unzip)
 print(unzip_list)
 for i in unzip_list:
     print(i)
-
-import numpy as np
-import tensorflow as tf
-import datetime
-
-log_device_placement = True
-n = 10
-
-A = np.random.rand(10000, 10000).astype('float32')
-B = np.random.rand(10000, 10000).astype('float32')
-
-c1 = []
-
-def matpow(M, n):
-    if n < 1: #Abstract cases where n < 1
-        return M
-    else:
-        return tf.matmul(M,...
