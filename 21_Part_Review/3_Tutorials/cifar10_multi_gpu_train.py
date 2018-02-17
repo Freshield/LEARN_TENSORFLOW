@@ -112,12 +112,16 @@ def average_gradients(tower_grads):
      across all towers.
   """
   average_grads = []
+  #zip(*)会把本来聚合的数值再分开
+  #[(1,2,3),(4,5,6)] -> [(1,4),(2,5),(3,6)]
   for grad_and_vars in zip(*tower_grads):
     # Note that each grad_and_vars looks like the following:
     #   ((grad0_gpu0, var0_gpu0), ... , (grad0_gpuN, var0_gpuN))
     grads = []
     for g, _ in grad_and_vars:
       # Add 0 dimension to the gradients to represent the tower.
+      #增加以为1维
+      #[1 2 3] -> [[1 2 3]]
       expanded_g = tf.expand_dims(g, 0)
 
       # Append on a 'tower' dimension which we will average over below.
