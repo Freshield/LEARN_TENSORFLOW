@@ -14,8 +14,8 @@
       <file leaf-file-name="5_CNN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/5_CNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="862">
-              <caret line="48" column="27" lean-forward="true" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
+            <state relative-caret-position="1334">
+              <caret line="48" column="27" lean-forward="false" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -27,7 +27,7 @@
         <entry file="file://$PROJECT_DIR$/multi_gpu_mnist.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="427">
-              <caret line="113" column="11" lean-forward="true" selection-start-line="113" selection-start-column="11" selection-end-line="113" selection-end-column="11" />
+              <caret line="113" column="11" lean-forward="false" selection-start-line="113" selection-start-column="11" selection-end-line="113" selection-end-column="11" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -328,9 +328,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4640">
           <caret line="172" column="50" lean-forward="true" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="50" />
-          <folding>
-            <element signature="e#1553#1591#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -365,9 +362,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2378">
           <caret line="94" column="72" lean-forward="true" selection-start-line="94" selection-start-column="16" selection-end-line="94" selection-end-column="72" />
-          <folding>
-            <element signature="e#1553#1591#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -434,9 +428,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1553#1591#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -704,9 +695,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4640">
           <caret line="172" column="50" lean-forward="false" selection-start-line="172" selection-start-column="27" selection-end-line="172" selection-end-column="50" />
-          <folding>
-            <element signature="e#1553#1591#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -714,14 +702,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="939">
           <caret line="84" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/5_CNN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="862">
-          <caret line="48" column="27" lean-forward="true" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
+        <state relative-caret-position="1334">
+          <caret line="48" column="27" lean-forward="false" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -731,7 +718,7 @@
     <entry file="file://$PROJECT_DIR$/multi_gpu_mnist.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="427">
-          <caret line="113" column="11" lean-forward="true" selection-start-line="113" selection-start-column="11" selection-end-line="113" selection-end-column="11" />
+          <caret line="113" column="11" lean-forward="false" selection-start-line="113" selection-start-column="11" selection-end-line="113" selection-end-column="11" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
