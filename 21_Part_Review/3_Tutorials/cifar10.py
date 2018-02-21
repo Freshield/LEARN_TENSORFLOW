@@ -102,6 +102,7 @@ def _activation_summary(x):
                                        tf.nn.zero_fraction(x))
 
 #创建variable在cpu
+#整个网络的variable数据全部在cpu上存储，为了多GPU时候共享paramter
 def _variable_on_cpu(name, shape, initializer):
   """Helper to create a Variable stored on CPU memory.
   Args:
@@ -338,7 +339,7 @@ def _add_loss_summaries(total_loss):
 
   return loss_averages_op
 
-#整个数据的训练过程（CPU版本）
+#整个数据的训练过程
 def train(total_loss, global_step):
   """Train CIFAR-10 model.
   Create an optimizer and apply to all trainable variables. Add moving
@@ -375,7 +376,7 @@ def train(total_loss, global_step):
 
   # Apply gradients.
   #使用得出的grads来更新weights并且把global的step加一
-  apply_gradient_op = opt.apply_gradents(grads, global_step=global_step)
+  apply_gradient_op = opt.apply_gradients(grads, global_step=global_step)
 
   # Add histograms for trainable variables.
   #给所有variable记录到summary
