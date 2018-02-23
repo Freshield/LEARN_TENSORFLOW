@@ -45,7 +45,7 @@ FLAGS = tf.app.flags.FLAGS
 # Basic model parameters.
 tf.app.flags.DEFINE_integer('batch_size', 128,
                             """Number of images to process in a batch.""")
-tf.app.flags.DEFINE_string('data_dir', 'cifar10_data',
+tf.app.flags.DEFINE_string('data_dir', 'data/cifar10_data',
                            """Path to the CIFAR-10 data directory.""")
 tf.app.flags.DEFINE_boolean('use_fp16', False,
                             """Train the model using fp16.""")
@@ -366,28 +366,36 @@ def train(total_loss, global_step):
   loss_averages_op = _add_loss_summaries(total_loss)
 
   # Compute gradients.
+  #在loss_averages_op运行完之后才能继续进行程序
   with tf.control_dependencies([loss_averages_op]):
+    #得到训练的optimazier
     opt = tf.train.GradientDescentOptimizer(lr)
+    #得到这一步训练得出的grads
     grads = opt.compute_gradients(total_loss)
 
   # Apply gradients.
+  #使用得出的grads来更新weights并且把global的step加一
   apply_gradient_op = opt.apply_gradents(grads, global_step=global_step)
 
   # Add histograms for trainable variables.
+  #给所有variable记录到summary
   for var in tf.trainable_variables():
     tf.summary.histogram(var.op.name, var)
 
   # Add histograms for gradients.
+  #把所有更新的grads加到summary
   for grad, var in grads:
     if grad is not None:
       tf.summary.histogram(var.op.name + '/gradients', grad)
 
   # Track the moving averages of all trainable variables.
+  #把全部variable加上一个average decay
   variable_averages = tf.train.ExponentialMovingAverage(
       MOVING_AVERAGE_DECAY, global_step)
   variables_averages_op = variable_averages.apply(tf.trainable_variables())
 
   with tf.control_dependencies([apply_gradient_op, variables_averages_op]):
+    #tf.no_op相当于nop，什么都不做，只不过是等待这些运行完
     train_op = tf.no_op(name='train')
 
   return train_op
