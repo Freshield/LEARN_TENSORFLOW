@@ -288,6 +288,7 @@ def inference(images):
 
   return softmax_linear
 
+#使用交叉熵loss
 def loss(logits, labels):
   """Add L2Loss to all the trainable variables.
   Add summary for "Loss" and "Loss/avg".
@@ -303,13 +304,15 @@ def loss(logits, labels):
   cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(
       labels=labels, logits=logits, name='cross_entropy_per_example')
   cross_entropy_mean = tf.reduce_mean(cross_entropy, name='cross_entropy')
+  #add_to_collection是把变量全都放到同一个集合中并且给集合一个名字
   tf.add_to_collection('losses', cross_entropy_mean)
 
   # The total loss is defined as the cross entropy loss plus all of the weight
   # decay terms (L2 loss).
+  #add_n是把目标名字的集合内所有变量全部相加
   return tf.add_n(tf.get_collection('losses'), name='total_loss')
 
-
+#给loss加上summary，并产生降噪后的loss同时加上summary
 def _add_loss_summaries(total_loss):
   """Add summaries for losses in CIFAR-10 model.
   Generates moving average for all losses and associated summaries for
@@ -320,6 +323,7 @@ def _add_loss_summaries(total_loss):
     loss_averages_op: op for generating moving averages of losses.
   """
   # Compute the moving average of all individual losses and the total loss.
+  #并不是直接显示average值，而是平滑的过度以减少显示时loss的噪音
   loss_averages = tf.train.ExponentialMovingAverage(0.9, name='avg')
   losses = tf.get_collection('losses')
   loss_averages_op = loss_averages.apply(losses + [total_loss])
@@ -334,7 +338,7 @@ def _add_loss_summaries(total_loss):
 
   return loss_averages_op
 
-
+#整个数据的训练过程（CPU版本）
 def train(total_loss, global_step):
   """Train CIFAR-10 model.
   Create an optimizer and apply to all trainable variables. Add moving
@@ -367,7 +371,7 @@ def train(total_loss, global_step):
     grads = opt.compute_gradients(total_loss)
 
   # Apply gradients.
-  apply_gradient_op = opt.apply_gradients(grads, global_step=global_step)
+  apply_gradient_op = opt.apply_gradents(grads, global_step=global_step)
 
   # Add histograms for trainable variables.
   for var in tf.trainable_variables():
