@@ -148,6 +148,7 @@ def distorted_inputs(data_dir, batch_size):
     images: Images. 4D tensor of [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] size.
     labels: Labels. 1D tensor of [batch_size] size.
   """
+  #1到6是因为只有6个文件
   filenames = [os.path.join(data_dir, 'data_batch_%d.bin' % i)
                for i in xrange(1, 6)]
   for f in filenames:
@@ -155,6 +156,7 @@ def distorted_inputs(data_dir, batch_size):
       raise ValueError('Failed to find file: ' + f)
 
   # Create a queue that produces the filenames to read.
+  #文件队列
   filename_queue = tf.train.string_input_producer(filenames)
 
   #数据增强部分，把数据裁剪扭曲
@@ -232,6 +234,9 @@ def inputs(eval_data, data_dir, batch_size):
 
     # Read examples from files in the filename queue.
     read_input = read_cifar10(filename_queue)
+
+    return
+
     reshaped_image = tf.cast(read_input.uint8image, tf.float32)
 
     height = IMAGE_SIZE

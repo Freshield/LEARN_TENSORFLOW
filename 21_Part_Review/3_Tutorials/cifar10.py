@@ -70,7 +70,7 @@ TOWER_NAME = 'tower'
 
 DATA_URL = 'https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz'
 
-
+#加上summary来记录tensor的值以便之后在tensorboard中显示
 def _activation_summary(x):
   """Helper to create summaries for activations.
   Creates a summary that provides a histogram of activations.
@@ -87,7 +87,7 @@ def _activation_summary(x):
   tf.summary.scalar(tensor_name + '/sparsity',
                                        tf.nn.zero_fraction(x))
 
-
+#创建variable在cpu
 def _variable_on_cpu(name, shape, initializer):
   """Helper to create a Variable stored on CPU memory.
   Args:
@@ -102,7 +102,7 @@ def _variable_on_cpu(name, shape, initializer):
     var = tf.get_variable(name, shape, initializer=initializer, dtype=dtype)
   return var
 
-
+#创建variable在cpu并且指定初始化和是否decay
 def _variable_with_weight_decay(name, shape, stddev, wd):
   """Helper to create an initialized Variable with weight decay.
   Note that the Variable is initialized with a truncated normal distribution.
@@ -126,7 +126,7 @@ def _variable_with_weight_decay(name, shape, stddev, wd):
     tf.add_to_collection('losses', weight_decay)
   return var
 
-
+#获取扭曲后的数据
 def distorted_inputs():
   """Construct distorted input for CIFAR training using the Reader ops.
   Returns:
@@ -145,7 +145,7 @@ def distorted_inputs():
     labels = tf.cast(labels, tf.float16)
   return images, labels
 
-
+#获取未扭曲的数据
 def inputs(eval_data):
   """Construct input for CIFAR evaluation using the Reader ops.
   Args:
@@ -352,7 +352,7 @@ def train(total_loss, global_step):
 
   return train_op
 
-
+#如果没有数据则下载并解压
 def maybe_download_and_extract():
   """Download and extract the tarball from Alex's website."""
   dest_directory = FLAGS.data_dir
@@ -372,5 +372,3 @@ def maybe_download_and_extract():
   extracted_dir_path = os.path.join(dest_directory, 'cifar-10-batches-bin')
   if not os.path.exists(extracted_dir_path):
     tarfile.open(filepath, 'r:gz').extractall(dest_directory)
-
-maybe_download_and_extract()
