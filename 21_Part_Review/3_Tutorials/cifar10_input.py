@@ -136,7 +136,7 @@ def _generate_image_and_label_batch(image, label, min_queue_examples,
 
   return images, tf.reshape(label_batch, [batch_size])
 
-#获取扭曲后的输入，训练时用
+#获取扭曲后的输入，训练时用,获取一个batch的数据
 #！看下filenames的大小和数值
 #！看reshaped_image大小，
 def distorted_inputs(data_dir, batch_size):
@@ -204,9 +204,7 @@ def distorted_inputs(data_dir, batch_size):
                                          min_queue_examples, batch_size,
                                          shuffle=True)
 
-distorted_inputs('cifar10_data/cifar-10-batches-bin', 40)
-
-#测试时用，非扭曲的数据
+#测试时用，非扭曲的数据,获取一个batch的数据
 def inputs(eval_data, data_dir, batch_size):
   """Construct input for CIFAR evaluation using the Reader ops.
   Args:

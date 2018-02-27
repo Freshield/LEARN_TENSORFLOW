@@ -70,6 +70,20 @@ TOWER_NAME = 'tower'
 
 DATA_URL = 'https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz'
 
+#Test helper
+#if LOOK_FLAG is True, then will print the values
+LOOK_FLAG = False
+
+def look_value(*args):
+    if type(args[-1]) is bool:
+        flag = args[-1]
+    else:
+        flag = LOOK_FLAG
+
+    if flag:
+        print(args)
+
+
 #加上summary来记录tensor的值以便之后在tensorboard中显示
 def _activation_summary(x):
   """Helper to create summaries for activations.
@@ -126,7 +140,7 @@ def _variable_with_weight_decay(name, shape, stddev, wd):
     tf.add_to_collection('losses', weight_decay)
   return var
 
-
+#获取扭曲数据，训练用的数据,获取一个batch的数据
 def distorted_inputs():
   """Construct distorted input for CIFAR training using the Reader ops.
   Returns:
@@ -145,7 +159,7 @@ def distorted_inputs():
     labels = tf.cast(labels, tf.float16)
   return images, labels
 
-
+#获取下一个数据，测试时候用的数据,获取一个batch的数据
 def inputs(eval_data):
   """Construct input for CIFAR evaluation using the Reader ops.
   Args:
@@ -167,7 +181,8 @@ def inputs(eval_data):
     labels = tf.cast(labels, tf.float16)
   return images, labels
 
-
+#整体的模型逻辑
+#！看下每层数据的shape
 def inference(images):
   """Build the CIFAR-10 model.
   Args:
@@ -192,12 +207,19 @@ def inference(images):
     conv1 = tf.nn.relu(pre_activation, name=scope.name)
     _activation_summary(conv1)
 
+  look_value('conv1',conv1)
+
   # pool1
   pool1 = tf.nn.max_pool(conv1, ksize=[1, 3, 3, 1], strides=[1, 2, 2, 1],
                          padding='SAME', name='pool1')
+
+  look_value('pool1',pool1)
+
   # norm1
   norm1 = tf.nn.lrn(pool1, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
                     name='norm1')
+
+  look_value('norm1',norm1)
 
   # conv2
   with tf.variable_scope('conv2') as scope:
@@ -211,12 +233,21 @@ def inference(images):
     conv2 = tf.nn.relu(pre_activation, name=scope.name)
     _activation_summary(conv2)
 
+  look_value('conv2',conv2)
+
   # norm2
   norm2 = tf.nn.lrn(conv2, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
                     name='norm2')
+
+  #print('norm2',norm2)
+
   # pool2
   pool2 = tf.nn.max_pool(norm2, ksize=[1, 3, 3, 1],
                          strides=[1, 2, 2, 1], padding='SAME', name='pool2')
+
+  look_value('pool2',pool2)
+
+  look_value('batch_size',FLAGS.batch_size)
 
   # local3
   with tf.variable_scope('local3') as scope:
@@ -229,6 +260,8 @@ def inference(images):
     local3 = tf.nn.relu(tf.matmul(reshape, weights) + biases, name=scope.name)
     _activation_summary(local3)
 
+  look_value('local3',local3)
+
   # local4
   with tf.variable_scope('local4') as scope:
     weights = _variable_with_weight_decay('weights', shape=[384, 192],
@@ -236,6 +269,8 @@ def inference(images):
     biases = _variable_on_cpu('biases', [192], tf.constant_initializer(0.1))
     local4 = tf.nn.relu(tf.matmul(local3, weights) + biases, name=scope.name)
     _activation_summary(local4)
+
+  look_value('local4',local4)
 
   # linear layer(WX + b),
   # We don't apply softmax here because
@@ -249,8 +284,9 @@ def inference(images):
     softmax_linear = tf.add(tf.matmul(local4, weights), biases, name=scope.name)
     _activation_summary(softmax_linear)
 
-  return softmax_linear
+    #print('softmax_linear',softmax_linear)
 
+  return softmax_linear
 
 def loss(logits, labels):
   """Add L2Loss to all the trainable variables.
