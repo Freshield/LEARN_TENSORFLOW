@@ -148,6 +148,7 @@ def distorted_inputs(data_dir, batch_size):
     images: Images. 4D tensor of [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] size.
     labels: Labels. 1D tensor of [batch_size] size.
   """
+  #1到6是因为只有6个文件
   filenames = [os.path.join(data_dir, 'data_batch_%d.bin' % i)
                for i in xrange(1, 6)]
   for f in filenames:
@@ -202,6 +203,8 @@ def distorted_inputs(data_dir, batch_size):
   return _generate_image_and_label_batch(float_image, read_input.label,
                                          min_queue_examples, batch_size,
                                          shuffle=True)
+
+distorted_inputs('cifar10_data/cifar-10-batches-bin', 40)
 
 #测试时用，非扭曲的数据
 def inputs(eval_data, data_dir, batch_size):
