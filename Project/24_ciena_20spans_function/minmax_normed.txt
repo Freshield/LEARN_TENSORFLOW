@@ -1,4 +1,0 @@
-(-1.0164913, -1.0, -1.0, -1.0, -1.0)
-(1.0, 1.0, 1.0242046, 1.0, 1.0)
-(((array([29]), array([1632])), 'Raw_data_760_test.csv', 0), ((array([98]), array([26])), 'Raw_data_338_train.csv', 3), ((array([12]), array([0])), 'Raw_data_872_train.csv', 0), ((array([32]), array([14])), 'Raw_data_61_train.csv', 6), ((array([32]), array([14])), 'Raw_data_61_train.csv', 6))
-(((array([55]), array([1639])), 'Raw_data_625_train.csv', 1), ((array([55, 55]), array([3313, 4473])), 'Raw_data_625_train.csv', 1), ((array([1]), array([0])), 'Raw_data_722_valid.csv', 0), ((array([31]), array([16])), 'Raw_data_733_train.csv', 2), ((array([89]), array([3])), 'Raw_data_1_train.csv', 2))

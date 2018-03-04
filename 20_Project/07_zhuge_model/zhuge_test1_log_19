@@ -1,0 +1,546 @@
+Data Shape: (1000, 261)
+loss in step 0 is 11.373561, acc is 0.320
+last 300 steps use 90.776563 sec
+rest time is 90.777 minutes
+----------train acc in step 0 is 0.3162----------
+----------valid acc in step 0 is 0.4100----------
+loss in step 100 is 0.988931, acc is 0.470
+loss in step 200 is 0.848214, acc is 0.650
+loss in step 300 is 0.878775, acc is 0.540
+loss in step 400 is 0.754321, acc is 0.680
+loss in step 500 is 0.635770, acc is 0.700
+last 300 steps use 1.306534 sec
+rest time is 1.285 minutes
+----------train acc in step 500 is 0.7188----------
+----------valid acc in step 500 is 0.3000----------
+loss in step 600 is 0.613899, acc is 0.740
+loss in step 700 is 0.447328, acc is 0.790
+loss in step 800 is 0.353818, acc is 0.870
+loss in step 900 is 0.318096, acc is 0.940
+loss in step 1000 is 0.288294, acc is 0.920
+last 300 steps use 0.807524 sec
+rest time is 0.781 minutes
+----------train acc in step 1000 is 0.8875----------
+----------valid acc in step 1000 is 0.3100----------
+loss in step 1100 is 0.286055, acc is 0.880
+loss in step 1200 is 0.255809, acc is 0.910
+loss in step 1300 is 0.258784, acc is 0.900
+loss in step 1400 is 0.208358, acc is 0.900
+loss in step 1500 is 0.114808, acc is 0.970
+last 300 steps use 0.787973 sec
+rest time is 0.749 minutes
+----------train acc in step 1500 is 0.9725----------
+----------valid acc in step 1500 is 0.3200----------
+loss in step 1600 is 0.121598, acc is 0.960
+loss in step 1700 is 0.071828, acc is 1.000
+loss in step 1800 is 0.212388, acc is 0.910
+loss in step 1900 is 0.041106, acc is 0.990
+loss in step 2000 is 0.042317, acc is 0.990
+last 300 steps use 0.781894 sec
+rest time is 0.730 minutes
+----------train acc in step 2000 is 0.9912----------
+----------valid acc in step 2000 is 0.2800----------
+loss in step 2100 is 0.035229, acc is 0.990
+loss in step 2200 is 0.029326, acc is 1.000
+loss in step 2300 is 0.055160, acc is 0.990
+loss in step 2400 is 0.015380, acc is 1.000
+loss in step 2500 is 0.017981, acc is 0.990
+last 300 steps use 0.719428 sec
+rest time is 0.659 minutes
+----------train acc in step 2500 is 1.0000----------
+----------valid acc in step 2500 is 0.3100----------
+loss in step 2600 is 0.009363, acc is 1.000
+loss in step 2700 is 0.009691, acc is 1.000
+loss in step 2800 is 0.007439, acc is 1.000
+loss in step 2900 is 0.006404, acc is 1.000
+loss in step 3000 is 0.013455, acc is 1.000
+last 300 steps use 0.837445 sec
+rest time is 0.754 minutes
+----------train acc in step 3000 is 1.0000----------
+----------valid acc in step 3000 is 0.3100----------
+loss in step 3100 is 0.006463, acc is 1.000
+loss in step 3200 is 0.008548, acc is 1.000
+loss in step 3300 is 0.006183, acc is 1.000
+loss in step 3400 is 0.004045, acc is 1.000
+loss in step 3500 is 0.002982, acc is 1.000
+last 300 steps use 0.809073 sec
+rest time is 0.715 minutes
+----------train acc in step 3500 is 1.0000----------
+----------valid acc in step 3500 is 0.3000----------
+loss in step 3600 is 0.003088, acc is 1.000
+loss in step 3700 is 0.003337, acc is 1.000
+loss in step 3800 is 0.001928, acc is 1.000
+loss in step 3900 is 0.002086, acc is 1.000
+loss in step 4000 is 0.001604, acc is 1.000
+last 300 steps use 0.818968 sec
+rest time is 0.710 minutes
+----------train acc in step 4000 is 1.0000----------
+----------valid acc in step 4000 is 0.3100----------
+loss in step 4100 is 0.002690, acc is 1.000
+loss in step 4200 is 0.000863, acc is 1.000
+loss in step 4300 is 0.001368, acc is 1.000
+loss in step 4400 is 0.000740, acc is 1.000
+loss in step 4500 is 0.000629, acc is 1.000
+last 300 steps use 0.898480 sec
+rest time is 0.764 minutes
+----------train acc in step 4500 is 1.0000----------
+----------valid acc in step 4500 is 0.3100----------
+loss in step 4600 is 0.001261, acc is 1.000
+loss in step 4700 is 0.001058, acc is 1.000
+loss in step 4800 is 0.001003, acc is 1.000
+loss in step 4900 is 0.001036, acc is 1.000
+loss in step 5000 is 0.000831, acc is 1.000
+last 300 steps use 0.772476 sec
+rest time is 0.644 minutes
+----------train acc in step 5000 is 1.0000----------
+----------valid acc in step 5000 is 0.3400----------
+loss in step 5100 is 0.000632, acc is 1.000
+loss in step 5200 is 0.000400, acc is 1.000
+loss in step 5300 is 0.000515, acc is 1.000
+loss in step 5400 is 0.000453, acc is 1.000
+loss in step 5500 is 0.000452, acc is 1.000
+last 300 steps use 0.790477 sec
+rest time is 0.646 minutes
+----------train acc in step 5500 is 1.0000----------
+----------valid acc in step 5500 is 0.3300----------
+loss in step 5600 is 0.000383, acc is 1.000
+loss in step 5700 is 0.000302, acc is 1.000
+loss in step 5800 is 0.000348, acc is 1.000
+loss in step 5900 is 0.000389, acc is 1.000
+loss in step 6000 is 0.000371, acc is 1.000
+last 300 steps use 0.721455 sec
+rest time is 0.577 minutes
+----------train acc in step 6000 is 1.0000----------
+----------valid acc in step 6000 is 0.3300----------
+loss in step 6100 is 0.000220, acc is 1.000
+loss in step 6200 is 0.000297, acc is 1.000
+loss in step 6300 is 0.000174, acc is 1.000
+loss in step 6400 is 0.000270, acc is 1.000
+loss in step 6500 is 0.000176, acc is 1.000
+last 300 steps use 0.820994 sec
+rest time is 0.643 minutes
+----------train acc in step 6500 is 1.0000----------
+----------valid acc in step 6500 is 0.3100----------
+loss in step 6600 is 0.000171, acc is 1.000
+loss in step 6700 is 0.000107, acc is 1.000
+loss in step 6800 is 0.000114, acc is 1.000
+loss in step 6900 is 0.000162, acc is 1.000
+loss in step 7000 is 0.000119, acc is 1.000
+last 300 steps use 0.837088 sec
+rest time is 0.642 minutes
+----------train acc in step 7000 is 1.0000----------
+----------valid acc in step 7000 is 0.3200----------
+loss in step 7100 is 0.000131, acc is 1.000
+loss in step 7200 is 0.000087, acc is 1.000
+loss in step 7300 is 0.000100, acc is 1.000
+loss in step 7400 is 0.000120, acc is 1.000
+loss in step 7500 is 0.000052, acc is 1.000
+last 300 steps use 0.891447 sec
+rest time is 0.669 minutes
+----------train acc in step 7500 is 1.0000----------
+----------valid acc in step 7500 is 0.3200----------
+loss in step 7600 is 0.000080, acc is 1.000
+loss in step 7700 is 0.000100, acc is 1.000
+loss in step 7800 is 0.000097, acc is 1.000
+loss in step 7900 is 0.000045, acc is 1.000
+loss in step 8000 is 0.000046, acc is 1.000
+last 300 steps use 0.820041 sec
+rest time is 0.601 minutes
+----------train acc in step 8000 is 1.0000----------
+----------valid acc in step 8000 is 0.3200----------
+loss in step 8100 is 0.000055, acc is 1.000
+loss in step 8200 is 0.000054, acc is 1.000
+loss in step 8300 is 0.000065, acc is 1.000
+loss in step 8400 is 0.000024, acc is 1.000
+loss in step 8500 is 0.000065, acc is 1.000
+last 300 steps use 0.894427 sec
+rest time is 0.641 minutes
+----------train acc in step 8500 is 1.0000----------
+----------valid acc in step 8500 is 0.3200----------
+loss in step 8600 is 0.000054, acc is 1.000
+loss in step 8700 is 0.000046, acc is 1.000
+loss in step 8800 is 0.000037, acc is 1.000
+loss in step 8900 is 0.000035, acc is 1.000
+loss in step 9000 is 0.000035, acc is 1.000
+last 300 steps use 0.776052 sec
+rest time is 0.543 minutes
+----------train acc in step 9000 is 1.0000----------
+----------valid acc in step 9000 is 0.3200----------
+loss in step 9100 is 0.000039, acc is 1.000
+loss in step 9200 is 0.000023, acc is 1.000
+loss in step 9300 is 0.000026, acc is 1.000
+loss in step 9400 is 0.000023, acc is 1.000
+loss in step 9500 is 0.000028, acc is 1.000
+last 300 steps use 0.827432 sec
+rest time is 0.565 minutes
+----------train acc in step 9500 is 1.0000----------
+----------valid acc in step 9500 is 0.3200----------
+loss in step 9600 is 0.000022, acc is 1.000
+loss in step 9700 is 0.000016, acc is 1.000
+loss in step 9800 is 0.000017, acc is 1.000
+loss in step 9900 is 0.000016, acc is 1.000
+loss in step 10000 is 0.000020, acc is 1.000
+last 300 steps use 0.790596 sec
+rest time is 0.527 minutes
+----------train acc in step 10000 is 1.0000----------
+----------valid acc in step 10000 is 0.3200----------
+loss in step 10100 is 0.000012, acc is 1.000
+loss in step 10200 is 0.000011, acc is 1.000
+loss in step 10300 is 0.000020, acc is 1.000
+loss in step 10400 is 0.000021, acc is 1.000
+loss in step 10500 is 0.000009, acc is 1.000
+last 300 steps use 0.736594 sec
+rest time is 0.479 minutes
+----------train acc in step 10500 is 1.0000----------
+----------valid acc in step 10500 is 0.3200----------
+loss in step 10600 is 0.000011, acc is 1.000
+loss in step 10700 is 0.000009, acc is 1.000
+loss in step 10800 is 0.000007, acc is 1.000
+loss in step 10900 is 0.000006, acc is 1.000
+loss in step 11000 is 0.000011, acc is 1.000
+last 300 steps use 0.768542 sec
+rest time is 0.487 minutes
+----------train acc in step 11000 is 1.0000----------
+----------valid acc in step 11000 is 0.3300----------
+loss in step 11100 is 0.000009, acc is 1.000
+loss in step 11200 is 0.000011, acc is 1.000
+loss in step 11300 is 0.000010, acc is 1.000
+loss in step 11400 is 0.000007, acc is 1.000
+loss in step 11500 is 0.000011, acc is 1.000
+last 300 steps use 0.771523 sec
+rest time is 0.476 minutes
+----------train acc in step 11500 is 1.0000----------
+----------valid acc in step 11500 is 0.3300----------
+loss in step 11600 is 0.000007, acc is 1.000
+loss in step 11700 is 0.000004, acc is 1.000
+loss in step 11800 is 0.000004, acc is 1.000
+loss in step 11900 is 0.000004, acc is 1.000
+loss in step 12000 is 0.000007, acc is 1.000
+last 300 steps use 0.791550 sec
+rest time is 0.475 minutes
+----------train acc in step 12000 is 1.0000----------
+----------valid acc in step 12000 is 0.3300----------
+loss in step 12100 is 0.000003, acc is 1.000
+loss in step 12200 is 0.000003, acc is 1.000
+loss in step 12300 is 0.000005, acc is 1.000
+loss in step 12400 is 0.000007, acc is 1.000
+loss in step 12500 is 0.000004, acc is 1.000
+last 300 steps use 0.926495 sec
+rest time is 0.540 minutes
+----------train acc in step 12500 is 1.0000----------
+----------valid acc in step 12500 is 0.3300----------
+loss in step 12600 is 0.000003, acc is 1.000
+loss in step 12700 is 0.000004, acc is 1.000
+loss in step 12800 is 0.000003, acc is 1.000
+loss in step 12900 is 0.000003, acc is 1.000
+loss in step 13000 is 0.000004, acc is 1.000
+last 300 steps use 0.836492 sec
+rest time is 0.474 minutes
+----------train acc in step 13000 is 1.0000----------
+----------valid acc in step 13000 is 0.3300----------
+loss in step 13100 is 0.000003, acc is 1.000
+loss in step 13200 is 0.000002, acc is 1.000
+loss in step 13300 is 0.000003, acc is 1.000
+loss in step 13400 is 0.000002, acc is 1.000
+loss in step 13500 is 0.000002, acc is 1.000
+last 300 steps use 0.814557 sec
+rest time is 0.448 minutes
+----------train acc in step 13500 is 1.0000----------
+----------valid acc in step 13500 is 0.3200----------
+loss in step 13600 is 0.000003, acc is 1.000
+loss in step 13700 is 0.000002, acc is 1.000
+loss in step 13800 is 0.000002, acc is 1.000
+loss in step 13900 is 0.000002, acc is 1.000
+loss in step 14000 is 0.000002, acc is 1.000
+last 300 steps use 0.879049 sec
+rest time is 0.469 minutes
+----------train acc in step 14000 is 1.0000----------
+----------valid acc in step 14000 is 0.3200----------
+loss in step 14100 is 0.000001, acc is 1.000
+loss in step 14200 is 0.000001, acc is 1.000
+loss in step 14300 is 0.000001, acc is 1.000
+loss in step 14400 is 0.000002, acc is 1.000
+loss in step 14500 is 0.000001, acc is 1.000
+last 300 steps use 0.768542 sec
+rest time is 0.397 minutes
+----------train acc in step 14500 is 1.0000----------
+----------valid acc in step 14500 is 0.3200----------
+loss in step 14600 is 0.000001, acc is 1.000
+loss in step 14700 is 0.000001, acc is 1.000
+loss in step 14800 is 0.000001, acc is 1.000
+loss in step 14900 is 0.000001, acc is 1.000
+loss in step 15000 is 0.000001, acc is 1.000
+last 300 steps use 1.325011 sec
+rest time is 0.663 minutes
+----------train acc in step 15000 is 1.0000----------
+----------valid acc in step 15000 is 0.3200----------
+loss in step 15100 is 0.000001, acc is 1.000
+loss in step 15200 is 0.000001, acc is 1.000
+loss in step 15300 is 0.000001, acc is 1.000
+loss in step 15400 is 0.000001, acc is 1.000
+loss in step 15500 is 0.000000, acc is 1.000
+last 300 steps use 3.744483 sec
+rest time is 1.810 minutes
+----------train acc in step 15500 is 1.0000----------
+----------valid acc in step 15500 is 0.3200----------
+loss in step 15600 is 0.000001, acc is 1.000
+loss in step 15700 is 0.000000, acc is 1.000
+loss in step 15800 is 0.000001, acc is 1.000
+loss in step 15900 is 0.000001, acc is 1.000
+loss in step 16000 is 0.000000, acc is 1.000
+last 300 steps use 0.980973 sec
+rest time is 0.458 minutes
+----------train acc in step 16000 is 1.0000----------
+----------valid acc in step 16000 is 0.3200----------
+loss in step 16100 is 0.000000, acc is 1.000
+loss in step 16200 is 0.000001, acc is 1.000
+loss in step 16300 is 0.000001, acc is 1.000
+loss in step 16400 is 0.000000, acc is 1.000
+loss in step 16500 is 0.000000, acc is 1.000
+last 300 steps use 1.194477 sec
+rest time is 0.538 minutes
+----------train acc in step 16500 is 1.0000----------
+----------valid acc in step 16500 is 0.3200----------
+loss in step 16600 is 0.000000, acc is 1.000
+loss in step 16700 is 0.000000, acc is 1.000
+loss in step 16800 is 0.000000, acc is 1.000
+loss in step 16900 is 0.000000, acc is 1.000
+loss in step 17000 is 0.000000, acc is 1.000
+last 300 steps use 0.881433 sec
+rest time is 0.382 minutes
+----------train acc in step 17000 is 1.0000----------
+----------valid acc in step 17000 is 0.3200----------
+loss in step 17100 is 0.000000, acc is 1.000
+loss in step 17200 is 0.000000, acc is 1.000
+loss in step 17300 is 0.000000, acc is 1.000
+loss in step 17400 is 0.000000, acc is 1.000
+loss in step 17500 is 0.000000, acc is 1.000
+last 300 steps use 0.760078 sec
+rest time is 0.317 minutes
+----------train acc in step 17500 is 1.0000----------
+----------valid acc in step 17500 is 0.3200----------
+loss in step 17600 is 0.000000, acc is 1.000
+loss in step 17700 is 0.000000, acc is 1.000
+loss in step 17800 is 0.000000, acc is 1.000
+loss in step 17900 is 0.000000, acc is 1.000
+loss in step 18000 is 0.000000, acc is 1.000
+last 300 steps use 0.978947 sec
+rest time is 0.392 minutes
+----------train acc in step 18000 is 1.0000----------
+----------valid acc in step 18000 is 0.3200----------
+loss in step 18100 is 0.000000, acc is 1.000
+loss in step 18200 is 0.000000, acc is 1.000
+loss in step 18300 is 0.000000, acc is 1.000
+loss in step 18400 is 0.000000, acc is 1.000
+loss in step 18500 is 0.000000, acc is 1.000
+last 300 steps use 0.860095 sec
+rest time is 0.330 minutes
+----------train acc in step 18500 is 1.0000----------
+----------valid acc in step 18500 is 0.3200----------
+loss in step 18600 is 0.000000, acc is 1.000
+loss in step 18700 is 0.000000, acc is 1.000
+loss in step 18800 is 0.000000, acc is 1.000
+loss in step 18900 is 0.000000, acc is 1.000
+loss in step 19000 is 0.000000, acc is 1.000
+last 300 steps use 0.847459 sec
+rest time is 0.311 minutes
+----------train acc in step 19000 is 1.0000----------
+----------valid acc in step 19000 is 0.3200----------
+loss in step 19100 is 0.000000, acc is 1.000
+loss in step 19200 is 0.000000, acc is 1.000
+loss in step 19300 is 0.000000, acc is 1.000
+loss in step 19400 is 0.000000, acc is 1.000
+loss in step 19500 is 0.000000, acc is 1.000
+last 300 steps use 0.759602 sec
+rest time is 0.266 minutes
+----------train acc in step 19500 is 1.0000----------
+----------valid acc in step 19500 is 0.3200----------
+loss in step 19600 is 0.000000, acc is 1.000
+loss in step 19700 is 0.000000, acc is 1.000
+loss in step 19800 is 0.000000, acc is 1.000
+loss in step 19900 is 0.000000, acc is 1.000
+loss in step 20000 is 0.000000, acc is 1.000
+last 300 steps use 0.924468 sec
+rest time is 0.308 minutes
+----------train acc in step 20000 is 1.0000----------
+----------valid acc in step 20000 is 0.3200----------
+loss in step 20100 is 0.000000, acc is 1.000
+loss in step 20200 is 0.000000, acc is 1.000
+loss in step 20300 is 0.000000, acc is 1.000
+loss in step 20400 is 0.000000, acc is 1.000
+loss in step 20500 is 0.000000, acc is 1.000
+last 300 steps use 3.432989 sec
+rest time is 1.087 minutes
+----------train acc in step 20500 is 1.0000----------
+----------valid acc in step 20500 is 0.3200----------
+loss in step 20600 is 0.000000, acc is 1.000
+loss in step 20700 is 0.000000, acc is 1.000
+loss in step 20800 is 0.000000, acc is 1.000
+loss in step 20900 is 0.000000, acc is 1.000
+loss in step 21000 is 0.000000, acc is 1.000
+last 300 steps use 0.808954 sec
+rest time is 0.243 minutes
+----------train acc in step 21000 is 1.0000----------
+----------valid acc in step 21000 is 0.3200----------
+loss in step 21100 is 0.000000, acc is 1.000
+loss in step 21200 is 0.000000, acc is 1.000
+loss in step 21300 is 0.000000, acc is 1.000
+loss in step 21400 is 0.000000, acc is 1.000
+loss in step 21500 is 0.000000, acc is 1.000
+last 300 steps use 0.823021 sec
+rest time is 0.233 minutes
+----------train acc in step 21500 is 1.0000----------
+----------valid acc in step 21500 is 0.3400----------
+loss in step 21600 is 0.000000, acc is 1.000
+loss in step 21700 is 0.000000, acc is 1.000
+loss in step 21800 is 0.000000, acc is 1.000
+loss in step 21900 is 0.000000, acc is 1.000
+loss in step 22000 is 0.000000, acc is 1.000
+last 300 steps use 1.209974 sec
+rest time is 0.323 minutes
+----------train acc in step 22000 is 1.0000----------
+----------valid acc in step 22000 is 0.3400----------
+loss in step 22100 is 0.000000, acc is 1.000
+loss in step 22200 is 0.000000, acc is 1.000
+loss in step 22300 is 0.000000, acc is 1.000
+loss in step 22400 is 0.000000, acc is 1.000
+loss in step 22500 is 0.000000, acc is 1.000
+last 300 steps use 0.896454 sec
+rest time is 0.224 minutes
+----------train acc in step 22500 is 1.0000----------
+----------valid acc in step 22500 is 0.3400----------
+loss in step 22600 is 0.000000, acc is 1.000
+loss in step 22700 is 0.000000, acc is 1.000
+loss in step 22800 is 0.000000, acc is 1.000
+loss in step 22900 is 0.000000, acc is 1.000
+loss in step 23000 is 0.000000, acc is 1.000
+last 300 steps use 0.800967 sec
+rest time is 0.187 minutes
+----------train acc in step 23000 is 1.0000----------
+----------valid acc in step 23000 is 0.3300----------
+loss in step 23100 is 0.000000, acc is 1.000
+loss in step 23200 is 0.000000, acc is 1.000
+loss in step 23300 is 0.000000, acc is 1.000
+loss in step 23400 is 0.000000, acc is 1.000
+loss in step 23500 is 0.000000, acc is 1.000
+last 300 steps use 0.831008 sec
+rest time is 0.180 minutes
+----------train acc in step 23500 is 1.0000----------
+----------valid acc in step 23500 is 0.3300----------
+loss in step 23600 is 0.000000, acc is 1.000
+loss in step 23700 is 0.000000, acc is 1.000
+loss in step 23800 is 0.000000, acc is 1.000
+loss in step 23900 is 0.000000, acc is 1.000
+loss in step 24000 is 0.000000, acc is 1.000
+last 300 steps use 0.841618 sec
+rest time is 0.168 minutes
+----------train acc in step 24000 is 1.0000----------
+----------valid acc in step 24000 is 0.3300----------
+loss in step 24100 is 0.000000, acc is 1.000
+loss in step 24200 is 1.055642, acc is 0.480
+loss in step 24300 is 0.889537, acc is 0.580
+loss in step 24400 is 0.902720, acc is 0.600
+loss in step 24500 is 0.729289, acc is 0.660
+last 300 steps use 0.798464 sec
+rest time is 0.146 minutes
+----------train acc in step 24500 is 0.6025----------
+----------valid acc in step 24500 is 0.3600----------
+loss in step 24600 is 0.735749, acc is 0.650
+loss in step 24700 is 0.766136, acc is 0.640
+loss in step 24800 is 0.731329, acc is 0.680
+loss in step 24900 is 0.583484, acc is 0.720
+loss in step 25000 is 0.697206, acc is 0.660
+last 300 steps use 0.777960 sec
+rest time is 0.130 minutes
+----------train acc in step 25000 is 0.7238----------
+----------valid acc in step 25000 is 0.4000----------
+loss in step 25100 is 0.534530, acc is 0.720
+loss in step 25200 is 0.463094, acc is 0.850
+loss in step 25300 is 0.497557, acc is 0.790
+loss in step 25400 is 0.473798, acc is 0.750
+loss in step 25500 is 0.420436, acc is 0.830
+last 300 steps use 0.920534 sec
+rest time is 0.138 minutes
+----------train acc in step 25500 is 0.7800----------
+----------valid acc in step 25500 is 0.3900----------
+loss in step 25600 is 0.431503, acc is 0.840
+loss in step 25700 is 0.389093, acc is 0.850
+loss in step 25800 is 0.498175, acc is 0.760
+loss in step 25900 is 0.385801, acc is 0.790
+loss in step 26000 is 0.377294, acc is 0.860
+last 300 steps use 0.814915 sec
+rest time is 0.109 minutes
+----------train acc in step 26000 is 0.8462----------
+----------valid acc in step 26000 is 0.3500----------
+loss in step 26100 is 0.449012, acc is 0.810
+loss in step 26200 is 0.388860, acc is 0.850
+loss in step 26300 is 0.325103, acc is 0.840
+loss in step 26400 is 0.354376, acc is 0.830
+loss in step 26500 is 0.289142, acc is 0.920
+last 300 steps use 0.900030 sec
+rest time is 0.105 minutes
+----------train acc in step 26500 is 0.8862----------
+----------valid acc in step 26500 is 0.4000----------
+loss in step 26600 is 0.305799, acc is 0.820
+loss in step 26700 is 0.279087, acc is 0.890
+loss in step 26800 is 0.284515, acc is 0.870
+loss in step 26900 is 0.196606, acc is 0.930
+loss in step 27000 is 0.341065, acc is 0.840
+last 300 steps use 1.309514 sec
+rest time is 0.131 minutes
+----------train acc in step 27000 is 0.8725----------
+----------valid acc in step 27000 is 0.3600----------
+loss in step 27100 is 0.316025, acc is 0.870
+loss in step 27200 is 0.333564, acc is 0.850
+loss in step 27300 is 0.240588, acc is 0.920
+loss in step 27400 is 0.123018, acc is 0.980
+loss in step 27500 is 0.138783, acc is 0.970
+last 300 steps use 0.764966 sec
+rest time is 0.064 minutes
+----------train acc in step 27500 is 0.9563----------
+----------valid acc in step 27500 is 0.3800----------
+loss in step 27600 is 0.143154, acc is 0.940
+loss in step 27700 is 0.417451, acc is 0.840
+loss in step 27800 is 0.127542, acc is 0.970
+loss in step 27900 is 0.119987, acc is 0.950
+loss in step 28000 is 0.123683, acc is 0.960
+last 300 steps use 0.728488 sec
+rest time is 0.049 minutes
+----------train acc in step 28000 is 0.9738----------
+----------valid acc in step 28000 is 0.3400----------
+loss in step 28100 is 0.101992, acc is 0.970
+loss in step 28200 is 0.251290, acc is 0.880
+loss in step 28300 is 0.088469, acc is 0.960
+loss in step 28400 is 0.099547, acc is 0.970
+loss in step 28500 is 0.068403, acc is 0.990
+last 300 steps use 0.738502 sec
+rest time is 0.037 minutes
+----------train acc in step 28500 is 0.9825----------
+----------valid acc in step 28500 is 0.3300----------
+loss in step 28600 is 0.090282, acc is 0.960
+loss in step 28700 is 0.080383, acc is 0.970
+loss in step 28800 is 0.066007, acc is 0.990
+loss in step 28900 is 0.047726, acc is 1.000
+loss in step 29000 is 0.060045, acc is 0.980
+last 300 steps use 1.295447 sec
+rest time is 0.043 minutes
+----------train acc in step 29000 is 0.9850----------
+----------valid acc in step 29000 is 0.3400----------
+loss in step 29100 is 0.048899, acc is 0.990
+loss in step 29200 is 0.437200, acc is 0.880
+loss in step 29300 is 0.447771, acc is 0.810
+loss in step 29400 is 0.161952, acc is 0.940
+loss in step 29500 is 0.120271, acc is 0.980
+last 300 steps use 0.749946 sec
+rest time is 0.012 minutes
+----------train acc in step 29500 is 0.9563----------
+----------valid acc in step 29500 is 0.3200----------
+loss in step 29600 is 0.105889, acc is 0.970
+loss in step 29700 is 0.057686, acc is 0.970
+loss in step 29800 is 0.044482, acc is 0.980
+loss in step 29900 is 0.060897, acc is 0.990
+last 300 steps use 0.901580 sec
+rest time is 0.000 minutes
+----------train acc in step 29999 is 0.9838----------
+----------valid acc in step 29999 is 0.3200----------
+----------last accuracy is 0.310000----------
