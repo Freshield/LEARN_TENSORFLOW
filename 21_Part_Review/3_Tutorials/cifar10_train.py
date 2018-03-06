@@ -45,7 +45,7 @@ import cifar10
 
 FLAGS = tf.app.flags.FLAGS
 
-tf.app.flags.DEFINE_string('train_dir', '/tmp/cifar10_train',
+tf.app.flags.DEFINE_string('train_dir', 'data/cifar10_train',
                            """Directory where to write event logs """
                            """and checkpoint.""")
 tf.app.flags.DEFINE_integer('max_steps', 1000000,
@@ -59,11 +59,13 @@ tf.app.flags.DEFINE_integer('log_frequency', 10,
 def train():
   """Train CIFAR-10 for a number of steps."""
   with tf.Graph().as_default():
+    #得到global step
     global_step = tf.train.get_or_create_global_step()
 
     # Get images and labels for CIFAR-10.
     # Force input pipeline to CPU:0 to avoid operations sometimes ending up on
     # GPU and resulting in a slow down.
+    #强制使用CPU去读取数据
     with tf.device('/cpu:0'):
       images, labels = cifar10.distorted_inputs()
 
@@ -90,6 +92,7 @@ def train():
         return tf.train.SessionRunArgs(loss)  # Asks for loss value.
 
       def after_run(self, run_context, run_values):
+        #记录时间并打印
         if self._step % FLAGS.log_frequency == 0:
           current_time = time.time()
           duration = current_time - self._start_time
