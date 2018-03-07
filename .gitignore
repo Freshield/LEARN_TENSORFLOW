@@ -19,3 +19,4 @@ interrupt
 *.tar
 model
 *.bin
+data
