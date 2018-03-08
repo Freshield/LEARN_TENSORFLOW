@@ -62,17 +62,12 @@ def build_model(x):
     y = tf.reshape(x,shape=[-1, 28, 28, 1])
     #layer 1
     y = conv2d('conv_1', y, [3, 3, 1, 8])
-    look_value('conv1',y)
     y = pool2d('pool_1', y)
-    look_value('pool1',y)
     #layer 2
     y = conv2d('conv_2', y, [3, 3, 8, 16])
-    look_value('conv2',y)
     y = pool2d('pool_2', y)
-    look_value('pool2',y)
     #layer fc
     y = fc('fc', y, [-1, 7*7*16], [-1, 10])
-    look_value('fc',y)
     return y
 
 def average_losses(loss):
@@ -123,6 +118,7 @@ def average_gradients(tower_grads):
         # across towers. So .. we will just return the first tower's pointer to
         # the Variable.
         #因为我们共享权重，所以只需要返回一个tower的权重就可以了
+        #这里相当于我们只取第一个tower的权重
         v = grad_and_vars[0][1]
         #这里的tuple是(平均的grads,variables)
         grad_and_var = (grad, v)
@@ -131,6 +127,7 @@ def average_gradients(tower_grads):
         #[(avg_conv1.grads,conv1),(avg_bias1.grads,bias1),...]
     return average_grads
 
+#暂时过
 def feed_all_gpu(inp_dict, models, payload_per_gpu, batch_x, batch_y,):
     for i in range(len(models)):
         x, y, _, _, _ = models[i]
@@ -140,39 +137,33 @@ def feed_all_gpu(inp_dict, models, payload_per_gpu, batch_x, batch_y,):
         inp_dict[y] = batch_y[start_pos:stop_pos]
     return inp_dict
 
-def multi_gpu(num_gpu):
-    batch_size = BATCH_SIZE * num_gpu
-    mnist = input_data.read_data_sets('/tmp/data/mnist',one_hot=True)
+def single_gpu():
+    batch_size = 128
+    mnist = input_data.read_data_sets('data/mnist',one_hot=True)
 
     tf.reset_default_graph()
-    with tf.Session(config=tf.ConfigProto(log_device_placement=log_device_placement)) as sess:
-        with tf.device('/cpu:0'):
-            learning_rate = tf.placeholder(tf.float32, shape=[])
-            opt = tf.train.AdamOptimizer(learning_rate=learning_rate)
 
+    # 选择是否显示每个op和varible的物理位置
+    config = tf.ConfigProto(log_device_placement=log_device_placement)
+    # 让gpu模式为随取随用而不是直接全部占满
+    config.gpu_options.allow_growth = True
+
+    with tf.Session(config=config) as sess:
+        with tf.device('/cpu:0'):
             print('build model...')
             print('build model on gpu tower...')
-            models = []
-            for gpu_id in range(num_gpu):
-                with tf.device('/gpu:%d' % gpu_id):
-                    print('tower:%d...'% gpu_id)
-                    with tf.name_scope('tower_%d' % gpu_id):
-                        with tf.variable_scope('cpu_variables', reuse=gpu_id>0):
-                            x = tf.placeholder(tf.float32, [None, 784])
-                            y = tf.placeholder(tf.float32, [None, 10])
-                            pred = build_model(x)
-                            loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
-                            grads = opt.compute_gradients(loss)
-                            models.append((x,y,pred,loss,grads))
+            with tf.device('/gpu:0'):
+                x = tf.placeholder(tf.float32, [None, 784])
+                y = tf.placeholder(tf.float32, [None, 10])
+                pred = build_model(x)
+                loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
+                learning_rate = tf.placeholder(tf.float32, shape=[])
+                train_op = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss)
             print('build model on gpu tower done.')
 
             print('reduce model on cpu...')
-            tower_x, tower_y, tower_preds, tower_losses, tower_grads = zip(*models)
-            aver_loss_op = tf.reduce_mean(tower_losses)
-            apply_gradient_op = opt.apply_gradients(average_gradients(tower_grads))
-
-            all_y = tf.reshape(tf.stack(tower_y, 0), [-1,10])
-            all_pred = tf.reshape(tf.stack(tower_preds, 0), [-1,10])
+            all_y = tf.reshape(y, [-1,10])
+            all_pred = tf.reshape(pred, [-1,10])
             correct_pred = tf.equal(tf.argmax(all_y, 1), tf.argmax(all_pred, 1))
             accuracy = tf.reduce_mean(tf.cast(correct_pred, 'float'))
             print('reduce model on cpu done.')
@@ -182,7 +173,6 @@ def multi_gpu(num_gpu):
             lr = 0.01
             for epoch in range(10):
                 start_time = time.time()
-                payload_per_gpu = batch_size // num_gpu
                 total_batch = int(mnist.train.num_examples/batch_size)
                 avg_loss = 0.0
                 print('\n---------------------')
@@ -191,21 +181,23 @@ def multi_gpu(num_gpu):
                     batch_x,batch_y = mnist.train.next_batch(batch_size)
                     inp_dict = {}
                     inp_dict[learning_rate] = lr
-                    inp_dict = feed_all_gpu(inp_dict, models, payload_per_gpu, batch_x, batch_y)
-                    _, _loss = sess.run([apply_gradient_op, aver_loss_op], inp_dict)
+                    inp_dict[x] = batch_x
+                    inp_dict[y] = batch_y
+                    _, _loss = sess.run([train_op, loss], inp_dict)
                     avg_loss += _loss
                 avg_loss /= total_batch
                 print('Train loss:%.4f' % (avg_loss))
 
                 lr = max(lr * 0.7,0.00001)
 
-                val_payload_per_gpu = batch_size // num_gpu
                 total_batch = int(mnist.validation.num_examples / batch_size)
                 preds = None
                 ys = None
                 for batch_idx in range(total_batch):
                     batch_x,batch_y = mnist.validation.next_batch(batch_size)
-                    inp_dict = feed_all_gpu({}, models, val_payload_per_gpu, batch_x, batch_y)
+                    inp_dict = {}
+                    inp_dict[x] = batch_x
+                    inp_dict[y] = batch_y
                     batch_pred,batch_y = sess.run([all_pred,all_y], inp_dict)
                     if preds is None:
                         preds = batch_pred
@@ -219,8 +211,136 @@ def multi_gpu(num_gpu):
                 print('Val Accuracy: %0.4f%%' % (100.0 * val_accuracy))
 
                 stop_time = time.time()
-                elapsed_time = stop_time-start_time
+                elapsed_time = stop_time - start_time
                 print('Cost time: ' + str(elapsed_time) + ' sec.')
+
+                print('Train loss:%.4f' % (avg_loss))
+                gpu_info = os.popen('nvidia-smi')
+                print(gpu_info.read())
+
+            print('training done.')
+
+            total_batch = int(mnist.test.num_examples / batch_size)
+            preds = None
+            ys = None
+            for batch_idx in range(total_batch):
+                batch_x, batch_y = mnist.test.next_batch(batch_size)
+                inp_dict = {}
+                inp_dict[x] = batch_x
+                inp_dict[y] = batch_y
+                batch_pred, batch_y = sess.run([all_pred, all_y], inp_dict)
+                if preds is None:
+                    preds = batch_pred
+                else:
+                    preds = np.concatenate((preds, batch_pred), 0)
+                if ys is None:
+                    ys = batch_y
+                else:
+                    ys = np.concatenate((ys, batch_y), 0)
+            test_accuracy = sess.run([accuracy], {all_y: ys, all_pred: preds})[0]
+            print('Test Accuracy: %0.4f%%' % (100.0 * test_accuracy))
+
+def multi_gpu(num_gpu):
+    #从数据集获取两倍的batch
+    batch_size = BATCH_SIZE * num_gpu
+
+    mnist = input_data.read_data_sets('data/mnist',one_hot=True)
+
+    tf.reset_default_graph()
+
+    with tf.Graph().as_default(), tf.device('/cpu:0'):
+        #lr作为一个可变的pl
+        learning_rate = tf.placeholder(tf.float32, shape=[])
+        opt = tf.train.AdamOptimizer(learning_rate=learning_rate)
+
+        print('build model...')
+        print('build model on gpu tower...')
+        # model数组为每个gpu的tuple数组
+        models = []
+        with tf.variable_scope(tf.get_variable_scope()):
+            for gpu_id in range(num_gpu):
+                with tf.device('/gpu:%d' % gpu_id):
+                    print('tower:%d...' % gpu_id)
+                    with tf.name_scope('tower_%d' % gpu_id):
+                        #每个GPU模型的输入pl
+                        x = tf.placeholder(tf.float32, [None, 784])
+                        y = tf.placeholder(tf.float32, [None, 10])
+                        #得到pred
+                        pred = build_model(x)
+                        #得到loss
+                        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
+                        #
+                        tf.get_variable_scope().reuse_variables()
+                        grads = opt.compute_gradients(loss)
+                        models.append((x, y, pred, loss, grads))
+
+        print('build model on gpu tower done.')
+
+        print('reduce model on cpu...')
+        tower_x, tower_y, tower_preds, tower_losses, tower_grads = zip(*models)
+        aver_loss_op = tf.reduce_mean(tower_losses)
+        apply_gradient_op = opt.apply_gradients(average_gradients(tower_grads))
+
+        all_y = tf.reshape(tf.stack(tower_y, 0), [-1, 10])
+        all_pred = tf.reshape(tf.stack(tower_preds, 0), [-1, 10])
+        correct_pred = tf.equal(tf.argmax(all_y, 1), tf.argmax(all_pred, 1))
+        accuracy = tf.reduce_mean(tf.cast(correct_pred, 'float'))
+        print('reduce model on cpu done.')
+
+        # 选择是否显示每个op和varible的物理位置
+        config = tf.ConfigProto(log_device_placement=log_device_placement)
+        # 让gpu模式为随取随用而不是直接全部占满
+        config.gpu_options.allow_growth = True
+
+        with tf.Session(config=config) as sess:
+            print('run train op...')
+            sess.run(tf.global_variables_initializer())
+            lr = 0.01
+            for epoch in range(10):
+                start_time = time.time()
+                payload_per_gpu = batch_size // num_gpu
+                total_batch = int(mnist.train.num_examples / batch_size)
+                avg_loss = 0.0
+                print('\n---------------------')
+                print('Epoch:%d, lr:%.4f' % (epoch, lr))
+                for batch_idx in range(total_batch):
+                    batch_x, batch_y = mnist.train.next_batch(batch_size)
+                    inp_dict = {}
+                    inp_dict[learning_rate] = lr
+                    inp_dict = feed_all_gpu(inp_dict, models, payload_per_gpu, batch_x, batch_y)
+                    _, _loss = sess.run([apply_gradient_op, aver_loss_op], inp_dict)
+                    avg_loss += _loss
+                avg_loss /= total_batch
+
+                lr = max(lr * 0.7, 0.00001)
+
+                val_payload_per_gpu = batch_size // num_gpu
+                total_batch = int(mnist.validation.num_examples / batch_size)
+                preds = None
+                ys = None
+                for batch_idx in range(total_batch):
+                    batch_x, batch_y = mnist.validation.next_batch(batch_size)
+                    inp_dict = feed_all_gpu({}, models, val_payload_per_gpu, batch_x, batch_y)
+                    batch_pred, batch_y = sess.run([all_pred, all_y], inp_dict)
+                    if preds is None:
+                        preds = batch_pred
+                    else:
+                        preds = np.concatenate((preds, batch_pred), 0)
+                    if ys is None:
+                        ys = batch_y
+                    else:
+                        ys = np.concatenate((ys, batch_y), 0)
+                val_accuracy = sess.run([accuracy], {all_y: ys, all_pred: preds})[0]
+                print('Val Accuracy: %0.4f%%' % (100.0 * val_accuracy))
+
+                stop_time = time.time()
+                elapsed_time = stop_time - start_time
+                print('Cost time: ' + str(elapsed_time) + ' sec.')
+
+                print('Train loss:%.4f' % (avg_loss))
+                gpu_info = os.popen('nvidia-smi')
+                print(gpu_info.read())
+
             print('training done.')
 
             test_payload_per_gpu = batch_size // num_gpu
@@ -241,5 +361,7 @@ def multi_gpu(num_gpu):
                     ys = np.concatenate((ys, batch_y), 0)
             test_accuracy = sess.run([accuracy], {all_y: ys, all_pred: preds})[0]
             print('Test Accuracy: %0.4f%%\n\n' % (100.0 * test_accuracy))
+
 if __name__ == '__main__':
+    #single_gpu()
     multi_gpu(2)

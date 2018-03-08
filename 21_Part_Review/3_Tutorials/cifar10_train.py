@@ -38,6 +38,7 @@ from __future__ import print_function
 
 from datetime import datetime
 import time
+import os
 
 import tensorflow as tf
 
@@ -107,13 +108,18 @@ def train():
           print (format_str % (datetime.now(), self._step, loss_value,
                                examples_per_sec, sec_per_batch))
 
+        if self._step % 500 == 0:
+            output = os.popen('nvidia-smi')
+            print(output.read())
+
+    config = tf.ConfigProto(log_device_placement=FLAGS.log_device_placement)
+    config.gpu_options.allow_growth = True
     with tf.train.MonitoredTrainingSession(
         checkpoint_dir=FLAGS.train_dir,
         hooks=[tf.train.StopAtStepHook(last_step=FLAGS.max_steps),
                tf.train.NanTensorHook(loss),
                _LoggerHook()],
-        config=tf.ConfigProto(
-            log_device_placement=FLAGS.log_device_placement)) as mon_sess:
+        config=config) as mon_sess:
       while not mon_sess.should_stop():
         mon_sess.run(train_op)
 
