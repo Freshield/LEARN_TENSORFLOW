@@ -14,7 +14,7 @@
       <file leaf-file-name="5_CNN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/5_CNN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1094">
+            <state relative-caret-position="1769">
               <caret line="63" column="7" lean-forward="false" selection-start-line="63" selection-start-column="7" selection-end-line="63" selection-end-column="7" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -26,7 +26,7 @@
       <file leaf-file-name="multi_gpu_mnist.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/multi_gpu_mnist.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="920">
+            <state relative-caret-position="3712">
               <caret line="133" column="21" lean-forward="false" selection-start-line="133" selection-start-column="8" selection-end-line="134" selection-end-column="44" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -35,23 +35,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="multi_gpu_mnist_test.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="multi_gpu_mnist_test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2633">
-              <caret line="174" column="0" lean-forward="true" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
+            <state relative-caret-position="0">
+              <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#15#25#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="multi_gpu_mnist_test_model.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="multi_gpu_mnist_test_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="58">
-              <caret line="2" column="36" lean-forward="false" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
+            <state relative-caret-position="841">
+              <caret line="29" column="8" lean-forward="true" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -104,8 +104,8 @@
         <option value="$PROJECT_DIR$/multi_gpu_mnist.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/5_CNN.py" />
-        <option value="$PROJECT_DIR$/multi_gpu_mnist_test.py" />
         <option value="$PROJECT_DIR$/multi_gpu_mnist_test_model.py" />
+        <option value="$PROJECT_DIR$/multi_gpu_mnist_test.py" />
       </list>
     </option>
   </component>
@@ -737,7 +737,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/multi_gpu_mnist.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="920">
+        <state relative-caret-position="3712">
           <caret line="133" column="21" lean-forward="false" selection-start-line="133" selection-start-column="8" selection-end-line="134" selection-end-column="44" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -747,7 +747,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/5_CNN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1094">
+        <state relative-caret-position="1769">
           <caret line="63" column="7" lean-forward="false" selection-start-line="63" selection-start-column="7" selection-end-line="63" selection-end-column="7" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
@@ -755,21 +755,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test.py">
+    <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2633">
-          <caret line="174" column="0" lean-forward="true" selection-start-line="174" selection-start-column="0" selection-end-line="174" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="841">
+          <caret line="29" column="8" lean-forward="true" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test_model.py">
+    <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="2" column="36" lean-forward="false" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-          <folding />
+        <state relative-caret-position="0">
+          <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
+          <folding>
+            <element signature="e#15#25#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
