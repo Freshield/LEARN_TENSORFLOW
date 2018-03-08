@@ -172,6 +172,7 @@ def multi_gpu(num_gpu):
 
                 #得到当前epoch的训练时间
                 stop_time = time.time()
+
                 elapsed_time = stop_time - start_time
                 print('Cost time: ' + str(elapsed_time) + ' sec.')
 

@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+#需要用get_variable来共享variable并把权重放到cpu
 def _variable_on_cpu(name, shape, initializer=tf.contrib.layers.xavier_initializer()):
     with tf.device('/cpu:0'):
         var = tf.get_variable(name, shape, initializer=initializer)
