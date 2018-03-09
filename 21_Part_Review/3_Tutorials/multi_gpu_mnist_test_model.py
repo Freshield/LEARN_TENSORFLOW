@@ -76,4 +76,4 @@ def build_model(x, y, reg):
 
     correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_pred, dtype=tf.float32))
-    return pred, loss, accuracy
+    return loss, accuracy

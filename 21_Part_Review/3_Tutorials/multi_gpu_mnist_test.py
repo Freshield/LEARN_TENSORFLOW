@@ -98,8 +98,8 @@ def multi_gpu(num_gpu):
                         #切分输入数据
                         x = images[start_pos:stop_pos]
                         y = labels[start_pos:stop_pos]
-                        #得到每个模型的pred，loss，accuracy
-                        pred, loss, acc = build_model(x, y, REG)
+                        #得到每个模型的loss，accuracy
+                        loss, acc = build_model(x, y, REG)
                         #设置variable为reuse
                         tf.get_variable_scope().reuse_variables()
                         #获取opt更新的当前tower的grads
@@ -247,19 +247,16 @@ def single_gpu():
 
         print('build model...')
         print('build model on gpu tower...')
-        # model数组为每个gpu的tuple数组
-        models = []
         # 每个GPU模型的输入pl
         images = tf.placeholder(tf.float32, [None, 784])
         labels = tf.placeholder(tf.float32, [None, 10])
         with tf.variable_scope(tf.get_variable_scope()):
             with tf.device('/gpu:0'):
-                # 得到pred, 和loss
-                pred, loss, acc = build_model(images, labels, REG)
+                # 得到loss和accuracy
+                loss, acc = build_model(images, labels, REG)
 
                 tf.get_variable_scope().reuse_variables()
                 grads = opt.compute_gradients(loss)
-                models.append((images, labels, pred, loss, grads, acc))
         aver_loss_op = loss
         apply_gradient_op = opt.apply_gradients(grads)
         aver_acc_op = tf.reduce_mean(acc)
@@ -292,7 +289,6 @@ def single_gpu():
                     inp_dict[learning_rate] = lr
                     inp_dict[images] = batch_x
                     inp_dict[labels] = batch_y
-                    #inp_dict = feed_all_gpu(inp_dict, models, payload_per_gpu, batch_x, batch_y)
                     _, _loss, _acc = sess.run([apply_gradient_op, aver_loss_op, aver_acc_op], inp_dict)
                     avg_loss += _loss
                     avg_acc += _acc
@@ -317,7 +313,6 @@ def single_gpu():
 
                 for batch_idx in range(total_batch):
                     batch_x, batch_y = mnist.validation.next_batch(batch_size)
-                    #inp_dict = feed_all_gpu({}, models, val_payload_per_gpu, batch_x, batch_y)
                     inp_dict[images] = batch_x
                     inp_dict[labels] = batch_y
                     _acc = sess.run(aver_acc_op, inp_dict)
@@ -340,7 +335,6 @@ def single_gpu():
 
             for batch_idx in range(total_batch):
                 batch_x, batch_y = mnist.test.next_batch(batch_size)
-                #inp_dict = feed_all_gpu({}, models, test_payload_per_gpu, batch_x, batch_y)
                 inp_dict[images] = batch_x
                 inp_dict[labels] = batch_y
                 _acc = sess.run(aver_acc_op, inp_dict)
@@ -349,5 +343,5 @@ def single_gpu():
             print('Test Accuracy: %0.4f%%\n\n' % (100.0 * test_accuracy))
 
 if __name__ == '__main__':
-    #single_gpu()
-    multi_gpu(2)
+    single_gpu()
+    #multi_gpu(2)
