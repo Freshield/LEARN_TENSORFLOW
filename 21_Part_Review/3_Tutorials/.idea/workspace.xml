@@ -48,8 +48,8 @@
       <file leaf-file-name="multi_gpu_mnist_test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-377">
-              <caret line="89" column="43" lean-forward="false" selection-start-line="89" selection-start-column="43" selection-end-line="89" selection-end-column="43" />
+            <state relative-caret-position="870">
+              <caret line="132" column="26" lean-forward="false" selection-start-line="132" selection-start-column="26" selection-end-line="132" selection-end-column="26" />
               <folding>
                 <element signature="e#15#25#0" expanded="true" />
               </folding>
@@ -766,8 +766,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/multi_gpu_mnist_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-377">
-          <caret line="89" column="43" lean-forward="false" selection-start-line="89" selection-start-column="43" selection-end-line="89" selection-end-column="43" />
+        <state relative-caret-position="870">
+          <caret line="132" column="26" lean-forward="false" selection-start-line="132" selection-start-column="26" selection-end-line="132" selection-end-column="26" />
           <folding>
             <element signature="e#15#25#0" expanded="true" />
           </folding>
