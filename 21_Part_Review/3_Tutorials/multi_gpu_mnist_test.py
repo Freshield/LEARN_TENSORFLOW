@@ -191,17 +191,12 @@ def single_gpu():
             with tf.device('/gpu:0'):
                 # 得到loss和accuracy
                 loss, acc = build_model(images, labels, REG)
-
-                tf.get_variable_scope().reuse_variables()
                 grads = opt.compute_gradients(loss)
         aver_loss_op = loss
         apply_gradient_op = opt.apply_gradients(grads)
-        aver_acc_op = tf.reduce_mean(acc)
-
-        # 选择是否显示每个op和varible的物理位置
-        config = tf.ConfigProto(log_device_placement=log_device_placement)
-        # 让gpu模式为随取随用而不是直接全部占满
-        config.gpu_options.allow_growth = True
+        print(acc)
+        aver_acc_op = acc
+        print(aver_acc_op)
 
         with tf.Session(config=config) as sess:
             print('run train op...')
@@ -279,5 +274,5 @@ def single_gpu():
             print('Test Accuracy: %0.4f%%\n\n' % (100.0 * test_accuracy))
 
 if __name__ == '__main__':
-    #single_gpu()
-    multi_gpu(2)
+    single_gpu()
+    #multi_gpu(2)
