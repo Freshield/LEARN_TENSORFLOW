@@ -129,7 +129,7 @@ global_step = tf.Variable(0, trainable=False)
 start_lr = 1e-4
 
 learning_rate = tf.train.exponential_decay(
-    start_lr, global_step, 2000, 0.99, staircase=True
+    start_lr, global_step, 3000, 0.99, staircase=True
 )
 
 train_step = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy, global_step=global_step)
