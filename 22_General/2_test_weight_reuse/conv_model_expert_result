@@ -1,0 +1,444 @@
+/home/freshield/anaconda3/bin/python /media/freshield/CORSAIR/LEARN_TENSORFLOW/22_General/2_test_weight_reuse/93_mnist_conv_expert_model.py
+/home/freshield/anaconda3/lib/python3.6/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Extracting ../../data/mnist/train-images-idx3-ubyte.gz
+Extracting ../../data/mnist/train-labels-idx1-ubyte.gz
+Extracting ../../data/mnist/t10k-images-idx3-ubyte.gz
+Extracting ../../data/mnist/t10k-labels-idx1-ubyte.gz
+2018-03-27 14:47:51.939672: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-03-27 14:47:51.939692: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-03-27 14:47:51.939696: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2018-03-27 14:47:51.939699: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-03-27 14:47:51.939702: W tensorflow/core/platform/cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2018-03-27 14:47:52.073609: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:893] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2018-03-27 14:47:52.073880: I tensorflow/core/common_runtime/gpu/gpu_device.cc:955] Found device 0 with properties: 
+name: GeForce GTX 1080
+major: 6 minor: 1 memoryClockRate (GHz) 1.835
+pciBusID 0000:01:00.0
+Total memory: 7.92GiB
+Free memory: 7.48GiB
+2018-03-27 14:47:52.164515: W tensorflow/stream_executor/cuda/cuda_driver.cc:523] A non-primary context 0x558cd0ed7340 exists before initializing the StreamExecutor. We haven't verified StreamExecutor works with that.
+2018-03-27 14:47:52.164687: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:893] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2018-03-27 14:47:52.164966: I tensorflow/core/common_runtime/gpu/gpu_device.cc:955] Found device 1 with properties: 
+name: GeForce GTX 1080
+major: 6 minor: 1 memoryClockRate (GHz) 1.835
+pciBusID 0000:02:00.0
+Total memory: 7.92GiB
+Free memory: 7.80GiB
+2018-03-27 14:47:52.165581: I tensorflow/core/common_runtime/gpu/gpu_device.cc:976] DMA: 0 1 
+2018-03-27 14:47:52.165588: I tensorflow/core/common_runtime/gpu/gpu_device.cc:986] 0:   Y Y 
+2018-03-27 14:47:52.165591: I tensorflow/core/common_runtime/gpu/gpu_device.cc:986] 1:   Y Y 
+2018-03-27 14:47:52.165600: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX 1080, pci bus id: 0000:01:00.0)
+2018-03-27 14:47:52.165604: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1045] Creating TensorFlow device (/gpu:1) -> (device: 1, name: GeForce GTX 1080, pci bus id: 0000:02:00.0)
+0
+2018-03-27 14:47:53.969480: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 3.90GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.0633
+50
+0.36949992
+100
+0.75200003
+150
+0.86820006
+200
+0.9088001
+250
+2018-03-27 14:48:00.258207: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.92940015
+300
+0.93890005
+350
+0.95000017
+400
+0.95260006
+450
+0.95780015
+500
+2018-03-27 14:48:06.372075: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.9627002
+550
+0.96430016
+600
+0.96560013
+650
+0.96920013
+700
+0.97030014
+750
+2018-03-27 14:48:12.554155: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.9726001
+800
+0.97240025
+850
+0.9758001
+900
+0.9769002
+950
+0.9739001
+1000
+0.9784001
+1050
+0.9777001
+1100
+0.97890013
+1150
+0.9786001
+1200
+2018-03-27 14:48:23.745003: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.98040015
+1250
+0.9805001
+1300
+0.9804001
+1350
+0.9800001
+1400
+0.9805001
+1450
+2018-03-27 14:48:29.908775: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.9834001
+1500
+0.9829001
+1550
+0.9839002
+1600
+0.9860002
+1650
+0.9826001
+1700
+2018-03-27 14:48:36.142231: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.98520017
+1750
+0.9847001
+1800
+0.9832001
+1850
+2018-03-27 14:48:39.819952: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.98400015
+1900
+0.9864002
+1950
+2018-03-27 14:48:42.269609: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.9850002
+2000
+0.9856001
+2050
+0.98450017
+2100
+0.9868002
+2150
+0.9864001
+2200
+0.9863002
+2250
+0.9863002
+2300
+0.98720014
+2350
+2018-03-27 14:48:52.202134: W tensorflow/core/common_runtime/bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 4.6KiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+0.98620015
+2400
+0.9867001
+2450
+0.98780006
+2500
+0.9881001
+2550
+0.98720014
+2600
+0.98800015
+2650
+0.9880001
+2700
+0.98570013
+2750
+0.9865002
+2800
+0.9885001
+2850
+0.9880001
+2900
+0.98930013
+2950
+0.98720014
+3000
+0.98830014
+3050
+0.9880001
+3100
+0.9892001
+3150
+0.9891001
+3200
+0.9878001
+3250
+0.9887001
+3300
+0.9883002
+3350
+0.9891002
+3400
+0.98940015
+3450
+0.98910016
+3500
+0.98890007
+3550
+0.9898002
+3600
+0.98970014
+3650
+0.98970014
+3700
+0.9884001
+3750
+0.98870015
+3800
+0.98980016
+3850
+0.98900014
+3900
+0.99020016
+3950
+0.9899001
+4000
+0.9897001
+4050
+0.9892002
+4100
+0.98880017
+4150
+0.9897001
+4200
+0.9897001
+4250
+0.9907001
+4300
+0.9905001
+4350
+0.99020016
+4400
+0.9909001
+4450
+0.9914001
+4500
+0.9897001
+4550
+0.99030006
+4600
+0.9906001
+4650
+0.9903002
+4700
+0.9907001
+4750
+0.99020016
+4800
+0.9904002
+4850
+0.9898001
+4900
+0.9903002
+4950
+0.9900001
+5000
+0.99010015
+5050
+0.9911001
+5100
+0.99100006
+5150
+0.9912001
+5200
+0.99120015
+5250
+0.9911002
+5300
+0.9905002
+5350
+0.9911001
+5400
+0.99040014
+5450
+0.99010015
+5500
+0.99020016
+5550
+0.9906001
+5600
+0.9905002
+5650
+0.99050015
+5700
+0.9903001
+5750
+0.9905001
+5800
+0.99150014
+5850
+0.9915001
+5900
+0.9919001
+5950
+0.9917001
+6000
+0.9910002
+6050
+0.9898001
+6100
+0.99230015
+6150
+0.9913001
+6200
+0.99220014
+6250
+0.9904001
+6300
+0.9911001
+6350
+0.9917001
+6400
+0.9919001
+6450
+0.9916001
+6500
+0.9919001
+6550
+0.9910001
+6600
+0.9905001
+6650
+0.99160016
+6700
+0.99150014
+6750
+0.99140006
+6800
+0.9921001
+6850
+0.9906001
+6900
+0.9910002
+6950
+0.9914001
+7000
+0.99150014
+7050
+0.99050015
+7100
+0.99090016
+7150
+0.99060017
+7200
+0.99100006
+7250
+0.9917002
+7300
+0.9917002
+7350
+0.9918001
+7400
+0.9914001
+7450
+0.9914001
+7500
+0.9913001
+7550
+0.9914001
+7600
+0.9911002
+7650
+0.9904002
+7700
+0.99130017
+7750
+0.9906001
+7800
+0.99170005
+7850
+0.99130017
+7900
+0.9918001
+7950
+0.99200004
+8000
+0.9925001
+8050
+0.99260014
+8100
+0.99150014
+8150
+0.9920001
+8200
+0.9912002
+8250
+0.99150014
+8300
+0.9924001
+8350
+0.9925002
+8400
+0.99230015
+8450
+0.9919001
+8500
+0.99230015
+8550
+0.9920001
+8600
+0.9929001
+8650
+0.9914001
+8700
+0.9926001
+8750
+0.99020016
+8800
+0.99150014
+8850
+0.9920001
+8900
+0.9923001
+8950
+0.99220014
+9000
+0.9919001
+9050
+0.99150014
+9100
+0.99020016
+9150
+0.9914001
+9200
+0.99010015
+9250
+0.99090016
+9300
+0.99180007
+9350
+0.9920001
+9400
+0.9919002
+9450
+0.9926001
+9500
+0.99240017
+9550
+0.9921001
+9600
+0.9926001
+9650
+0.99220014
+9700
+0.9921001
+9750
+0.9925002
+9800
+0.9914001
+9850
+0.9923001
+9900
+0.99260014
+9950
+0.9929002
+
+Process finished with exit code 0

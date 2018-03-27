@@ -77,7 +77,7 @@ cross_entropy = tf.reduce_mean(
     tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv)
 )
 
-train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 
 correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -88,9 +88,11 @@ saver = tf.train.Saver()
 
 tf.global_variables_initializer().run()
 
-for i in range(1000):
+for i in range(10000):
     if i % 50 == 0:
         print(i)
+        print(sess.run(accuracy, feed_dict={x: mnist.test.images,
+                                            y_: mnist.test.labels}))
     batch_xs, batch_ys = mnist.train.next_batch(100)
     sess.run(train_step, feed_dict={x: batch_xs, y_:batch_ys})
 
