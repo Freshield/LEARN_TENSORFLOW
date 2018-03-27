@@ -20,3 +20,5 @@ interrupt
 model
 *.bin
 data
+*.npy
+*.hdf5
