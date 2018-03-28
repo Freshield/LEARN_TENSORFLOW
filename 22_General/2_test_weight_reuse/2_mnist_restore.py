@@ -1,7 +1,6 @@
 from tensorflow.examples.tutorials.mnist import input_data
 import tensorflow as tf
 import os
-import shutil
 
 mnist = input_data.read_data_sets('../../data/mnist', one_hot=True)
 
@@ -26,11 +25,8 @@ sess = tf.InteractiveSession()
 
 saver = tf.train.Saver()
 
-tf.global_variables_initializer().run()
-
-for _ in range(1000):
-    batch_xs, batch_ys = mnist.train.next_batch(100)
-    sess.run(train_step, feed_dict={x: batch_xs, y_:batch_ys})
+saver.restore(sess,save_path+'model.ckpt')
+print('done restore')
 
 correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -38,5 +34,3 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 print(sess.run(accuracy, feed_dict={x: mnist.test.images,
                                     y_: mnist.test.labels}))
 
-saver.save(sess,save_path+'model.ckpt')
-print('done save model')
