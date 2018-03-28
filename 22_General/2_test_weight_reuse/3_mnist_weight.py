@@ -1,13 +1,29 @@
 from tensorflow.examples.tutorials.mnist import input_data
 import tensorflow as tf
 import os
+import numpy as np
+import h5py
 
 class Weight_Bag:
 
-    weight_dic = {}
+    restore_dic = {}
+    save_dic = {}
 
-    def get_tensor(self,name):
-        tensor = tf.Variable()
+    def get_v_tensor(self,name):
+        tensor = tf.Variable(self.restore_dic[name],name=name)
+        return tensor
+
+    def get_c_tensor(self,name):
+        tensor = tf.constant(self.restore_dic[name],name=name)
+        return tensor
+
+    def save_tensor(self,sess,tensor,name):
+        self.save_dic[name] = sess.run(tensor)
+
+    def save_dic_to_hdf5(self,name):
+        with h5py.File(name) as f:
+            for
+
 
 mnist = input_data.read_data_sets('../../data/mnist', one_hot=True)
 
@@ -40,5 +56,8 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 print(sess.run(accuracy, feed_dict={x: mnist.test.images,
                                     y_: mnist.test.labels}))
-
-
+'''
+weightBag = Weight_Bag()
+weightBag.save_tensor(sess,W,'W')
+print(type(weightBag.save_dic['W']))
+'''
