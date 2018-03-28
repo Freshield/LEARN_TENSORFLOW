@@ -21,8 +21,14 @@ class Weight_Bag:
         self.save_dic[name] = sess.run(tensor)
 
     def save_dic_to_hdf5(self,name):
-        with h5py.File(name) as f:
-            for
+        with h5py.File(name,'w') as f:
+            for key,value in self.save_dic.items():
+                f.create_dataset(key,data=value,compression='gzip')
+
+    def hdf5_to_restore_dic(self,name):
+        with h5py.File(name,'r') as f:
+            for key in f.keys():
+                self.restore_dic[key] = f[key].value
 
 
 mnist = input_data.read_data_sets('../../data/mnist', one_hot=True)
@@ -56,8 +62,17 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 print(sess.run(accuracy, feed_dict={x: mnist.test.images,
                                     y_: mnist.test.labels}))
+
 '''
-weightBag = Weight_Bag()
-weightBag.save_tensor(sess,W,'W')
-print(type(weightBag.save_dic['W']))
 '''
+wb = Weight_Bag()
+wb.save_tensor(sess,W,'W')
+wb.save_tensor(sess,b,'b')
+
+
+print(wb.save_dic)
+wb.save_dic_to_hdf5('weights.hdf5')
+
+wb.hdf5_to_restore_dic('weights.hdf5')
+print(wb.restore_dic)
+
