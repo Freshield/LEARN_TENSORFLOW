@@ -34,6 +34,11 @@ classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
 #get the y_score
 y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
+print(y_test.shape)
+print(y_score.shape)
+print(y_test[:5])
+print(y_score[:5])
+
 #compute ROC
 fpr = dict()
 tpr = dict()
